@@ -6,8 +6,15 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Finite State Automata Designer</title>
 	<link rel="stylesheet" href="/Style/main.css">
+	<script type="module" src="/Script/controls.js"></script>
 </head>
 <body>
+	<div id="controls">
+		<button id="zoom-in">Zoom in</button>
+		<button id="zoom-out">Zoom out</button>
+		<button id="zoom-reset">Reset zoom</button>
+		<input id="zoom" type="range" value="1" min="0.25" max="4" step="0.01">
+	</div>
 	<script src="/Script/workspace.js"></script>
 </body>
 </html>

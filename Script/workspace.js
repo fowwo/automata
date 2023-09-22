@@ -6,6 +6,7 @@ workspace.style.setProperty("--py", "0px");
 workspace.style.setProperty("--scale", 1);
 
 workspace.onmousedown = (event) => {
+	const scale = parseFloat(workspace.style.getPropertyValue("--scale"));
 	const [ cx, cy ] = [ event.clientX, event.clientY ];
 	const [ px, py ] = [ workspace.style.getPropertyValue("--px"), workspace.style.getPropertyValue("--py") ].map(x => parseFloat(x));
 	workspace.onmouseup = () => {
@@ -13,7 +14,7 @@ workspace.onmousedown = (event) => {
 		workspace.onmousemove = null;
 	};
 	workspace.onmousemove = (event) => {
-		const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ];
+		const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ].map(x => x / scale);
 		workspace.style.setProperty("--px", `${px + dx}px`);
 		workspace.style.setProperty("--py", `${py + dy}px`);
 	};
