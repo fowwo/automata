@@ -1,14 +1,12 @@
-export default class Draggable {
+import Element from "./Element.js";
 
-	#x;
-	#y;
+export default class Draggable extends Element {
 
-	constructor(element, x = 0, y = 0) {
-		this.element = element;
-		this.element.classList.add("draggable");
-		this.position = [ x, y ];
+	constructor(element, x, y) {
+		super(element, x, y);
+		element.classList.add("draggable");
 
-		this.element.onmousedown = (event) => {
+		element.onmousedown = (event) => {
 			event.stopPropagation();
 
 			const scale = parseFloat(workspace.style.getPropertyValue("--scale"));
@@ -27,23 +25,6 @@ export default class Draggable {
 			document.addEventListener("mouseup", mouseup);
 			document.addEventListener("mousemove", mousemove);
 		};
-	}
-
-	get x() { return this.#x; }
-	set x(x) {
-		this.#x = x;
-		this.element.style.setProperty("--x", `${x}px`);
-	}
-
-	get y() { return this.#y; }
-	set y(y) {
-		this.#y = y;
-		this.element.style.setProperty("--y", `${y}px`);
-	}
-
-	get position() { return [ this.x, this.y ]; }
-	set position([ x, y ]) {
-		[ this.x, this.y ] = [ x, y ];
 	}
 
 }
