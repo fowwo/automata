@@ -4,7 +4,6 @@ import Draggable from "../Element/Draggable.js";
 export default class State extends Draggable {
 
 	#span;
-	#final;
 
 	/**
 	 * @param {Number} x - The initial x position.
@@ -34,9 +33,8 @@ export default class State extends Draggable {
 	get label() { return this.span.innerText; }
 	set label(value) { this.#span.innerText = value; }
 
-	get final() { return this.#final; }
+	get final() { return this.element.classList.contains("final"); }
 	set final(value) {
-		this.#final = value;
 		if (value) {
 			this.element.classList.add("final");
 		} else {
