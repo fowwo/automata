@@ -57,12 +57,33 @@ export default class State extends Draggable {
 		this.#arrow.appendChild(tip1);
 		this.#arrow.appendChild(tip2);
 		element.appendChild(this.#arrow);
-		
+
 		// Add anchor to start transition.
 		this.start = start;
 		const anchor = new Anchor(
 			(length + stateRadius) * Math.cos(angle) + x,
-			(length + stateRadius) * Math.sin(angle) + y
+			(length + stateRadius) * Math.sin(angle) + y,
+			{
+				movementFilter: ([ x, y ]) => {
+					const [ px, py ] = this.position;
+
+					// Snap to axis.
+					const threshold = 10;
+					if (Math.abs(x - px) < threshold) x = px;
+					if (Math.abs(y - py) < threshold) y = py;
+
+					// Force minimum length.
+					const length = Math.sqrt((x - px) ** 2 + (y - py) ** 2) - stateRadius;
+					const minimumLength = 2 * arrowTipLength;
+					if (length < minimumLength) {
+						const angle = Math.atan2(y - py, x - px);
+						x = (minimumLength + stateRadius) * Math.cos(angle) + px;
+						y = (minimumLength + stateRadius) * Math.sin(angle) + py;
+					}
+
+					return [ x, y ];
+				}
+			}
 		);
 
 		let blockAnchorListener = false;
