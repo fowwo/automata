@@ -1,10 +1,18 @@
 import Draggable from "../Element/Draggable.js";
 
+/** A state in a diagram. */
 export default class State extends Draggable {
 
 	#span;
 	#final;
 
+	/**
+	 * @param {Number} x - The initial x position.
+	 * @param {Number} y - The initial y position.
+	 * @param {Object} options - An object containing optional parameters.
+	 * @param {String} [options.label] - The label of the state.
+	 * @param {Boolean} [options.final] - Whether the state is a final state.
+	 */
 	constructor(x, y, { label = "", final = false } = {}) {
 		const element = document.createElement("div");
 		element.classList.add("state");

@@ -1,10 +1,16 @@
 const workspace = document.getElementById("workspace");
 
+/** An element in the workspace. */
 export default class Element {
 
 	#x;
 	#y;
 
+	/**
+	 * @param {HTMLElement} element - The element to add to the workspace.
+	 * @param {Number} x - The initial x position.
+	 * @param {Number} y - The initial y position.
+	 */
 	constructor(element, x, y) {
 		this.element = element;
 		this.position = [ x, y ];
