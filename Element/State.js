@@ -11,6 +11,7 @@ export default class State extends Draggable {
 	#start;
 	#arrow;
 	#arrowLine;
+	#anchor;
 
 	/**
 	 * @param {Number} x - The initial x position.
@@ -59,8 +60,7 @@ export default class State extends Draggable {
 		element.appendChild(this.#arrow);
 
 		// Add anchor to start transition.
-		this.start = start;
-		const anchor = new Anchor(
+		this.#anchor = new Anchor(
 			(length + stateRadius) * Math.cos(angle) + x,
 			(length + stateRadius) * Math.sin(angle) + y,
 			{
@@ -85,19 +85,20 @@ export default class State extends Draggable {
 				}
 			}
 		);
+		this.start = start;
 
 		let blockAnchorListener = false;
 		this.addMoveListener(([ x, y ], [ px, py ]) => {
 			if (start === null) return;
 
-			const [ ax, ay ] = anchor.position;
+			const [ ax, ay ] = this.#anchor.position;
 			const [ dx, dy ] = [ x - px, y - py ];
 
 			blockAnchorListener = true;
-			anchor.position = [ ax + dx, ay + dy ];
+			this.#anchor.position = [ ax + dx, ay + dy ];
 			blockAnchorListener = false;
 		});
-		anchor.addMoveListener(([ x, y ]) => {
+		this.#anchor.addMoveListener(([ x, y ]) => {
 			if (blockAnchorListener) return;
 
 			const [ sx, sy ] = this.position;
@@ -121,6 +122,7 @@ export default class State extends Draggable {
 	set start(value) {
 		if (value === null) {
 			this.#arrow.style.visibility = "hidden";
+			this.#anchor.element.style.display = "none";
 			this.#start = null;
 			return;
 		}
@@ -132,6 +134,7 @@ export default class State extends Draggable {
 		this.#arrowLine.setAttribute("x1", length + stateRadius);
 		this.#arrow.style.rotate = `${angle}rad`;
 		this.#arrow.style.visibility = "";
+		this.#anchor.element.style.display = "";
 	}
 
 	get final() { return this.element.classList.contains("final"); }
