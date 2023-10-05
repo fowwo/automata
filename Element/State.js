@@ -15,13 +15,16 @@ export default class State extends Draggable {
 
 		this.final = final;
 		this.label = label;
+
+		// Resize label when text or font changes.
+		new ResizeObserver(([ entry ]) => {
+			const { width } = entry.contentRect;
+			this.#rescaleLabel(width);
+		}).observe(this.#span);
 	}
 
 	get label() { return this.span.innerText; }
-	set label(value) {
-		this.#span.innerText = value;
-		this.#rescaleLabel();
-	}
+	set label(value) { this.#span.innerText = value; }
 
 	get final() { return this.#final; }
 	set final(value) {
@@ -31,14 +34,16 @@ export default class State extends Draggable {
 		} else {
 			this.element.classList.remove("final");
 		}
-		this.#rescaleLabel();
+
+		// Resize label.
+		const { width } = this.#span.getBoundingClientRect();
+		const scale = this.#span.style.scale || 1;
+		this.#rescaleLabel(width / scale);
 	}
 
-	#rescaleLabel() {
+	#rescaleLabel(width) {
 		const maxWidth = this.final ? 60 : 80;
-		const scale = this.#span.style.scale || 1;
-		const { width } = this.#span.getBoundingClientRect();
-		this.#span.style.scale = Math.min(1, scale * maxWidth / width);
+		this.#span.style.scale = Math.min(1, maxWidth / width);
 	}
 
 }
