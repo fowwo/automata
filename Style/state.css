@@ -1,6 +1,8 @@
 .state {
+	position: relative;
 	display: flex;
 	justify-content: center;
+	align-items: center;
 	box-sizing: border-box;
 	aspect-ratio: 1;
 	width: 100px;
@@ -20,6 +22,7 @@
 	border-radius: 100%;
 	border: 5px solid currentColor;
 }
+.state > * { position: absolute; }
 .state > span {
 	font-size: 50px;
 	line-height: 90px;
