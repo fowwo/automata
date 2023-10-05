@@ -8,3 +8,15 @@
 	border: 5px solid currentColor;
 	border-radius: 100%;
 }
+.state.final:after {
+	position: absolute;
+	display: block;
+	content: "";
+	margin: 5px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	border-radius: 100%;
+	border: 5px solid currentColor;
+}
