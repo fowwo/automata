@@ -7,8 +7,10 @@ export default class Draggable extends Element {
 	 * @param {HTMLElement} element - The element to add to the workspace.
 	 * @param {Number} x - The initial x position.
 	 * @param {Number} y - The initial y position.
+	 * @param {Object} options - An object containing optional parameters.
+	 * @param {([ x, y ]: [ Number, Number ]) => [ Number, Number ]} [options.movementFilter] - A function to intercept and control movement.
 	 */
-	constructor(element, x, y) {
+	constructor(element, x, y, { movementFilter = null } = {}) {
 		super(element, x, y);
 		element.classList.add("draggable");
 
@@ -25,7 +27,9 @@ export default class Draggable extends Element {
 			};
 			const mousemove = (event) => {
 				const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ].map(x => x / scale);
-				this.position = [ px + dx, py + dy ];
+				const position = [ px + dx, py + dy ];
+				if (movementFilter) this.position = movementFilter(position);
+				else this.position = position;
 			};
 
 			document.addEventListener("mouseup", mouseup);
