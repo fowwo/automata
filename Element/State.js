@@ -8,9 +8,7 @@ const arrowTipLength = 15;
 export default class State extends Draggable {
 
 	#span;
-	#start;
 	#arrow;
-	#arrowLine;
 	#anchor;
 
 	/**
@@ -18,7 +16,9 @@ export default class State extends Draggable {
 	 * @param {Number} y - The initial y position.
 	 * @param {Object} options - An object containing optional parameters.
 	 * @param {String} [options.label] - The label of the state.
-	 * @param {Boolean} [options.start] - Whether the state is a start state.
+	 * @param {Object} [options.start] - The properties of the start transition.
+	 * @param {Number} [options.start.angle] - The angle of the start transition.
+	 * @param {Number} [options.start.length] - The length of the start transition.
 	 * @param {Boolean} [options.final] - Whether the state is a final state.
 	 */
 	constructor(x, y, { label = "", start = null, final = false } = {}) {
@@ -33,16 +33,17 @@ export default class State extends Draggable {
 		this.label = label;
 
 		// Add start transition.
+		const { angle = Math.PI, length = 75 } = start ?? {};
 		this.#arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		this.#arrow.setAttribute("width", "1");
 		this.#arrow.setAttribute("height", "1");
 		this.#arrow.setAttribute("viewBox", "-0.5 -0.5 1 1");
-		const { angle = 0, length = 75 } = start ?? {};
+		this.#arrow.style.rotate = `${angle}rad`;
 
-		this.#arrowLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+		const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		for (const [ attribute, value ] of [
 			[ "x1", length + stateRadius ], [ "x2", stateRadius ], [ "y1", 0 ], [ "y2", 0 ]
-		]) this.#arrowLine.setAttribute(attribute, value);
+		]) line.setAttribute(attribute, value);
 
 		const tip1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		for (const [ attribute, value ] of [
@@ -54,7 +55,7 @@ export default class State extends Draggable {
 			[ "x1", stateRadius + arrowTipLength ], [ "x2", stateRadius ], [ "y1", arrowTipLength ], [ "y2", 0 ]
 		]) tip2.setAttribute(attribute, value);
 
-		this.#arrow.appendChild(this.#arrowLine);
+		this.#arrow.appendChild(line);
 		this.#arrow.appendChild(tip1);
 		this.#arrow.appendChild(tip2);
 		element.appendChild(this.#arrow);
@@ -89,8 +90,6 @@ export default class State extends Draggable {
 
 		let blockAnchorListener = false;
 		this.addMoveListener(([ x, y ], [ px, py ]) => {
-			if (start === null) return;
-
 			const [ ax, ay ] = this.#anchor.position;
 			const [ dx, dy ] = [ x - px, y - py ];
 
@@ -105,7 +104,9 @@ export default class State extends Draggable {
 			const [ dx, dy ] = [ x - sx, y - sy ];
 			const angle = -Math.atan2(dx, dy) + Math.PI / 2;
 			const length = Math.sqrt(dx ** 2 + dy ** 2) - stateRadius;
-			this.start = { angle, length };
+
+			line.setAttribute("x1", length + stateRadius);
+			this.#arrow.style.rotate = `${angle}rad`;
 		});
 
 		// Resize label when text or font changes.
@@ -118,23 +119,15 @@ export default class State extends Draggable {
 	get label() { return this.span.innerText; }
 	set label(value) { this.#span.innerText = value; }
 
-	get start() { return this.#start; }
+	get start() { return this.#arrow.style.visibility !== "hidden"; }
 	set start(value) {
-		if (value === null) {
+		if (value) {
+			this.#arrow.style.visibility = "";
+			this.#anchor.element.style.display = "";
+		} else {
 			this.#arrow.style.visibility = "hidden";
 			this.#anchor.element.style.display = "none";
-			this.#start = null;
-			return;
 		}
-
-		if (this.#start) Object.assign(this.#start, value);
-		else this.#start = value;
-
-		const { angle, length } = this.#start;
-		this.#arrowLine.setAttribute("x1", length + stateRadius);
-		this.#arrow.style.rotate = `${angle}rad`;
-		this.#arrow.style.visibility = "";
-		this.#anchor.element.style.display = "";
 	}
 
 	get final() { return this.element.classList.contains("final"); }
