@@ -23,7 +23,6 @@ export default class StraightArrow extends SVG {
 	 */
 	constructor(x, y, { length = defaultLength, headLength = defaultHeadLength, offset = 0 } = {}) {
 		super(x, y);
-		console.log(this);
 
 		this.#length = length;
 		this.#headLength = headLength;
