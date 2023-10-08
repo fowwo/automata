@@ -1,7 +1,7 @@
 import Anchor from "../Element/Anchor.js";
 import Draggable from "../Element/Draggable.js";
 
-const stateRadius = 50;
+export const radius = 50;
 const arrowTipLength = 15;
 
 /** A state in a diagram. */
@@ -42,17 +42,17 @@ export default class State extends Draggable {
 
 		const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		for (const [ attribute, value ] of [
-			[ "x1", length + stateRadius ], [ "x2", stateRadius ], [ "y1", 0 ], [ "y2", 0 ]
+			[ "x1", length + radius ], [ "x2", radius ], [ "y1", 0 ], [ "y2", 0 ]
 		]) line.setAttribute(attribute, value);
 
 		const tip1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		for (const [ attribute, value ] of [
-			[ "x1", stateRadius + arrowTipLength ], [ "x2", stateRadius ], [ "y1", -arrowTipLength ], [ "y2", 0 ]
+			[ "x1", radius + arrowTipLength ], [ "x2", radius ], [ "y1", -arrowTipLength ], [ "y2", 0 ]
 		]) tip1.setAttribute(attribute, value);
 
 		const tip2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
 		for (const [ attribute, value ] of [
-			[ "x1", stateRadius + arrowTipLength ], [ "x2", stateRadius ], [ "y1", arrowTipLength ], [ "y2", 0 ]
+			[ "x1", radius + arrowTipLength ], [ "x2", radius ], [ "y1", arrowTipLength ], [ "y2", 0 ]
 		]) tip2.setAttribute(attribute, value);
 
 		this.#arrow.appendChild(line);
@@ -62,8 +62,8 @@ export default class State extends Draggable {
 
 		// Add anchor to start transition.
 		this.#anchor = new Anchor(
-			(length + stateRadius) * Math.cos(angle) + x,
-			(length + stateRadius) * Math.sin(angle) + y,
+			(length + radius) * Math.cos(angle) + x,
+			(length + radius) * Math.sin(angle) + y,
 			{
 				movementFilter: ([ x, y ]) => {
 					const [ px, py ] = this.position;
@@ -74,12 +74,12 @@ export default class State extends Draggable {
 					if (Math.abs(y - py) < threshold) y = py;
 
 					// Force minimum length.
-					const length = Math.sqrt((x - px) ** 2 + (y - py) ** 2) - stateRadius;
+					const length = Math.sqrt((x - px) ** 2 + (y - py) ** 2) - radius;
 					const minimumLength = 2 * arrowTipLength;
 					if (length < minimumLength) {
 						const angle = Math.atan2(y - py, x - px);
-						x = (minimumLength + stateRadius) * Math.cos(angle) + px;
-						y = (minimumLength + stateRadius) * Math.sin(angle) + py;
+						x = (minimumLength + radius) * Math.cos(angle) + px;
+						y = (minimumLength + radius) * Math.sin(angle) + py;
 					}
 
 					return [ x, y ];
@@ -103,9 +103,9 @@ export default class State extends Draggable {
 			const [ sx, sy ] = this.position;
 			const [ dx, dy ] = [ x - sx, y - sy ];
 			const angle = -Math.atan2(dx, dy) + Math.PI / 2;
-			const length = Math.sqrt(dx ** 2 + dy ** 2) - stateRadius;
+			const length = Math.sqrt(dx ** 2 + dy ** 2) - radius;
 
-			line.setAttribute("x1", length + stateRadius);
+			line.setAttribute("x1", length + radius);
 			this.#arrow.style.rotate = `${angle}rad`;
 		});
 

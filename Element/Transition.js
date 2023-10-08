@@ -1,6 +1,6 @@
 import Anchor from "../Element/Anchor.js";
 import Element from "../Element/Element.js";
-import State from "./State.js";
+import State, { radius as stateRadius } from "./State.js";
 
 /** A transition in a diagram. */
 export default class Transition extends Element {
@@ -12,18 +12,14 @@ export default class Transition extends Element {
 	#anchor;
 
 	// Path
-	#radius;
-	#large;
-	#flip;
+	#angle;
 
 	/**
 	 * @param {State} from - The state to transition from.
 	 * @param {State} to - The state to transition to.
-	 * @param {Number} r - The radius of the transition arc.
-	 * @param {Boolean} large - Whether the arc's central angle is larger than 180 degrees.
-	 * @param {Boolean} flip - Whether the arc should be flipped.
+	 * @param {Number} [angle] - The angle of the transition.
 	 */
-	constructor(from, to, r, large, flip) {
+	constructor(from, to, angle = 0) {
 		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
 		svg.classList.add("transition");
@@ -33,12 +29,10 @@ export default class Transition extends Element {
 		svg.setAttribute("viewBox", "-0.5 -0.5 1 1");
 
 		super(svg, ...midpoint(from.position, to.position));
-		this.#path = path;
 		this.#from = from;
 		this.#to = to;
-		this.#radius = r;
-		this.#large = large;
-		this.#flip = flip;
+		this.#path = path;
+		this.#angle = angle;
 		this.#renderPath();
 
 		this.#anchor = new Anchor(...this.#getArcMidpoint(), {
@@ -77,53 +71,67 @@ export default class Transition extends Element {
 
 			this.#renderPath();
 		}
-		const onAnchorMove = () => {
+		const onAnchorMove = ([ x, y ]) => {
 			if (blockAnchorMove) return;
-			const [ x, y ] = this.#anchor.position;
+
 			const [ ax, ay ] = this.#from.position;
 			const [ bx, by ] = this.#to.position;
 			const [ cx, cy ] = midpoint(this.#from.position, this.#to.position);
 			const [ dx, dy ] = [ bx - ax, by - ay ];
-			const c = Math.sqrt(dx ** 2 + dy ** 2) / 2;
-			const a = Math.sqrt((cx - x) ** 2 + (cy - y) ** 2);
-			this.#radius = a === 0 ? 0 : (a ** 2 + c ** 2) / (2 * a);
 
-			const cbAngle = (Math.atan2(bx - cx, by - cy) + 2 * Math.PI) % (2 * Math.PI);
-			const cpAngle = (Math.atan2(x - cx, y - cy) + 2 * Math.PI) % (2 * Math.PI);
-			const angle3 = (cbAngle - cpAngle + 2 * Math.PI) % (2 * Math.PI);
-			this.#flip = angle3 > Math.PI;
-			this.#large = a > c;
+			const m = Math.sqrt((cx - x) ** 2 + (cy - y) ** 2);
+			const r = Math.sqrt(dx ** 2 + dy ** 2) / 2;
+			const t = Math.atan2(dy, dx);
+			const a = Math.atan2(y - cy, x - cx);
+
+			const angle = 2 * Math.atan2(m, r + stateRadius);
+			const flip = (t - a + 2 * Math.PI) % (2 * Math.PI) < Math.PI;
+			this.#angle = flip ? -angle : angle;
 			this.#renderPath();
 		}
 
 		this.#from.addMoveListener(onStateMove.bind(this));
 		this.#to.addMoveListener(onStateMove.bind(this));
 		this.#anchor.addMoveListener(onAnchorMove.bind(this));
-
 	}
 
 	#renderPath() {
 		const [ ax, ay ] = this.#from.position;
 		const [ bx, by ] = this.#to.position;
-		const [ x1, y1 ] = [ (ax - bx) / 2, (ay - by) / 2 ];
-		const [ x2, y2 ] = [ (bx - ax) / 2, (by - ay) / 2 ];
+		const [ rx, ry ] = [ (bx - ax) / 2, (by - ay) / 2 ];
 
-		const r = this.#radius;
-		this.#path.setAttribute("d", `M ${x1} ${y1} A ${r} ${r} 0 ${this.#large ? 1 : 0} ${this.#flip ? 1 : 0} ${x2} ${y2}`);
+		const r = this.#getRadius();
+		const t = Math.atan2(ry, rx);
+
+		const [ x1, y1 ] = [ -rx + stateRadius * Math.cos(this.#angle + t), -ry + stateRadius * Math.sin(this.#angle + t) ];
+		const [ x2, y2 ] = [ rx - stateRadius * Math.cos(this.#angle - t), ry + stateRadius * Math.sin(this.#angle - t) ];
+
+		const large = Math.abs(this.#angle) > Math.PI / 2;
+		const flip = this.#angle < 0;
+		this.#path.setAttribute("d", `M ${x1} ${y1} A ${r} ${r} 0 ${large ? 1 : 0} ${flip ? 1 : 0} ${x2} ${y2}`);
 	}
-	#getArcMidpoint() {
+	#getRadius() {
+		if (this.#angle === 0) return 0;
+
 		const [ ax, ay ] = this.#from.position;
 		const [ bx, by ] = this.#to.position;
+		const [ rx, ry ] = [ (bx - ax) / 2, (by - ay) / 2 ];
+
+		return (Math.sqrt(rx ** 2 + ry ** 2) - stateRadius * Math.cos(this.#angle)) / Math.sin(this.#angle);
+	}
+	#getArcMidpoint() {
 		const [ cx, cy ] = midpoint(this.#from.position, this.#to.position);
-		if (this.#radius === 0) return [ cx, cy ];
+		if (this.#angle === 0) return [ cx, cy ];
 
+		const [ ax, ay ] = this.#from.position;
+		const [ bx, by ] = this.#to.position;
 		const [ dx, dy ] = [ bx - ax, by - ay ];
-		const c = Math.sqrt(dx ** 2 + dy ** 2) / 2;
-		const angle = Math.atan2(dy / 2, dx / 2) + Math.PI / 2;
-		const m = c >= this.#radius ? c * (this.#flip ? -1 : 1)
-			: (this.#radius + Math.sqrt(this.#radius ** 2 - c ** 2) * (this.#large ? 1 : -1)) * (this.#flip ? -1 : 1);
 
-		return [ cx + m * Math.cos(angle), cy + m * Math.sin(angle) ];
+		const r = this.#getRadius();
+		const t = Math.atan2(dy, dx);
+
+		const m = r - r * Math.cos(this.#angle) + stateRadius * Math.sin(this.#angle);
+		return [ cx - m * Math.sin(t), cy + m * Math.cos(t) ];
 	}	
 
 }
