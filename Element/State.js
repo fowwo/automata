@@ -1,8 +1,8 @@
 import Anchor from "../Element/Anchor.js";
 import Draggable from "../Element/Draggable.js";
+import StraightArrow from "./StraightArrow.js";
 
 export const radius = 50;
-const arrowTipLength = 15;
 
 /** A state in a diagram. */
 export default class State extends Draggable {
@@ -34,31 +34,8 @@ export default class State extends Draggable {
 
 		// Add start transition.
 		const { angle = Math.PI, length = 75 } = start ?? {};
-		this.#arrow = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		this.#arrow.setAttribute("width", "1");
-		this.#arrow.setAttribute("height", "1");
-		this.#arrow.setAttribute("viewBox", "-0.5 -0.5 1 1");
-		this.#arrow.style.rotate = `${angle}rad`;
-
-		const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		for (const [ attribute, value ] of [
-			[ "x1", length + radius ], [ "x2", radius ], [ "y1", 0 ], [ "y2", 0 ]
-		]) line.setAttribute(attribute, value);
-
-		const tip1 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		for (const [ attribute, value ] of [
-			[ "x1", radius + arrowTipLength ], [ "x2", radius ], [ "y1", -arrowTipLength ], [ "y2", 0 ]
-		]) tip1.setAttribute(attribute, value);
-
-		const tip2 = document.createElementNS("http://www.w3.org/2000/svg", "line");
-		for (const [ attribute, value ] of [
-			[ "x1", radius + arrowTipLength ], [ "x2", radius ], [ "y1", arrowTipLength ], [ "y2", 0 ]
-		]) tip2.setAttribute(attribute, value);
-
-		this.#arrow.appendChild(line);
-		this.#arrow.appendChild(tip1);
-		this.#arrow.appendChild(tip2);
-		element.appendChild(this.#arrow);
+		this.#arrow = new StraightArrow(x, y, { length, offset: radius });
+		this.#arrow.element.style.rotate = `${angle}rad`;
 
 		// Add anchor to start transition.
 		this.#anchor = new Anchor(
@@ -75,7 +52,7 @@ export default class State extends Draggable {
 
 					// Force minimum length.
 					const length = Math.sqrt((x - px) ** 2 + (y - py) ** 2) - radius;
-					const minimumLength = 2 * arrowTipLength;
+					const minimumLength = 2 * this.#arrow.headLength / Math.SQRT2;
 					if (length < minimumLength) {
 						const angle = Math.atan2(y - py, x - px);
 						x = (minimumLength + radius) * Math.cos(angle) + px;
@@ -93,6 +70,8 @@ export default class State extends Draggable {
 			const [ ax, ay ] = this.#anchor.position;
 			const [ dx, dy ] = [ x - px, y - py ];
 
+			this.#arrow.position = [ x, y ];
+
 			blockAnchorListener = true;
 			this.#anchor.position = [ ax + dx, ay + dy ];
 			blockAnchorListener = false;
@@ -105,8 +84,8 @@ export default class State extends Draggable {
 			const angle = -Math.atan2(dx, dy) + Math.PI / 2;
 			const length = Math.sqrt(dx ** 2 + dy ** 2) - radius;
 
-			line.setAttribute("x1", length + radius);
-			this.#arrow.style.rotate = `${angle}rad`;
+			this.#arrow.length = length;
+			this.#arrow.element.style.rotate = `${angle}rad`;
 		});
 
 		// Resize label when text or font changes.
@@ -122,10 +101,10 @@ export default class State extends Draggable {
 	get start() { return this.#arrow.style.visibility !== "hidden"; }
 	set start(value) {
 		if (value) {
-			this.#arrow.style.visibility = "";
+			this.#arrow.element.style.visibility = "";
 			this.#anchor.element.style.display = "";
 		} else {
-			this.#arrow.style.visibility = "hidden";
+			this.#arrow.element.style.visibility = "hidden";
 			this.#anchor.element.style.display = "none";
 		}
 	}
