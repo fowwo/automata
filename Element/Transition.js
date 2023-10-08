@@ -1,5 +1,6 @@
 import Anchor from "./Anchor.js";
 import State, { radius as stateRadius } from "./State.js";
+import StraightArrow from "./StraightArrow.js";
 import SVG from "./SVG.js";
 
 /** A transition in a diagram. */
@@ -10,6 +11,7 @@ export default class Transition extends SVG {
 	#to;
 	#path;
 	#anchor;
+	#arrowHead;
 
 	// Path
 	#angle;
@@ -30,6 +32,7 @@ export default class Transition extends SVG {
 		this.#to = to;
 		this.#path = path;
 		this.#angle = angle;
+		this.#arrowHead = new StraightArrow(...this.#to.position, { length: 0, offset: stateRadius });
 		this.#renderPath();
 
 		this.#anchor = new Anchor(...this.#getArcMidpoint(), {
@@ -68,6 +71,10 @@ export default class Transition extends SVG {
 
 			this.#renderPath();
 		}
+		const onToMove = (position) => {
+			this.#arrowHead.position = position;
+			onStateMove();
+		};
 		const onAnchorMove = ([ x, y ]) => {
 			if (blockAnchorMove) return;
 
@@ -87,9 +94,9 @@ export default class Transition extends SVG {
 			this.#renderPath();
 		}
 
-		this.#from.addMoveListener(onStateMove.bind(this));
-		this.#to.addMoveListener(onStateMove.bind(this));
-		this.#anchor.addMoveListener(onAnchorMove.bind(this));
+		this.#from.addMoveListener(onStateMove);
+		this.#to.addMoveListener(onToMove);
+		this.#anchor.addMoveListener(onAnchorMove);
 	}
 
 	#renderPath() {
@@ -106,6 +113,7 @@ export default class Transition extends SVG {
 		const large = Math.abs(this.#angle) > Math.PI / 2;
 		const flip = this.#angle < 0;
 		this.#path.setAttribute("d", `M ${x1} ${y1} A ${r} ${r} 0 ${large ? 1 : 0} ${flip ? 1 : 0} ${x2} ${y2}`);
+		this.#arrowHead.element.style.rotate = `${Math.PI - this.#angle + t}rad`;
 	}
 	#getRadius() {
 		if (this.#angle === 0) return 0;
