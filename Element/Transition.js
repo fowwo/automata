@@ -1,9 +1,9 @@
-import Anchor from "../Element/Anchor.js";
-import Element from "../Element/Element.js";
+import Anchor from "./Anchor.js";
 import State, { radius as stateRadius } from "./State.js";
+import SVG from "./SVG.js";
 
 /** A transition in a diagram. */
-export default class Transition extends Element {
+export default class Transition extends SVG {
 
 	// Elements
 	#from;
@@ -20,15 +20,12 @@ export default class Transition extends Element {
 	 * @param {Number} [angle] - The angle of the transition.
 	 */
 	constructor(from, to, angle = 0) {
-		const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-		svg.classList.add("transition");
-		svg.appendChild(path);
-		svg.setAttribute("width", "1");
-		svg.setAttribute("height", "1");
-		svg.setAttribute("viewBox", "-0.5 -0.5 1 1");
+		super(...midpoint(from.position, to.position));
 
-		super(svg, ...midpoint(from.position, to.position));
+		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+		this.element.appendChild(path);
+		this.element.classList.add("transition");
+
 		this.#from = from;
 		this.#to = to;
 		this.#path = path;
