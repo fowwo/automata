@@ -1,4 +1,5 @@
 import Anchor from "./Anchor.js";
+import Text from "./Text.js";
 import State, { radius as stateRadius } from "./State.js";
 import StraightArrow from "./StraightArrow.js";
 import SVG from "./SVG.js";
@@ -10,6 +11,7 @@ export default class Transition extends SVG {
 	#from;
 	#to;
 	#path;
+	#label;
 	#anchor;
 	#arrowHead;
 
@@ -19,9 +21,10 @@ export default class Transition extends SVG {
 	/**
 	 * @param {State} from - The state to transition from.
 	 * @param {State} to - The state to transition to.
+	 * @param {String} label - The label of the transition.
 	 * @param {Number} [angle] - The angle of the transition.
 	 */
-	constructor(from, to, angle = 0) {
+	constructor(from, to, label, angle = 0) {
 		super(...midpoint(from.position, to.position));
 
 		const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
@@ -34,6 +37,10 @@ export default class Transition extends SVG {
 		this.#angle = angle;
 		this.#arrowHead = new StraightArrow(...this.#to.position, { length: 0, offset: stateRadius });
 		this.#renderPath();
+
+		this.#label = new Text(...this.#getArcMidpoint());
+		this.#label.element.innerText = label;
+		this.#repositionLabel();
 
 		this.#anchor = new Anchor(...this.#getArcMidpoint(), {
 			movementFilter: ([ x, y ]) => {
@@ -76,7 +83,10 @@ export default class Transition extends SVG {
 			onStateMove();
 		};
 		const onAnchorMove = ([ x, y ]) => {
-			if (blockAnchorMove) return;
+			if (blockAnchorMove) {
+				this.#repositionLabel();
+				return;
+			}
 
 			const [ ax, ay ] = this.#from.position;
 			const [ bx, by ] = this.#to.position;
@@ -92,11 +102,18 @@ export default class Transition extends SVG {
 			const flip = (t - a + 2 * Math.PI) % (2 * Math.PI) < Math.PI;
 			this.#angle = flip ? -angle : angle;
 			this.#renderPath();
+			this.#repositionLabel();
 		}
 
 		this.#from.addMoveListener(onStateMove);
 		this.#to.addMoveListener(onToMove);
 		this.#anchor.addMoveListener(onAnchorMove);
+	}
+
+	get label() { return this.#label.element.innerText; }
+	set label(text) {
+		this.#label.element.innerText = text;
+		this.#repositionLabel();
 	}
 
 	#renderPath() {
@@ -114,6 +131,36 @@ export default class Transition extends SVG {
 		const flip = this.#angle < 0;
 		this.#path.setAttribute("d", `M ${x1} ${y1} A ${r} ${r} 0 ${large ? 1 : 0} ${flip ? 1 : 0} ${x2} ${y2}`);
 		this.#arrowHead.element.style.rotate = `${Math.PI - this.#angle + t}rad`;
+	}
+	#repositionLabel() {
+		const [ ax, ay ] = this.#from.position;
+		const [ bx, by ] = this.#to.position;
+		const [ cx, cy ] = midpoint(this.#from.position, this.#to.position);
+		const [ dx, dy ] = [ bx - ax, by - ay ];
+		const [ x, y ] = this.#getArcMidpoint();
+
+		const [ width, height ] = [ this.#label.element.offsetWidth, this.#label.element.offsetHeight ];
+		const t = Math.atan2(dy, dx);
+		const a = Math.atan2(y - cy, x - cx);
+		const angle = t + Math.PI / 2;
+		const distance = 10;
+
+		if (this.#angle === 0) {
+			const flip = 0 <= angle && angle <= Math.PI;
+			const [ ox, oy ] = [
+				(distance + width / 2) * Math.cos(angle),
+				(distance + height / 2) * Math.sin(angle)
+			];
+			this.#label.position = flip ? [ x - ox, y - oy ] : [ x + ox, y + oy ];
+			return;
+		}
+
+		const flip = (t - a + 2 * Math.PI) % (2 * Math.PI) < Math.PI;
+		const [ ox, oy ] = [
+			(distance + width / 2) * Math.cos(angle),
+			(distance + height / 2) * Math.sin(angle)
+		];
+		this.#label.position = flip ? [ x - ox, y - oy ] : [ x + ox, y + oy ];
 	}
 	#getRadius() {
 		if (this.#angle === 0) return 0;
