@@ -18,6 +18,11 @@ export default class Transition extends SVG {
 	// Path
 	#angle;
 
+	// Listeners
+	#onStateMove;
+	#onToMove;
+	#onAnchorMove;
+
 	/**
 	 * @param {State} from - The state to transition from.
 	 * @param {State} to - The state to transition to.
@@ -68,22 +73,22 @@ export default class Transition extends SVG {
 			}
 		});
 
-		let blockAnchorMove = false;
-		const onStateMove = () => {
+		let blockAnchorListener = false;
+		this.#onStateMove = () => {
 			this.position = midpoint(this.#from.position, this.#to.position);
 
-			blockAnchorMove = true;
+			blockAnchorListener = true;
 			this.#anchor.position = this.#getArcMidpoint();
-			blockAnchorMove = false;
+			blockAnchorListener = false;
 
 			this.#renderPath();
 		}
-		const onToMove = (position) => {
-			this.#arrowHead.position = position;
-			onStateMove();
+		this.#onToMove = () => {
+			this.#arrowHead.position = this.#to.position;
+			this.#onStateMove();
 		};
-		const onAnchorMove = ([ x, y ]) => {
-			if (blockAnchorMove) {
+		this.#onAnchorMove = ([ x, y ]) => {
+			if (blockAnchorListener) {
 				this.#repositionLabel();
 				return;
 			}
@@ -105,9 +110,25 @@ export default class Transition extends SVG {
 			this.#repositionLabel();
 		}
 
-		this.#from.addMoveListener(onStateMove);
-		this.#to.addMoveListener(onToMove);
-		this.#anchor.addMoveListener(onAnchorMove);
+		this.#from.addMoveListener(this.#onStateMove);
+		this.#to.addMoveListener(this.#onToMove);
+		this.#anchor.addMoveListener(this.#onAnchorMove);
+	}
+
+	get from() { return this.#from; }
+	set from(state) {
+		this.#from.removeMoveListener(this.#onStateMove);
+		this.#from = state;
+		this.#from.addMoveListener(this.#onStateMove);
+		this.#onStateMove();
+	}
+
+	get to() { return this.#to; }
+	set to(state) {
+		this.#to.removeMoveListener(this.#onToMove);
+		this.#to = state;
+		this.#to.addMoveListener(this.#onToMove);
+		this.#onToMove();
 	}
 
 	get label() { return this.#label.element.innerText; }
