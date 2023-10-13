@@ -29,15 +29,9 @@ export default class State extends Draggable {
 		this.#span = document.createElement("span");
 		element.appendChild(this.#span);
 
-		this.final = final;
-		this.label = label;
-
 		// Add start transition.
 		const { angle = Math.PI, length = 75 } = start ?? {};
 		this.#arrow = new StraightArrow(x, y, { length, offset: radius });
-		this.#arrow.element.style.rotate = `${angle}rad`;
-
-		// Add anchor to start transition.
 		this.#anchor = new Anchor(
 			(length + radius) * Math.cos(angle) + x,
 			(length + radius) * Math.sin(angle) + y,
@@ -63,7 +57,10 @@ export default class State extends Draggable {
 				}
 			}
 		);
-		this.start = start;
+
+		this.label = label;
+		this.start = start !== null ? { angle, length } : null;
+		this.final = final;
 
 		let blockAnchorListener = false;
 		this.addMoveListener(([ x, y ], [ px, py ]) => {
@@ -84,8 +81,9 @@ export default class State extends Draggable {
 			const angle = -Math.atan2(dx, dy) + Math.PI / 2;
 			const length = Math.sqrt(dx ** 2 + dy ** 2) - radius;
 
-			this.#arrow.length = length;
-			this.#arrow.element.style.rotate = `${angle}rad`;
+			blockAnchorListener = true;
+			this.start = { angle, length };
+			blockAnchorListener = false;
 		});
 
 		// Resize label when text or font changes.
@@ -95,18 +93,35 @@ export default class State extends Draggable {
 		}).observe(this.#span);
 	}
 
-	get label() { return this.span.innerText; }
+	get label() { return this.#span.innerText; }
 	set label(value) { this.#span.innerText = value; }
 
-	get start() { return this.#arrow.style.visibility !== "hidden"; }
+	get start() {
+		if (this.#arrow.element.style.visibility !== "hidden") {
+			return {
+				angle: Number(this.#arrow.element.style.rotate.slice(0, -3)),
+				length: this.#arrow.length
+			};
+		}
+		return null;
+	}
 	set start(value) {
-		if (value) {
-			this.#arrow.element.style.visibility = "";
-			this.#anchor.element.style.display = "";
-		} else {
+		if (!value) {
 			this.#arrow.element.style.visibility = "hidden";
 			this.#anchor.element.style.display = "none";
+			return;
 		}
+
+		if (value.angle !== undefined) this.#arrow.element.style.rotate = `${value.angle}rad`;
+		if (value.length !== undefined) this.#arrow.length = value.length;
+		this.#arrow.element.style.visibility = "";
+		this.#anchor.element.style.display = "";
+
+		const { angle = this.start.angle, length = this.start.length } = value;
+		this.#anchor.position = [
+			(length + radius) * Math.cos(angle) + this.x,
+			(length + radius) * Math.sin(angle) + this.y
+		];
 	}
 
 	get final() { return this.element.classList.contains("final"); }
