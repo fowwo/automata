@@ -1,6 +1,6 @@
 import Element from "./Element.js";
 
-/** A span element in the workspace. */
+/** A span element in a diagram. */
 export default class Text extends Element {
 
 	/**

@@ -1,7 +1,7 @@
-const workspace = document.getElementById("workspace");
+const diagram = document.getElementById("diagram");
 const zoom = document.getElementById("zoom");
 
-workspace.onwheel = (event) => {
+diagram.onwheel = (event) => {
 	if (event.buttons) return; // Prevent scroll while dragging.
 	if (event.deltaY > 0) zoomOut();
 	else zoomIn();
@@ -17,14 +17,14 @@ document.getElementById("zoom").oninput = (event) => {
 };
 
 function zoomIn() {
-	const scale = parseFloat(workspace.style.getPropertyValue("--scale"));
+	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
 	setScale(Math.min(4, 1.25 * scale));
 }
 function zoomOut() {
-	const scale = parseFloat(workspace.style.getPropertyValue("--scale"));
+	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
 	setScale(Math.max(0.25, 0.8 * scale));
 }
 function setScale(x) {
-	workspace.style.setProperty("--scale", x);
+	diagram.style.setProperty("--scale", x);
 	zoom.value = x;
 }

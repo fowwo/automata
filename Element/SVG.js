@@ -1,6 +1,6 @@
 import Element from "./Element.js";
 
-/** An SVG element in the workspace. */
+/** An SVG element in a diagram. */
 export default class SVG extends Element {
 
 	/**

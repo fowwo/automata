@@ -1,0 +1,29 @@
+#diagram {
+	font-size: 32px;
+	z-index: 1;
+	cursor: move;
+}
+#diagram > * {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	translate:
+		calc(var(--scale, 1) * calc(var(--px, 0px) + var(--x, 0px)) - 50%)
+		calc(var(--scale, 1) * calc(var(--py, 0px) + var(--y, 0px)) - 50%);
+	scale: var(--scale, 1);
+}
+#diagram > span {
+	text-shadow:
+		-1px -1px 0px white,
+		-1px 1px 0px white,
+		1px -1px 0px white,
+		1px 1px 0px white;
+	z-index: 2;
+}
+#diagram > .draggable {
+	cursor: grab;
+	user-select: none;
+}
+#diagram > .draggable:active {
+	cursor: grabbing;
+}

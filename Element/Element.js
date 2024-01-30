@@ -1,6 +1,4 @@
-const workspace = document.getElementById("workspace");
-
-/** An element in the workspace. */
+/** An element in a diagram. */
 export default class Element {
 
 	#x;
@@ -8,14 +6,14 @@ export default class Element {
 	#moveListeners = new Set();
 
 	/**
-	 * @param {HTMLElement} element - The element to add to the workspace.
+	 * @param {HTMLElement} element - The element to add to the diagram.
 	 * @param {Number} x - The initial x position.
 	 * @param {Number} y - The initial y position.
 	 */
 	constructor(element, x, y) {
 		this.element = element;
 		this.position = [ x, y ];
-		workspace.appendChild(element);
+		diagram.appendChild(element);
 	}
 
 	get x() { return this.#x; }

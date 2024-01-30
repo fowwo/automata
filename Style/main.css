@@ -6,14 +6,20 @@ body {
 	font-family: 'Roboto Slab', serif;
 	color: black;
 }
+main {
+	width: 100vw;
+	height: 100vh;
+}
+main > * {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+}
 svg {
 	fill: none;
 	stroke: currentColor;
 	stroke-width: 5px;
 	stroke-linecap: round;
 	overflow: visible;
-}
-#controls {
-	position: absolute;
-	z-index: 1;
 }

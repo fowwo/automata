@@ -1,10 +1,10 @@
 import Element from "./Element.js";
 
-/** A draggable element in the workspace. */
+/** A draggable element in a diagram. */
 export default class Draggable extends Element {
 
 	/**
-	 * @param {HTMLElement} element - The element to add to the workspace.
+	 * @param {HTMLElement} element - The element to add to the diagram.
 	 * @param {Number} x - The initial x position.
 	 * @param {Number} y - The initial y position.
 	 * @param {Object} options - An object containing optional parameters.
@@ -17,7 +17,7 @@ export default class Draggable extends Element {
 		element.onmousedown = (event) => {
 			event.stopPropagation();
 
-			const scale = parseFloat(workspace.style.getPropertyValue("--scale"));
+			const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
 			const [ cx, cy ] = [ event.clientX, event.clientY ];
 			const [ px, py ] = this.position;
 
