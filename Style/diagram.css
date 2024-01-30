@@ -20,6 +20,7 @@
 		1px 1px 0px white;
 	z-index: 2;
 }
+
 #diagram > .draggable {
 	cursor: grab;
 	user-select: none;
@@ -27,3 +28,44 @@
 #diagram > .draggable:active {
 	cursor: grabbing;
 }
+
+#diagram > .state {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	box-sizing: border-box;
+	aspect-ratio: 1;
+	width: 100px;
+	background-color: white;
+	border: 5px solid currentColor;
+	border-radius: 100%;
+	z-index: 1;
+}
+#diagram > .state.final:after {
+	position: absolute;
+	display: block;
+	content: "";
+	margin: 5px;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	border-radius: 100%;
+	border: 5px solid currentColor;
+}
+#diagram > .state > * { position: absolute; }
+#diagram > .state > span {
+	font-size: 50px;
+	line-height: 90px;
+	white-space: nowrap;
+}
+
+#diagram > .anchor {
+	aspect-ratio: 1;
+	width: 30px;
+	border-radius: 100%;
+	background-color: #f008;
+	z-index: 3;
+}
+#diagram > .anchor:hover { background-color: gold; }
+#diagram > .anchor:active { background-color: cyan; }

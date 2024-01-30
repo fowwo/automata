@@ -1,9 +1,0 @@
-.anchor {
-	aspect-ratio: 1;
-	width: 30px;
-	border-radius: 100%;
-	background-color: #f008;
-	z-index: 3;
-}
-.anchor:hover { background-color: gold; }
-.anchor:active { background-color: cyan; }
