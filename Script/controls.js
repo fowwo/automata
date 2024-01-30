@@ -11,11 +11,11 @@ document.getElementById("zoom-out").onclick = zoomOut;
 
 function zoomIn() {
 	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
-	setScale(Math.min(4, 1.25 * scale));
+	setScale(Math.min(4, Math.SQRT2 * scale));
 }
 function zoomOut() {
 	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
-	setScale(Math.max(0.25, 0.8 * scale));
+	setScale(Math.max(0.25, Math.SQRT1_2 * scale));
 }
 function setScale(x) {
 	diagram.style.setProperty("--scale", x);
