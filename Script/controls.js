@@ -1,5 +1,4 @@
 const diagram = document.getElementById("diagram");
-const zoom = document.getElementById("zoom");
 
 diagram.onwheel = (event) => {
 	if (event.buttons) return; // Prevent scroll while dragging.
@@ -9,12 +8,6 @@ diagram.onwheel = (event) => {
 
 document.getElementById("zoom-in").onclick = zoomIn;
 document.getElementById("zoom-out").onclick = zoomOut;
-document.getElementById("zoom-reset").onclick = (event) => {
-	setScale(1);
-};
-document.getElementById("zoom").oninput = (event) => {
-	setScale(event.target.valueAsNumber);
-};
 
 function zoomIn() {
 	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
@@ -26,5 +19,5 @@ function zoomOut() {
 }
 function setScale(x) {
 	diagram.style.setProperty("--scale", x);
-	zoom.value = x;
+	document.getElementById("zoom-label").innerText = x.toFixed(2);
 }
