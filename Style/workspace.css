@@ -59,12 +59,12 @@
 	opacity: 50%;
 }
 #zoom > #zoom-in::after {
-	content: "zoom_in";
+	content: "\e8ff";
 	font-variation-settings: "FILL" 1;
 	font-size: 36px;
 }
 #zoom > #zoom-out::after {
-	content: "zoom_out";
+	content: "\e900";
 	font-variation-settings: "FILL" 1;
 	font-size: 36px;
 }
