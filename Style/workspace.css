@@ -4,67 +4,67 @@
 	z-index: 2;
 	pointer-events: none;
 	--margin: 20px;
-}
-#workspace > * {
-	position: absolute;
-	display: flex;
-	gap: 5px;
-}
-#workspace button {
-	aspect-ratio: 1;
-	border-radius: 20%;
-	background-color: #fffb;
-	box-shadow:
-		0px 0.6px 2.2px rgba(0, 0, 0, 0.028),
-		0px 1.3px 5.3px rgba(0, 0, 0, 0.04),
-		0px 2.5px 10px rgba(0, 0, 0, 0.05),
-		0px 4.5px 17.9px rgba(0, 0, 0, 0.06),
-		0px 8.4px 33.4px rgba(0, 0, 0, 0.072),
-		0px 20px 80px rgba(0, 0, 0, 0.1);
-	backdrop-filter: blur(8px);
-	pointer-events: all;
-	cursor: pointer;
-}
-#workspace button::before {
-	border-radius: inherit;
-	z-index: -1;
-}
-#workspace button::after {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	font-family: 'Material Symbols Outlined';
-	opacity: 75%;
-	transition: inherit;
-}
-#workspace button:hover::after {
-	opacity: 100%;
-	scale: 1.1;
-}
-#workspace button:hover:active::after {
-	scale: 1;
-}
 
-#zoom {
-	margin: 0 var(--margin) var(--margin) 0;
-	bottom: 0;
-	right: 0;
-	flex-direction: column;
-}
-#zoom > * {
-	width: 50px;
-}
-#zoom > #zoom-label {
-	text-align: center;
-	opacity: 50%;
-}
-#zoom > #zoom-in::after {
-	content: "\e8ff";
-	font-variation-settings: "FILL" 1;
-	font-size: 36px;
-}
-#zoom > #zoom-out::after {
-	content: "\e900";
-	font-variation-settings: "FILL" 1;
-	font-size: 36px;
+	> * {
+		position: absolute;
+		display: flex;
+		gap: 5px;
+	}
+	button {
+		aspect-ratio: 1;
+		border-radius: 20%;
+		background-color: #fffb;
+		box-shadow:
+			0px 0.6px 2.2px rgba(0, 0, 0, 0.028),
+			0px 1.3px 5.3px rgba(0, 0, 0, 0.04),
+			0px 2.5px 10px rgba(0, 0, 0, 0.05),
+			0px 4.5px 17.9px rgba(0, 0, 0, 0.06),
+			0px 8.4px 33.4px rgba(0, 0, 0, 0.072),
+			0px 20px 80px rgba(0, 0, 0, 0.1);
+		backdrop-filter: blur(8px);
+		pointer-events: all;
+		cursor: pointer;
+
+		&::before {
+			border-radius: inherit;
+			z-index: -1;
+		}
+		&::after {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			font-family: 'Material Symbols Outlined';
+			opacity: 75%;
+			transition: inherit;
+		}
+		&:hover::after {
+			opacity: 100%;
+			scale: 1.1;
+		}
+		&:hover:active::after {
+			scale: 1;
+		}
+	}
+	#zoom {
+		margin: 0 var(--margin) var(--margin) 0;
+		bottom: 0;
+		right: 0;
+		flex-direction: column;
+
+		> * {
+			width: 50px;
+		}
+		> #zoom-label {
+			text-align: center;
+			opacity: 50%;
+		}
+		> #zoom-in::after {
+			content: "\e8ff";
+			font-size: 36px;
+		}
+		> #zoom-out::after {
+			content: "\e900";
+			font-size: 36px;
+		}
+	}
 }
