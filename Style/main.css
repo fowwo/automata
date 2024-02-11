@@ -3,9 +3,24 @@
 	padding: 0;
 	box-sizing: border-box;
 }
+html {
+	background: hsl(var(--background-color-hsl));
+
+	/* Light color scheme values */
+	color-scheme: light;
+	--background-color-hsl: 0 0 100%;
+	--text-color-hsl: 0 0 0;
+	--shadow-color-hsl: 0 0 0;
+}
+html.dark {
+	color-scheme: dark;
+	--background-color-hsl: 0 0 10%;
+	--text-color-hsl: 0 0 100%;
+	--shadow-color-hsl: 0 0 100%;
+}
 body {
 	font-family: 'Roboto Slab', serif;
-	color: black;
+	color: hsl(var(--text-color-hsl));
 }
 main {
 	width: 100vw;
@@ -25,7 +40,7 @@ button {
 	justify-content: center;
 	align-items: center;
 	font: inherit;
-	background-color: inherit;
+	background-color: transparent;
 	color: inherit;
 	transition:
 		all cubic-bezier(0.5, 1, 0, 1.5),

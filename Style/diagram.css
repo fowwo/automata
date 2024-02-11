@@ -14,10 +14,10 @@
 	}
 	> span {
 		text-shadow:
-			-1px -1px 0px white,
-			-1px 1px 0px white,
-			1px -1px 0px white,
-			1px 1px 0px white;
+			-1px -1px 0px hsl(var(--background-color-hsl)),
+			-1px 1px 0px hsl(var(--background-color-hsl)),
+			1px -1px 0px hsl(var(--background-color-hsl)),
+			1px 1px 0px hsl(var(--background-color-hsl));
 		z-index: 2;
 	}
 	> .anchor {
@@ -45,7 +45,7 @@
 		box-sizing: border-box;
 		aspect-ratio: 1;
 		width: 100px;
-		background-color: white;
+		background-color: hsl(var(--background-color-hsl));
 		border: 5px solid currentColor;
 		border-radius: 100%;
 		z-index: 1;
