@@ -1,0 +1,35 @@
+body > nav {
+	display: flex;
+	padding: 5px;
+	width: 50px;
+	justify-content: space-between;
+	flex-direction: column;
+	flex-shrink: 0;
+	background-color: hsl(var(--background-color-2-hsl));
+	box-shadow: var(--shadow-large);
+	z-index: 1;
+
+	> div {
+		display: flex;
+		flex-direction: column;
+		gap: 5px;
+
+		> button, > .button {
+			position: relative;
+			aspect-ratio: 1;
+			background-color: hsl(var(--background-color-2-hsl));
+
+			&::before {
+				content: "";
+				position: absolute;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				border-radius: inherit;
+				box-shadow: var(--shadow-small);
+				z-index: -1;
+			}
+		}
+	}
+}

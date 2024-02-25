@@ -20,6 +20,12 @@
 			1px 1px 0px hsl(var(--background-color-hsl));
 		z-index: 2;
 	}
+	> svg {
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 5px;
+		stroke-linecap: round;
+	}
 	> .anchor {
 		aspect-ratio: 1;
 		width: 30px;
