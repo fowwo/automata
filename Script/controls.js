@@ -9,6 +9,8 @@ diagram.onwheel = (event) => {
 document.getElementById("zoom-in").onclick = zoomIn;
 document.getElementById("zoom-out").onclick = zoomOut;
 
+document.getElementById("color-scheme").onclick = toggleTheme;
+
 function zoomIn() {
 	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
 	setScale(Math.min(4, Math.SQRT2 * scale));
@@ -20,4 +22,8 @@ function zoomOut() {
 function setScale(x) {
 	diagram.style.setProperty("--scale", x);
 	document.getElementById("zoom-label").innerText = x.toFixed(2);
+}
+function toggleTheme() {
+	const dark = document.documentElement.classList.toggle("dark");
+	localStorage.setItem("color-scheme", dark ? "dark" : "light");
 }
