@@ -1,0 +1,8 @@
+#panel {
+	padding: 20px;
+	width: 300px;
+	flex-shrink: 0;
+	background-color: hsl(var(--background-color-2-hsl));
+	box-shadow: var(--shadow-large);
+	overflow-y: auto;
+}
