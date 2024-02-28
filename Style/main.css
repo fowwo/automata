@@ -51,11 +51,6 @@ a.button {
 	background-color: transparent;
 	color: hsl(var(--text-color-hsl) / 65%);
 	border-radius: 5px;
-	transition:
-		font-size cubic-bezier(0.5, 1, 0, 1.5),
-		background-color ease,
-		color ease;
-	transition-duration: 150ms;
 	cursor: pointer;
 
 	&:hover {
