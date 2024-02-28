@@ -1,6 +1,16 @@
+#diagram-info-container {
+	max-width: 0px;
+	z-index: 1;
+	transition: max-width var(--transition-duration) var(--transition-smooth);
+	--width: 300px;
+
+	body:has(#open-diagram-info > input:checked) & {
+		max-width: var(--width);
+	}
+}
 #diagram-info {
 	padding: 20px;
-	width: 300px;
+	width: var(--width);
 	flex-shrink: 0;
 	overflow-y: auto;
 }

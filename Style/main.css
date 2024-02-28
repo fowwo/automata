@@ -6,6 +6,9 @@
 html {
 	background: hsl(var(--background-color-hsl));
 
+	--transition-smooth: cubic-bezier(0.6, 0, 0.4, 1);
+	--transition-duration: 300ms;
+
 	/* Light color scheme values */
 	color-scheme: light;
 	--background-color-hsl: 0 0 100%;
@@ -24,15 +27,14 @@ body {
 	position: relative;
 	display: flex;
 	height: 100vh;
+	overflow: hidden;
 	font-family: 'Roboto Slab', serif;
 	color: hsl(var(--text-color-hsl));
-	z-index: 0;
 }
 main {
 	position: relative;
 	width: 100%;
 	user-select: none;
-	z-index: -1;
 }
 main > * {
 	position: absolute;
@@ -40,8 +42,7 @@ main > * {
 	height: 100%;
 	overflow: hidden;
 }
-button,
-a.button {
+button, .button {
 	display: block;
 	appearance: none;
 	border: none;
@@ -56,6 +57,9 @@ a.button {
 	&:hover {
 		color: hsl(var(--text-color-hsl));
 	}
+}
+input[type=checkbox] {
+	cursor: pointer;
 }
 svg {
 	fill: currentColor;

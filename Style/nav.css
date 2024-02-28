@@ -5,6 +5,7 @@ body > nav {
 	justify-content: space-between;
 	flex-direction: column;
 	flex-shrink: 0;
+	z-index: 2;
 
 	> div {
 		display: flex;
