@@ -1,0 +1,6 @@
+#diagram-info {
+	padding: 20px;
+	width: 300px;
+	flex-shrink: 0;
+	overflow-y: auto;
+}
