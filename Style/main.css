@@ -67,6 +67,13 @@ svg {
 	overflow: visible;
 }
 
+.symbol, .filled-symbol {
+	font-family: "Material Symbols Outlined";
+}
+.filled-symbol {
+	font-variation-settings: "FILL" 1;
+}
+
 .large-shadow, .small-shadow {
 	position: relative;
 

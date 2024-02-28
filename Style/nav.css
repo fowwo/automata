@@ -14,10 +14,8 @@ body > nav {
 		> button, > .button {
 			position: relative;
 			aspect-ratio: 1;
-			font-family: 'Material Symbols Outlined';
 			font-size: 28px;
-			font-variation-settings: "FILL" 1;
-			background-color: hsl(var(--background-color-2-hsl));
+			background-color: hsl(var(--background-color-hsl));
 		}
 	}
 
@@ -33,7 +31,7 @@ body > nav {
 			position: absolute;
 			display: block;
 			rotate: 135deg;
-			translate: -1px 2px;
+			translate: -1px;
 
 			html.dark & {
 				visibility: hidden;
