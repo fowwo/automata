@@ -20,6 +20,21 @@ body > nav {
 	}
 
 	#color-scheme {
+		html:has(&:hover) * {
+			/*
+				This style declaration removes the transitions for
+				`background-color` and `color` while retaining the
+				transitions for `font-size` and `max-width`. Some
+				elements have one or more of the color transitions,
+				which would be visible when changing color schemes.
+				However, I don't want to remove all transitions so
+				that I dont disrupt transitions unrelated to color.
+				
+				I have no idea why this style declaration works,
+				but it does exactly what I want it to do.
+			*/
+			transition: all !important;
+		}
 		> span {
 			position: absolute;
 			display: block;
