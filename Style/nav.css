@@ -20,6 +20,12 @@ body > nav {
 	}
 
 	#color-scheme {
+		> span {
+			position: absolute;
+			display: block;
+			left: 0;
+			right: 0;
+		}
 		> :first-child {
 			visibility: hidden;
 
@@ -28,10 +34,8 @@ body > nav {
 			}
 		}
 		> :last-child {
-			position: absolute;
-			display: block;
 			rotate: 135deg;
-			translate: -1px;
+			translate: -2px 2px;
 
 			html.dark & {
 				visibility: hidden;
