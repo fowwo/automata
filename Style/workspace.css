@@ -10,9 +10,9 @@
 		display: flex;
 		gap: 5px;
 	}
-	*:not(.widget)::before,
-	*::after {
-		font-family: 'Material Symbols Outlined';
+	button {
+		font-family: "Material Symbols Outlined";
+		font-size: 32px;
 	}
 	.widget {
 		position: relative;
@@ -33,24 +33,6 @@
 			z-index: -1;
 		}
 	}
-	button {
-		&::after {
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			opacity: 75%;
-			transition: inherit;
-		}
-		&:hover {
-			&::after {
-				opacity: 100%;
-				scale: 1.1;
-			}
-			&:active::after {
-				scale: 1;
-			}
-		}
-	}
 	#zoom {
 		margin: 0 var(--margin) var(--margin) 0;
 		bottom: 0;
@@ -60,18 +42,14 @@
 		> button {
 			aspect-ratio: 1;
 			width: 50px;
+
+			&:not(:active):hover {
+				font-size: 36px;
+			}
 		}
-		> #zoom-label {
+		> span {
 			text-align: center;
 			opacity: 50%;
-		}
-		> #zoom-in::after {
-			content: "\e8ff";
-			font-size: 36px;
-		}
-		> #zoom-out::after {
-			content: "\e900";
-			font-size: 36px;
 		}
 	}
 }

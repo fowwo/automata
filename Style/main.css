@@ -62,14 +62,18 @@ a.button {
 	font: inherit;
 	line-height: 0;
 	background-color: transparent;
-	color: inherit;
+	color: hsl(var(--text-color-hsl) / 65%);
 	border-radius: 5px;
 	transition:
-		all cubic-bezier(0.5, 1, 0, 1.5),
+		font-size cubic-bezier(0.5, 1, 0, 1.5),
 		background-color ease,
 		color ease;
-	transition-duration: 200ms;
+	transition-duration: 150ms;
 	cursor: pointer;
+
+	&:hover {
+		color: hsl(var(--text-color-hsl));
+	}
 }
 svg {
 	fill: currentColor;
