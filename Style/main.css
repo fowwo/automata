@@ -6,6 +6,16 @@
 html {
 	background: hsl(var(--background-color-hsl));
 
+	--accent-color-hsl: 215 100% 50%;
+
+	--small-inset-shadow:
+		inset 0px 0.1px 0.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.25)),
+		inset 0px 0.1px 0.3px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.407)),
+		inset 0px 0.3px 0.6px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.5)),
+		inset 0px 0.4px 1.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.593)),
+		inset 0px 0.8px 2.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.72)),
+		inset 0px 2px 5px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity)));
+
 	--transition-smooth: cubic-bezier(0.6, 0, 0.4, 1);
 	--transition-duration: 300ms;
 
@@ -57,6 +67,58 @@ button, .button {
 	&:hover {
 		color: hsl(var(--text-color-hsl));
 	}
+.checkbox, .radio {
+	position: relative;
+	aspect-ratio: 1;
+	box-shadow: var(--small-inset-shadow);
+	border-radius: 5px;
+
+	&:has(> input:checked) {
+		background-color: #08f;
+		box-shadow: none;
+		&::after {
+			content: ""; 
+			display: flex;
+			position: absolute;
+			inset: 3px;
+			justify-content: center;
+			align-items: center;
+			background-color: hsl(var(--background-color-hsl));
+			border-radius: 3px;
+			pointer-events: none;
+		}
+	}
+	> input {
+		position: absolute;
+		inset: 0;
+		appearance: none;
+		border-radius: inherit;
+		cursor: pointer;
+	}
+}
+.checkbox {
+	font-size: 1.25em;
+
+	&:has(> input:checked) {
+		&.symbol::after {
+			content: "\e876";
+		}
+	}
+}
+.radio {
+	font-size: 0.75em;
+	border-radius: 50%;
+
+	&:has(> input:checked) {
+		&::after {
+			border-radius: 50%;
+		}
+		&.symbol::after {
+			content: "\e061";
+			font-variation-settings: "FILL" 1;
+		}
+	}
+}
 }
 input[type=checkbox] {
 	cursor: pointer;
