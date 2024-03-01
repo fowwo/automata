@@ -120,8 +120,23 @@ button, .button {
 	}
 }
 }
-input[type=checkbox] {
-	cursor: pointer;
+input[type=text] {
+	border: none;
+	appearance: none;
+	padding: 5px;
+	width: 100%;
+	background: none;
+	font: inherit;
+	text-overflow: ellipsis;
+	color: hsl(var(--text-color-hsl) / 65%);
+	border-radius: 5px;
+
+	&:enabled {
+		box-shadow: var(--small-inset-shadow);
+	}
+	&:focus, &:enabled:hover {
+		color: hsl(var(--text-color-hsl) / 100%);
+	}
 }
 svg {
 	fill: currentColor;

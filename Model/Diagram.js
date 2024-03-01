@@ -47,6 +47,13 @@ export default class Diagram {
 				new Transition(states[from], states[to], symbols.join(","), angle);
 			});
 		});
+
+		// Enable renaming input field.
+		const rename = document.querySelector("#diagram-info > header > input");
+		rename.disabled = false;
+		rename.onchange = (event) => {
+			this.name = event.target.value;
+		};
 	}
 
 }
