@@ -26,4 +26,26 @@
 			padding: 0 10px;
 		}
 	}
+	> #states {
+		width: 100%;
+
+		> thead > tr {
+			> th:not(:last-child) {
+				font-size: 1.25em;
+			}
+			> th:last-child {
+				line-height: 0;
+				width: 100%;
+				text-align: left;
+			}
+		}
+		> tbody > tr > td {
+			&:not(:last-child) > div {
+				display: block;
+				margin: 0 auto;
+				height: 31px;
+				aspect-ratio: 1;
+			}
+		}
+	}
 }

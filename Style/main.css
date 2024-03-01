@@ -69,6 +69,12 @@ button, .button {
 	> svg {
 		padding: 5px;
 	}
+}
+h1 {
+	margin: 10px 0;
+	font-size: 1.75em;
+	line-height: 1;
+}
 .checkbox, .radio {
 	position: relative;
 	aspect-ratio: 1;
@@ -168,6 +174,16 @@ input[type=text] {
 svg {
 	fill: currentColor;
 	overflow: visible;
+}
+table {
+	border-collapse: collapse;
+	border-style: hidden;
+
+	td, th {
+		border-width: 5px 10px;
+		border-style: solid;
+		border-color: transparent;
+	}
 }
 
 .symbol, .filled-symbol {
