@@ -18,22 +18,41 @@ export default class Diagram {
 		this.machine = new {
 			"DFA": DFA
 		}[type](machine);
-		this.elements = elements;
+
+		this.states = elements.states.map(({ x, y, ...options }, i) => {
+			if (this.machine.finalStates.has(i)) options.final = true;
+			return new State(x, y, options);
+		});
+		if (this.states[machine.startState]) this.states[machine.startState].start = elements.startState;
+
+		this.transitions = Object.entries(this.machine.transitions).reduce((list, [ from, transitions ]) => {
+
+			// Merge transitions of the same states and symbols.
+			const symbols = {};
+			Object.entries(transitions).forEach(([ symbol, to ]) => {
+				if (to in symbols) symbols[to].push(symbol);
+				else symbols[to] = [ symbol ];
+			});
+
+			return list.concat(Object.entries(symbols).map(([ to, symbols ]) => {
+				const angle = elements.transitions[from]?.[to];
+				return new Transition(this.states[from], this.states[to], symbols.join(","), angle);
+			}));
+		}, []);
 	}
 
 	/** Renders the diagram. */
 	load() {
 		document.getElementById("diagram").innerHTML = "";
+		for (const state of this.states) state.render();
+		for (const transition of this.transitions) transition.render();
+
 		const statesList = document.querySelector("#states tbody");
 		statesList.innerHTML = "";
 
 		// Render states and display state info.
 		let startState = null;
-		const states = this.elements.states.map(({ x, y, ...options }, i) => {
-			if (i === this.machine.startState) options.start = this.elements.startState;
-			if (this.machine.finalStates.has(i)) options.final = true;
-			
-			const state = new State(x, y, options);
+		for (const state of this.states) {
 			const tr = document.createElement("tr");
 
 			// Start state toggle
@@ -81,23 +100,7 @@ export default class Diagram {
 				tr.appendChild(td);
 			}
 			statesList.appendChild(tr);
-			return state;
-		});
-
-		// Render transitions.
-		Object.entries(this.machine.transitions).forEach(([ from, transitions ]) => {
-
-			// Merge transitions of the same states and symbols.
-			const symbols = {};
-			Object.entries(transitions).forEach(([ symbol, to ]) => {
-				if (to in symbols) symbols[to].push(symbol);
-				else symbols[to] = [ symbol ];
-			});
-			Object.entries(symbols).forEach(([ to, symbols ]) => {
-				const angle = this.elements.transitions[from]?.[to];
-				new Transition(states[from], states[to], symbols.join(","), angle);
-			});
-		});
+		}
 
 		// Enable renaming input field.
 		const rename = document.querySelector("#diagram-info > header > input");

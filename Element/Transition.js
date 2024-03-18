@@ -49,7 +49,6 @@ export default class Transition extends SVG {
 
 		this.#label = new Text(...this.#getArcMidpoint());
 		this.#label.element.innerText = label;
-		this.#repositionLabel();
 
 		this.#anchor = new Anchor(...this.#getArcMidpoint(), {
 			movementFilter: ([ x, y ]) => {
@@ -167,6 +166,14 @@ export default class Transition extends SVG {
 	get label() { return this.#label.element.innerText; }
 	set label(text) {
 		this.#label.element.innerText = text;
+		this.#repositionLabel();
+	}
+
+	render() {
+		super.render();
+		this.#arrowHead.render();
+		this.#anchor.render();
+		this.#label.render();
 		this.#repositionLabel();
 	}
 

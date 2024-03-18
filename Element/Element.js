@@ -13,7 +13,6 @@ export default class Element {
 	constructor(element, x, y) {
 		this.element = element;
 		this.position = [ x, y ];
-		diagram.appendChild(element);
 	}
 
 	get x() { return this.#x; }
@@ -39,6 +38,11 @@ export default class Element {
 		this.element.style.setProperty("--x", `${x}px`);
 		this.element.style.setProperty("--y", `${y}px`);
 		this.#notifyMoveListeners(previous);
+	}
+
+	/** Appends the element to the diagram. */
+	render() {
+		document.getElementById("diagram").appendChild(this.element);
 	}
 
 	addMoveListener(listener) {

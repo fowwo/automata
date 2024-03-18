@@ -32,6 +32,7 @@ export default class State extends Draggable {
 		// Add start transition.
 		const { angle = Math.PI, length = 75 } = start ?? {};
 		this.#arrow = new StraightArrow(x, y, { length, offset: radius });
+		this.#arrow.element.style.rotate = `${angle}rad`;
 		this.#anchor = new Anchor(
 			(length + radius) * Math.cos(angle) + x,
 			(length + radius) * Math.sin(angle) + y,
@@ -127,6 +128,12 @@ export default class State extends Draggable {
 		else this.element.classList.remove("final");
 
 		this.#rescaleLabel();
+	}
+
+	render() {
+		super.render();
+		this.#arrow.render();
+		this.#anchor.render();
 	}
 
 	#rescaleLabel() {
