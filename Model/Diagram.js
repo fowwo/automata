@@ -51,55 +51,8 @@ export default class Diagram {
 		statesList.innerHTML = "";
 
 		// Render states and display state info.
-		let startState = null;
 		for (const state of this.states) {
-			const tr = document.createElement("tr");
-
-			// Start state toggle
-			const radio = document.createElement("div");
-			radio.classList.add("radio", "symbol");
-			const start = document.createElement("input");
-			start.type = "radio";
-			start.name = "start";
-			if (state.start) {
-				startState = state;
-				start.checked = true;
-			}
-			start.addEventListener("change", () => {
-				if (startState) {
-					state.start = startState.start;
-					startState.start = null;
-				}
-				startState = state;
-			});
-			radio.appendChild(start);
-
-			// Final state toggle
-			const checkbox = document.createElement("div");
-			checkbox.classList.add("checkbox", "symbol");
-			const final = document.createElement("input");
-			final.type = "checkbox";
-			final.checked = state.final;
-			final.addEventListener("change", (event) => {
-				state.final = event.target.checked;
-			});
-			checkbox.appendChild(final);
-
-			// Label
-			const label = document.createElement("input");
-			label.type = "text";
-			label.value = state.label;
-			label.addEventListener("change", (event) => {
-				state.label = event.target.value;
-			});
-			
-			// Append elements to table row.
-			for (const element of [ radio, checkbox, label ]) {
-				const td = document.createElement("td");
-				td.appendChild(element);
-				tr.appendChild(td);
-			}
-			statesList.appendChild(tr);
+			statesList.appendChild(this.#createStateEntry(state));
 		}
 
 		// Enable renaming input field.
@@ -108,6 +61,57 @@ export default class Diagram {
 		rename.onchange = (event) => {
 			this.name = event.target.value;
 		};
+	}
+
+	/**
+	 * Creates a table row entry for the given state.
+	 * @param {State} state - The state.
+	 */
+	#createStateEntry(state) {
+		const tr = document.createElement("tr");
+
+		// Start state toggle
+		const radio = document.createElement("div");
+		radio.classList.add("radio", "symbol");
+		const start = document.createElement("input");
+		start.type = "radio";
+		start.name = "start";
+		start.checked = Boolean(state.start);
+		start.addEventListener("change", () => {
+			if (this.states[this.machine.startState]) {
+				state.start = this.states[this.machine.startState].start;
+				this.states[this.machine.startState].start = null;
+			}
+			this.machine.startState = this.states.findIndex(x => x === state);
+		});
+		radio.appendChild(start);
+
+		// Final state toggle
+		const checkbox = document.createElement("div");
+		checkbox.classList.add("checkbox", "symbol");
+		const final = document.createElement("input");
+		final.type = "checkbox";
+		final.checked = state.final;
+		final.addEventListener("change", (event) => {
+			state.final = event.target.checked;
+		});
+		checkbox.appendChild(final);
+
+		// Label
+		const label = document.createElement("input");
+		label.type = "text";
+		label.value = state.label;
+		label.addEventListener("change", (event) => {
+			state.label = event.target.value;
+		});
+		
+		// Append elements to table row.
+		for (const element of [ radio, checkbox, label ]) {
+			const td = document.createElement("td");
+			td.appendChild(element);
+			tr.appendChild(td);
+		}
+		return tr;
 	}
 
 }
