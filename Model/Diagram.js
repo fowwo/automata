@@ -101,6 +101,7 @@ export default class Diagram {
 		const label = document.createElement("input");
 		label.type = "text";
 		label.value = state.label;
+		label.onchange = () => label.blur()
 		label.addEventListener("change", (event) => {
 			state.label = event.target.value;
 		});
