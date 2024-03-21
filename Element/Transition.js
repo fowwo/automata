@@ -177,6 +177,13 @@ export default class Transition extends SVG {
 		this.#repositionLabel();
 	}
 
+	remove() {
+		super.remove();
+		this.#arrowHead.remove();
+		this.#anchor.remove();
+		this.#label.remove();
+	}
+
 	#renderPath() {
 		if (this.#from === this.#to) {
 			const angle = 2 * Math.atan2(stateRadius + loopDistance, stateRadius);

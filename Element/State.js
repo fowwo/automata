@@ -136,6 +136,12 @@ export default class State extends Draggable {
 		this.#anchor.render();
 	}
 
+	remove() {
+		super.remove();
+		this.#arrow.remove();
+		this.#anchor.remove();
+	}
+
 	#rescaleLabel() {
 		const width = this.#span.clientWidth;
 		const maxWidth = this.final ? 60 : 80;

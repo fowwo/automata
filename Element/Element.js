@@ -45,6 +45,11 @@ export default class Element {
 		document.getElementById("diagram").appendChild(this.element);
 	}
 
+	/** Removes the element from the diagram. */
+	remove() {
+		this.element.remove();
+	}
+
 	addMoveListener(listener) {
 		this.#moveListeners.add(listener);
 	}
