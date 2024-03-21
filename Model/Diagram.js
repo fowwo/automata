@@ -25,34 +25,57 @@ export default class Diagram {
 		});
 		if (this.states[machine.startState]) this.states[machine.startState].start = elements.startState;
 
-		this.transitions = Object.entries(this.machine.transitions).reduce((list, [ from, transitions ]) => {
+		this.transitions = {};
+		for (const [ from, transitions ] of Object.entries(this.machine.transitions)) {
 
 			// Merge transitions of the same states and symbols.
-			const symbols = {};
+			const merge = {};
 			Object.entries(transitions).forEach(([ symbol, to ]) => {
-				if (to in symbols) symbols[to].push(symbol);
-				else symbols[to] = [ symbol ];
+				if (to in merge) merge[to].add(symbol);
+				else merge[to] = new Set([ symbol ]);
 			});
 
-			return list.concat(Object.entries(symbols).map(([ to, symbols ]) => {
+			for (const [ to, symbols ] of Object.entries(merge)) {
 				const angle = elements.transitions[from]?.[to];
-				return new Transition(this.states[from], this.states[to], symbols.join(","), angle);
-			}));
-		}, []);
+				const transition = new Transition(this.states[from], this.states[to], Array.from(symbols).sort().join(","), angle);
+				merge[to] = { symbols, transition };
+			}
+			this.transitions[from] = merge;
+		}
 	}
 
 	/** Renders the diagram. */
 	load() {
 		document.getElementById("diagram").innerHTML = "";
 		for (const state of this.states) state.render();
-		for (const transition of this.transitions) transition.render();
+		for (const stateTransitions of Object.values(this.transitions)) {
+			for (const transitionEntry of Object.values(stateTransitions)) {
+				transitionEntry.transition.render();
+			}
+		}
 
 		const statesList = document.querySelector("#states tbody");
-		statesList.innerHTML = "";
+		const transitionsList = document.getElementById("transitions");
+		const transitionHeadRow = transitionsList.firstElementChild.firstElementChild;
+		const transitionBody = transitionsList.lastElementChild;
 
-		// Render states and display state info.
+		// Clear tables.
+		statesList.innerHTML = "";
+		transitionHeadRow.innerHTML = "";
+		transitionBody.innerHTML = "";
+
+		// Create transition table head.
+		transitionHeadRow.appendChild(document.createElement("th"));
+		for (const symbol of this.machine.alphabet) {
+			const th = document.createElement("th");
+			th.innerText = symbol;
+			transitionHeadRow.appendChild(th);
+		}
+
+		// Display state and transition info.
 		for (const state of this.states) {
 			statesList.appendChild(this.#createStateEntry(state));
+			transitionBody.appendChild(this.#createTransitionEntry(state));
 		}
 
 		// Enable renaming input field.
@@ -64,7 +87,29 @@ export default class Diagram {
 	}
 
 	/**
-	 * Creates a table row entry for the given state.
+	 * Changes the label of the given state.
+	 * @param {State} state - The state to rename.
+	 * @param {String} name - The new state name.
+	 */
+	renameState(state, name) {
+		// Rename state name in transition table.
+		for (const th of document.querySelectorAll("#transitions > tbody > tr > th")) {
+			if (th.innerText === state.label) {
+				th.innerText = name;
+				th.setAttribute("data-value", name);
+			}
+		}
+		for (const input of document.querySelectorAll("#transitions > tbody > tr > td > input")) {
+			if (input.value === state.label) {
+				input.value = name;
+				input.setAttribute("data-value", name);
+			}
+		}
+		state.label = name;
+	}
+
+	/**
+	 * Creates a state table entry for the given state.
 	 * @param {State} state - The state.
 	 */
 	#createStateEntry(state) {
@@ -92,8 +137,8 @@ export default class Diagram {
 		const final = document.createElement("input");
 		final.type = "checkbox";
 		final.checked = state.final;
-		final.addEventListener("change", (event) => {
-			state.final = event.target.checked;
+		final.addEventListener("change", () => {
+			state.final = final.checked;
 		});
 		checkbox.appendChild(final);
 
@@ -101,16 +146,84 @@ export default class Diagram {
 		const label = document.createElement("input");
 		label.type = "text";
 		label.value = state.label;
+		label.setAttribute("data-value", state.label);
 		label.onchange = () => label.blur()
-		label.addEventListener("change", (event) => {
-			state.label = event.target.value;
+		label.addEventListener("change", () => {
+			label.value = label.value.trim();
+			if (start.label === label.value) return;
+
+			// Prevent duplicate state name.
+			if (this.states.findIndex(x => x.label === label.value) !== -1) {
+				label.value = label.getAttribute("data-value");
+				return;
+			}
+			this.renameState(state, label.value);
+			label.setAttribute("data-value", state.label);
 		});
-		
+
 		// Append elements to table row.
 		for (const element of [ radio, checkbox, label ]) {
 			const td = document.createElement("td");
 			td.appendChild(element);
 			tr.appendChild(td);
+		}
+		return tr;
+	}
+
+	/**
+	 * Creates a transition table entry for the given state.
+	 * @param {State} state - The state.
+	 */
+	#createTransitionEntry(state) {
+		const tr = document.createElement("tr");
+		const th = document.createElement("th");
+		th.innerText = state.label;
+		tr.appendChild(th);
+
+		const from = this.states.findIndex(x => x === state);
+		for (const symbol of this.machine.alphabet) {
+			const input = document.createElement("input");
+			input.type = "text";
+			input.onchange = () => input.blur();
+			input.addEventListener("change", () => {
+				input.value = input.value.trim();
+				if (input.value === input.getAttribute("data-value")) return;
+				
+				const to = this.states.findIndex(x => x.label === input.value);
+				if (to === -1) {
+					input.value = input.getAttribute("data-value");
+					return;
+				}
+
+				// Remove symbol from current transitions.
+				const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"))
+				this.transitions[from][prev].symbols.delete(symbol);
+				if (this.transitions[from][prev].symbols.size) {
+					this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
+				} else {
+					this.transitions[from][prev].transition.remove();
+					delete this.transitions[from][prev]
+				}
+				
+				// Add symbol to new transition.
+				if (this.transitions[from][to]) {
+					this.transitions[from][to].symbols.add(symbol);
+					this.transitions[from][to].transition.label = Array.from(this.transitions[from][to].symbols).sort().join(",");
+				} else {
+					const symbols = new Set([ symbol ]);
+					const transition = new Transition(this.states[from], this.states[to], symbol);
+					transition.render();
+					this.transitions[from][to] = { symbols, transition };
+				}
+				
+				this.machine.transitions[from][symbol] = to;
+				input.setAttribute("data-value", input.value);
+			});
+			if (symbol in this.machine.transitions[from]) {
+				input.value = this.states[this.machine.transitions[from][symbol]].label;
+				input.setAttribute("data-value", input.value);
+			}
+			tr.appendChild(document.createElement("td")).appendChild(input);
 		}
 		return tr;
 	}
