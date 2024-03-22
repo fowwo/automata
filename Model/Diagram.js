@@ -150,13 +150,14 @@ export default class Diagram {
 		label.onchange = () => label.blur()
 		label.addEventListener("change", () => {
 			label.value = label.value.trim();
-			if (start.label === label.value) return;
+			if (label.value === start.label) return;
 
-			// Prevent duplicate state name.
-			if (this.states.findIndex(x => x.label === label.value) !== -1) {
+			// Prevent blank or duplicate state name.
+			if (label.value === "" || this.states.findIndex(x => x.label === label.value) !== -1) {
 				label.value = label.getAttribute("data-value");
 				return;
 			}
+
 			this.renameState(state, label.value);
 			label.setAttribute("data-value", state.label);
 		});
