@@ -189,6 +189,22 @@ export default class Diagram {
 				input.value = input.value.trim();
 				if (input.value === input.getAttribute("data-value")) return;
 				
+				// Delete transition?
+				if (input.value === "") {
+					const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"));
+					this.transitions[from][prev].symbols.delete(symbol);
+					if (this.transitions[from][prev].symbols.size) {
+						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
+					} else {
+						this.transitions[from][prev].transition.remove();
+						delete this.transitions[from][prev];
+					}
+					delete this.machine.transitions[from][symbol];
+					input.setAttribute("data-value", "");
+					return;
+				}
+
+				// Check if state exists.
 				const to = this.states.findIndex(x => x.label === input.value);
 				if (to === -1) {
 					input.value = input.getAttribute("data-value");
@@ -196,15 +212,17 @@ export default class Diagram {
 				}
 
 				// Remove symbol from current transitions.
-				const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"))
-				this.transitions[from][prev].symbols.delete(symbol);
-				if (this.transitions[from][prev].symbols.size) {
-					this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
-				} else {
-					this.transitions[from][prev].transition.remove();
-					delete this.transitions[from][prev]
+				const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"));
+				if (prev !== -1) {
+					this.transitions[from][prev].symbols.delete(symbol);
+					if (this.transitions[from][prev].symbols.size) {
+						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
+					} else {
+						this.transitions[from][prev].transition.remove();
+						delete this.transitions[from][prev];
+					}
 				}
-				
+
 				// Add symbol to new transition.
 				if (this.transitions[from][to]) {
 					this.transitions[from][to].symbols.add(symbol);
