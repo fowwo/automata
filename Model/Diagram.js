@@ -2,6 +2,12 @@ import DFA from "./DFA.js";
 import State from "../Element/State.js";
 import Transition from "../Element/Transition.js";
 
+const diagram = document.getElementById("diagram");
+const statesList = document.querySelector("#states tbody");
+const transitionsList = document.getElementById("transitions");
+const transitionHeadRow = transitionsList.firstElementChild.firstElementChild;
+const transitionBody = transitionsList.lastElementChild;
+
 /** A diagram. */
 export default class Diagram {
 
@@ -25,9 +31,7 @@ export default class Diagram {
 		});
 		if (this.states[machine.startState]) this.states[machine.startState].start = elements.startState;
 
-		this.transitions = {};
-		for (const [ from, transitions ] of Object.entries(this.machine.transitions)) {
-
+		this.transitions = this.machine.transitions.map((transitions, from) => {
 			// Merge transitions of the same states and symbols.
 			const merge = {};
 			Object.entries(transitions).forEach(([ symbol, to ]) => {
@@ -40,29 +44,25 @@ export default class Diagram {
 				const transition = new Transition(this.states[from], this.states[to], Array.from(symbols).sort().join(","), angle);
 				merge[to] = { symbols, transition };
 			}
-			this.transitions[from] = merge;
-		}
+			return merge;
+		});
 	}
 
-	/** Renders the diagram. */
+	/** Renders the diagram and displays its info. */
 	load() {
-		document.getElementById("diagram").innerHTML = "";
+		// Clear diagram and info.
+		diagram.innerHTML = "";
+		statesList.innerHTML = "";
+		transitionHeadRow.innerHTML = "";
+		transitionBody.innerHTML = "";
+
+		// Render elements.
 		for (const state of this.states) state.render();
 		for (const stateTransitions of Object.values(this.transitions)) {
 			for (const transitionEntry of Object.values(stateTransitions)) {
 				transitionEntry.transition.render();
 			}
 		}
-
-		const statesList = document.querySelector("#states tbody");
-		const transitionsList = document.getElementById("transitions");
-		const transitionHeadRow = transitionsList.firstElementChild.firstElementChild;
-		const transitionBody = transitionsList.lastElementChild;
-
-		// Clear tables.
-		statesList.innerHTML = "";
-		transitionHeadRow.innerHTML = "";
-		transitionBody.innerHTML = "";
 
 		// Create transition table head.
 		transitionHeadRow.appendChild(document.createElement("th"));
@@ -74,8 +74,8 @@ export default class Diagram {
 
 		// Display state and transition info.
 		for (const state of this.states) {
-			statesList.appendChild(this.#createStateEntry(state));
-			transitionBody.appendChild(this.#createTransitionEntry(state));
+			this.#createStateEntry(state);
+			this.#createTransitionEntry(state);
 		}
 
 		// Enable renaming input field.
@@ -84,6 +84,31 @@ export default class Diagram {
 		rename.onchange = (event) => {
 			this.name = event.target.value;
 		};
+
+		// Enable add state button.
+		document.getElementById("new-state").onclick = this.createState.bind(this);
+	}
+
+	/** Creates a new state and adds it to the diagram. */
+	createState() {
+		// Find unused state label.
+		let label = this.states.length;
+		const labels = new Set(this.states.map(x => x.label));
+		while (labels.has(String(label))) label++;
+
+		// Create new state.
+		const px = parseFloat(diagram.style.getPropertyValue("--px"));
+		const py = parseFloat(diagram.style.getPropertyValue("--py"));
+		const state = new State(-px, -py, { label });
+		this.states.push(state);
+		this.transitions.push({});
+		this.machine.stateCount++;
+		this.machine.transitions.push({});
+
+		// Render state and show info.
+		this.#createStateEntry(state).querySelector("input[type=text]").focus();
+		this.#createTransitionEntry(state);
+		state.render();
 	}
 
 	/**
@@ -92,14 +117,13 @@ export default class Diagram {
 	 * @param {String} name - The new state name.
 	 */
 	renameState(state, name) {
-		// Rename state name in transition table.
-		for (const th of document.querySelectorAll("#transitions > tbody > tr > th")) {
+		for (const th of transitionBody.querySelectorAll("th")) {
 			if (th.innerText === state.label) {
 				th.innerText = name;
 				th.setAttribute("data-value", name);
 			}
 		}
-		for (const input of document.querySelectorAll("#transitions > tbody > tr > td > input")) {
+		for (const input of transitionBody.querySelectorAll("input")) {
 			if (input.value === state.label) {
 				input.value = name;
 				input.setAttribute("data-value", name);
@@ -168,6 +192,8 @@ export default class Diagram {
 			td.appendChild(element);
 			tr.appendChild(td);
 		}
+
+		statesList.appendChild(tr);
 		return tr;
 	}
 
@@ -244,6 +270,8 @@ export default class Diagram {
 			}
 			tr.appendChild(document.createElement("td")).appendChild(input);
 		}
+
+		transitionBody.appendChild(tr);
 		return tr;
 	}
 
