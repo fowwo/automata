@@ -1,5 +1,7 @@
+import Automaton from "./Automaton.js";
+
 /** A deterministic finite automaton. */
-export default class DFA {
+export default class DFA extends Automaton {
 
 	/**
 	 * @param {Object} x
@@ -9,12 +11,8 @@ export default class DFA {
 	 * @param {Iterable<Number>} x.finalStates - The indices of the final states.
 	 * @param {{[state: Number]: {[symbol: String]: Number}}} x.transitions - An object mapping each state and each symbol to a state.
 	 */
-	constructor({ alphabet = [], stateCount = 0, startState = null, finalStates = [], transitions = [] } = {}) {
-		this.alphabet = new Set(alphabet);
-		this.stateCount = stateCount;
-		this.startState = startState;
-		this.finalStates = new Set(finalStates);
-		this.transitions = transitions;
+	constructor({ alphabet, stateCount, startState, finalStates, transitions } = {}) {
+		super({ alphabet, stateCount, startState, finalStates, transitions });
 	}
 
 	/**
