@@ -15,11 +15,6 @@ export default class NFA extends Automaton {
 		super({ alphabet, stateCount, startState, finalStates, transitions });
 	}
 
-	/**
-	 * Determines whether a string is in the language.
-	 * @param {String} string - A string over the alphabet.
-	 * @returns {Boolean}
-	 */
 	accepts(string) {
 		if (this.startState === null) return false;
 

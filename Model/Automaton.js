@@ -17,4 +17,22 @@ export default class Automaton {
 		this.transitions = transitions;
 	}
 
+	/**
+	 * Determines whether a string is in the language.
+	 * @param {String} string - A string over the alphabet.
+	 * @returns {Boolean}
+	 */
+	accepts(string) {
+		throw new Error("Method not implemented.");
+	}
+
+	/**
+	 * Determines whether a string is not in the language.
+	 * @param {String} string - A string over the alphabet.
+	 * @returns {Boolean}
+	 */
+	rejects(string) {
+		return !this.accepts(string);
+	}
+
 }
