@@ -20,13 +20,17 @@ export default class DFA extends Automaton {
 	 * @param {String} string - A string over the alphabet.
 	 * @returns {Boolean}
 	 */
-	run(string) {
+	accepts(string) {
+		if (this.startState === null) return false;
+
 		let state = this.startState;
 		for (const symbol of string) {
 			if (state === undefined) return false;
-			state = this.transitions[state][symbol];
+			state = this.transitions[state][symbol][0];
 		}
 		return this.finalStates.has(state);
 	}
 
+	// 	const states = [ this.finalStates. ];
+	// }
 }
