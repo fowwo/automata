@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="/Style/nav.css">
 	<link rel="stylesheet" href="/Style/diagram-info.css">
 	<script type="module" src="/Script/controls.js"></script>
+	<script type="module" src="/Script/load.js"></script>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto+Slab&display=swap">
@@ -32,8 +33,25 @@
 	</nav>
 	<main>
 		<div id="workspace">
+			<!-- <div id="diagram-select">
+				<div id="diagram-selector-container" class="widget large-shadow">
+					<button id="diagram-selector" class="dfa-icon">Diagram 111111111</button>
+				</div>
+				<button id="export" class="widget large-shadow"></button>
+				<div id="diagram-list-container" class="widget large-shadow">
+					<div>
+						<ul></ul>
+					</div>
+				</div>
+			</div> -->
+			<!-- <div id="toolbox">
+				<input id="select" class="symbol" type="radio" name="toolbox" checked class="widget">
+				<input id="pan" class="symbol" type="radio" name="toolbox" class="widget">
+				<input id="state" class="symbol" type="radio" name="toolbox" class="widget">
+				<input id="transition" class="symbol" type="radio" name="toolbox" class="widget">
+			</div> -->
 			<div id="open-diagram-info" class="widget button toggle large-shadow">
-				<input type="checkbox">
+				<input type="checkbox" checked>
 				<span class="symbol">&#xF535;</span>
 				<span class="symbol">&#xE5CD;</span>
 			</div>
@@ -42,14 +60,81 @@
 				<button id="zoom-in" class="widget symbol large-shadow">&#xE8FF;</button>
 				<button id="zoom-out" class="widget symbol large-shadow">&#xE900;</button>
 			</div>
+			<!--
+				Tools
+					Drag/Select
+					State
+					Transition
+				Menu
+					"File"
+						Create
+						Export
+						Load
+				Side Menu
+				Context Menu
+				Zoom
+					In
+					Out
+					Slider
+			-->
 		</div>
 		<div id="diagram"></div>
 	</main>
 	<div id="diagram-info-container" class="large-shadow">
 		<div id="diagram-info">
 			<header>
+				<div class="button toggle small-shadow">
+					<input type="checkbox">
+					<span class="dfa-icon"></span>
+				</div>
 				<input type="text" class="small-inset-shadow" value="Diagram 1" disabled>
+				<div id="change-type-container" class="small-shadow">
+					<div>
+						<div class="button">
+							<input type="radio" name="type">
+							<span class="dfa-prefix">
+								<span>
+									Deterministic Finite Automaton
+									<span>(DFA)</span>
+								</span>
+							</span>
+						</div>
+						<hr>
+						<div class="button">
+							<input type="radio" name="type">
+							<span class="nfa-prefix">
+								<span>
+									Nondeterministic Finite Automaton
+									<span>(NFA)</span>
+								</span>
+							</span>
+						</div>
+						<hr>
+						<div class="button">
+							<input type="radio" name="type">
+							<span class="pda-prefix">
+								<span>
+									Pushdown Automaton
+									<span>(PDA)</span>
+								</span>
+							</span>
+						</div>
+						<hr>
+						<div class="button">
+							<input type="radio" name="type">
+							<span class="tm-prefix">
+								<span>
+									Turing Machine
+									<span>(TM)</span>
+								</span>
+							</span>
+						</div>
+					</div>
+				</div>
 			</header>
+			<h1>Alphabet</h1>
+			<ul id="alphabet"></ul>
+			<hr>
 			<h1>States</h1>
 			<table id="states">
 				<thead>

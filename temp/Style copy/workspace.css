@@ -1,44 +1,88 @@
+@import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@40,700,0..1,0);
+
+.dfa::before {
+	content: "\ef4a";
+	color: #08f;
+}
+.nfa::before {
+	content: "\e86b";
+	color: #0d8;
+}
+.pda::before {
+	content: "\eb36";
+	color: #f0f;
+}
+.tm::before {
+	content: "\eb50";
+	color: #f80;
+}
+
 #workspace {
 	z-index: 2;
 	pointer-events: none;
 	--gap: 5px;
 	--margin: 20px;
+	--shadow-color: 0 20 100;
+	--shadow:
+		0px 0.6px 2.2px rgb(var(--shadow-color) / 0.028),
+		0px 1.3px 5.3px rgb(var(--shadow-color) / 0.04),
+		0px 2.5px 10px rgb(var(--shadow-color) / 0.05),
+		0px 4.5px 17.9px rgb(var(--shadow-color) / 0.06),
+		0px 8.4px 33.4px rgb(var(--shadow-color) / 0.072),
+		0px 20px 80px rgb(var(--shadow-color) / 0.1);
+		/* --background-color-hsl: var(--accent-color-hs) 20%; */
 
 	> * {
 		position: absolute;
 		display: flex;
 		gap: var(--gap);
 	}
-	button, .button {
-		aspect-ratio: 1;
-		width: 50px;
+	*:not(.widget)::before,
+	*::after {
+		font-family: 'Material Symbols Outlined';
 	}
 	.widget {
 		position: relative;
 		background-color: hsl(var(--background-color-hsl) / 75%);
 		border-radius: 10px;
-		backdrop-filter: blur(8px);
 		pointer-events: all;
-	}
-	> #open-diagram-info {
-		position: absolute;
-		top: var(--margin);
-		right: var(--margin);
-		padding: 0;
-		font-size: 24px;
-		transition-property: right, background-color;
-		transition-duration: var(--transition-duration);
-		transition-timing-function: var(--transition-smooth);
 
-		&:hover {
-			font-size: 27px;
-		}
-		&:has(> input:checked) {
-			right: -10px;
-			background-color: hsl(var(--background-color-hsl));
+		&::before {
+			content: "";
+			position: absolute;
+			left: 0;
+			right: 0;
+			top: 0;
+			bottom: 0;
+			border-radius: inherit;
+			box-shadow: var(--shadow);
+			backdrop-filter: blur(8px);
+			z-index: -1;
 		}
 	}
-	/* > #diagram-select {
+	input[type=radio]:checked {
+		background-color: hsl(var(--accent-color-hsl) / 75%);
+	}
+	button::after,
+	input[type=radio]::after {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		opacity: 75%;
+		transition: inherit;
+	}
+	button:hover,
+	input[type=radio]:hover,
+	input[type=radio]:checked {
+		&::after {
+			opacity: 100%;
+			scale: 1.1;
+		}
+		&:active::after {
+			scale: 1;
+		}
+	}
+	> #diagram-select {
 		margin: var(--margin) auto 0;
 		width: min-content;
 		left: 0;
@@ -108,7 +152,7 @@
 					height: calc(100vh - 2 * var(--margin) - var(--selector-height) - var(--gap) - 120px);
 					padding: 0 5px;
 					overflow-y: scroll;
-					transition: max-height var(--transition-duration) var(--transition-smooth);
+					transition: max-height var(--transition-fast) var(--transition-smooth);
 
 					> li {
 						position: relative;
@@ -181,8 +225,8 @@
 				}
 			}
 		}
-	} */
-	/* #toolbox {
+	}
+	#toolbox {
 		margin-bottom: calc(var(--margin) + 15px);
 		bottom: 0;
 		width: 100%;
@@ -222,7 +266,7 @@
 			rotate: 90deg;
 			font-size: 44px;
 		}
-	} */
+	}
 	#zoom {
 		margin: 0 var(--margin) var(--margin) 0;
 		bottom: 0;
@@ -230,15 +274,20 @@
 		flex-direction: column;
 
 		> button {
-			font-size: 32px;
-
-			&:not(:active):hover {
-				font-size: 36px;
-			}
+			aspect-ratio: 1;
+			width: 50px;
 		}
 		> span {
 			text-align: center;
 			opacity: 50%;
+		}
+		> #zoom-in::after {
+			content: "\e8ff";
+			font-size: 36px;
+		}
+		> #zoom-out::after {
+			content: "\e900";
+			font-size: 36px;
 		}
 	}
 }

@@ -17,3 +17,37 @@
 	if (localStorage.getItem("color-scheme") === "dark")
 		document.documentElement.classList.add("dark");
 })();
+
+// const clear = localStorage.clear.bind(localStorage);
+// const key = localStorage.key.bind(localStorage);
+
+// function clearOverride() {
+// 	for (const key of Object.keys(localStorage)) {
+// 		if (key.startsWith(`${namespace}-`)) {
+// 			removeItem(key);
+// 		}
+// 	}
+// }
+
+// function keyOverride(index) {
+// 	for (let i = 0; true; i++) {
+// 		const x = key.apply(null, [ i ]);
+// 		if (x === null) return null;
+// 		if (x.startsWith(`${namespace}-`)) {
+// 			index--;
+// 			if (index < 0) return x;
+// 		}
+// 	}
+// }
+
+// localStorage.clear = clearOverride.bind(localStorage);
+// localStorage.key = keyOverride.bind(localStorage);
+
+// Object.defineProperty(window.localStorage, "length", {
+// 	get: () => {
+// 		return Object.keys(window.localStorage).reduce((sum, key) => {
+// 			if (key.startsWith(`${namespace}-`)) return sum + 1;
+// 			return sum;
+// 		}, 0);
+// 	}
+// });

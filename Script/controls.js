@@ -1,3 +1,5 @@
+// import "./diagram-selector.js";
+
 const diagram = document.getElementById("diagram");
 
 diagram.onwheel = (event) => {

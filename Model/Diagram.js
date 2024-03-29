@@ -112,6 +112,43 @@ export default class Diagram {
 	}
 
 	/**
+	 * Removes the state from the diagram.
+	 * @param {State} state - The state to remove.
+	 */
+	removeState(state) {
+		const id = this.states.indexOf(state);
+		if (id === -1) return;
+
+		// Remove state and table entry.
+		state.remove();
+
+		/*
+		FIXME: Removing a state like this causes transitions in
+		`this.machine.transitions` to map to the wrong state.
+		For a transition mapping to state 3, removing state 2 requires
+		that this transition now points to state 2.
+
+		I should rework/create a machine class to handle addState, removeState, etc.
+		*/
+		this.states.splice(id, 1); 
+
+		this.machine.stateCount--;
+		statesList.children.item(id).remove();
+
+		// Remove outgoing transitions.
+		console.log(this.transitions[id]);
+		for (const { transition } of Object.values(this.transitions[id])) transition.remove();
+		this.transitions.splice(id, 1);
+		this.machine.transitions.splice(id, 1);
+		transitionBody.children.item(id).remove();
+
+		// Remove incoming transitions.
+		for (const [ i, symbol ] of Object.entries(this.machine.alphabet)) {
+			// if (this.machine.transitions[id][symbol])
+		}
+	}
+
+	/**
 	 * Changes the label of the given state.
 	 * @param {State} state - The state to rename.
 	 * @param {String} name - The new state name.
@@ -133,6 +170,32 @@ export default class Diagram {
 	}
 
 	/**
+	 * Removes a transition from the diagram.
+	 * @param {State} state - The state the transition comes from.
+	 * @param {String} symbol - The transition symbol.
+	 */
+	removeTransition(state, symbol) {
+		const from = this.states.indexOf(state);
+		const to = this.machine.transitions[from][symbol];
+
+		this.transitions[from][to].symbols.delete(symbol);
+		if (this.transitions[from][to].symbols.size) {
+			this.transitions[from][to].transition.label = Array.from(this.transitions[from][to].symbols).sort().join(",");
+		} else {
+			this.transitions[from][to].transition.remove();
+			delete this.transitions[from][to];
+		}
+		delete this.machine.transitions[from][symbol];
+
+		// Clear transition in the transition table.
+		let symbolIndex = 0;
+		while (transitionHeadRow.children.item(symbolIndex).innerText !== symbol) symbolIndex++;
+		const input = transitionBody.children.item(from).children.item(symbolIndex).firstElementChild;
+		input.value = "";
+		input.setAttribute("data-value", "");
+	}
+
+	/**
 	 * Creates a state table entry for the given state.
 	 * @param {State} state - The state.
 	 */
@@ -151,7 +214,7 @@ export default class Diagram {
 				state.start = this.states[this.machine.startState].start;
 				this.states[this.machine.startState].start = null;
 			}
-			this.machine.startState = this.states.findIndex(x => x === state);
+			this.machine.startState = this.states.indexOf(state);
 		});
 		radio.appendChild(start);
 
@@ -186,8 +249,15 @@ export default class Diagram {
 			label.setAttribute("data-value", state.label);
 		});
 
+		// Remove
+		const remove = document.createElement("button");
+		remove.classList.add("symbol", "small-shadow");
+		// remove.innerHTML = "&#xE872;"; // trash can
+		remove.innerHTML = "&#xE5CD;"; // X
+		remove.onclick = () => { this.removeState(state); };
+
 		// Append elements to table row.
-		for (const element of [ radio, checkbox, label ]) {
+		for (const element of [ radio, checkbox, label, remove ]) {
 			const td = document.createElement("td");
 			td.appendChild(element);
 			tr.appendChild(td);
@@ -207,7 +277,7 @@ export default class Diagram {
 		th.innerText = state.label;
 		tr.appendChild(th);
 
-		const from = this.states.findIndex(x => x === state);
+		const from = this.states.indexOf(state);
 		for (const symbol of this.machine.alphabet) {
 			const input = document.createElement("input");
 			input.type = "text";

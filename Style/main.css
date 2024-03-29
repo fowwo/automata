@@ -18,6 +18,10 @@ html {
 
 	--transition-smooth: cubic-bezier(0.6, 0, 0.4, 1);
 	--transition-duration: 300ms;
+	/* --transition-zip: cubic-bezier(0.5, 1, 0, 1.5); */
+	/* --transition-fast: 150ms; */
+
+	--green: #0d8;
 
 	/* Light color scheme values */
 	color-scheme: light;
@@ -28,7 +32,7 @@ html {
 }
 html.dark {
 	color-scheme: dark;
-	--background-color-hsl: 240 20% 10%;
+	--background-color-hsl: 240 20% 14%;
 	--text-color-hsl: 0 0 100%;
 	--shadow-color-hsl: 240 50% 5%;
 	--shadow-opacity: 100%;
@@ -230,4 +234,41 @@ table {
 		0px 1.1px 2.2px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.593)),
 		0px 2.1px 4.2px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.72)),
 		0px 5px 10px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity)));
+}
+
+/* .diagram-icon::before {
+	content: "\f754";
+	color: #888;
+	rotate: 45deg;
+} */
+
+.dfa-icon, .nfa-icon, .pda-icon, .tm-icon {
+	&::after {
+		font-family: "Material Symbols Outlined";
+	}
+}
+.dfa-prefix, .nfa-prefix, .pda-prefix, .tm-prefix {
+	&:not(:empty)::before {
+		margin-right: 2px;
+	}
+	&::before {
+		font-family: "Material Symbols Outlined";
+		vertical-align: bottom;
+	}
+}
+.dfa-icon::after, .dfa-prefix::before {
+	content: "\ef4a";
+	color: #08f;
+}
+.nfa-icon::after, .nfa-prefix::before {
+	content: "\e86b";
+	color: #0d8;
+}
+.pda-icon::after, .pda-prefix::before {
+	content: "\eb36";
+	color: #f0f;
+}
+.tm-icon::after, .tm-prefix::before {
+	content: "\eb50";
+	color: #f80;
 }

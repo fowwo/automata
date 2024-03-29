@@ -21,11 +21,41 @@ export default class DFA extends Automaton {
 		let state = this.startState;
 		for (const symbol of string) {
 			if (state === undefined) return false;
-			state = this.transitions[state][symbol][0];
+			state = this.transitions[state][symbol];
 		}
 		return this.finalStates.has(state);
 	}
 
+	removeState(state) {
+		this.stateCount--;
+		if (this.startState === state) this.startState = null;
+		this.finalStates.delete(state);
+		delete this.transitions[state];
+		for (const [ from, transitions ] of Object.entries(this.transitions)) {
+			for (const [ symbol, to ] of Object.entries(transitions)) {
+				if (to === state) {
+					delete transitions[symbol];
+				} else if (to > state) {
+					transitions[symbol]--;
+				}
+			}
+			if (Object.keys(transitions).length === 0) delete this.transitions[from];
+		}
+	}
+
+	// /** Determines whether the DFA has a valid construction. */
+	// isValid() {
+
+	// 	// The DFA must have a start state.
+	// 	if (!this.states.has(this.startState)) return false;
+
+	// 	// Each state must have a transition for each symbol in the alphabet.
+	// 	// for (const state of this.states) {
+			
+	// 	// }
+	// }
+
+	// minimize() {
 	// 	const states = [ this.finalStates. ];
 	// }
 }

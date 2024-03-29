@@ -35,4 +35,45 @@ export default class Automaton {
 		return !this.accepts(string);
 	}
 
+	/**
+	 * Adds a state.
+	 * @returns {Number} The index of the new state.
+	 */
+	addState() {
+		return this.stateCount++;
+	}
+
+	/**
+	 * Removes a state
+	 * @param {Number} state - The index of the state to remove.
+	 */
+	removeState(state) {
+		throw new Error("Method not implemented.");
+	}
+
+	/**
+	 * Removes a transition.
+	 * @param {Number} from - The state at the start of the transition.
+	 * @param {String} symbol - The symbol of the transition.
+	 * @param {Number} [to] - The state at the end of the transition.
+	 */
+	removeTransition(from, symbol, to) {
+
+	}
+
+	/** Creates a copy of the automaton. */
+	clone() {
+		const transitions = {};
+		for (const state in this.transitions) {
+			transitions[state] = { ...this.transitions[state] };
+		}
+		return new this.constructor({
+			alphabet: this.alphabet,
+			stateCount: this.stateCount,
+			startState: this.startState,
+			finalStates: this.finalStates,
+			transitions
+		});
+	}
+
 }
