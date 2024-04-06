@@ -21,7 +21,7 @@ export default class DFA extends Automaton {
 		let state = this.startState;
 		for (const symbol of string) {
 			if (state === undefined) return false;
-			state = this.transitions[state][symbol][0];
+			state = this.transitions[state][symbol];
 		}
 		return this.finalStates.has(state);
 	}
