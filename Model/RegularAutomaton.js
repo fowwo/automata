@@ -14,62 +14,83 @@ export default class RegularAutomaton extends Automaton {
 	constructor({ alphabet, stateCount, startState, finalStates, transitions } = {}) {
 		super({ alphabet, stateCount, startState, finalStates, transitions });
 	}
+	
+	/**
+	 * @param {String} string - The input string.
+	 * @returns {Set<Number>} The set of reachable states after reading the string.
+	 */
+	run(string) {
+		if (this.startState === null) return new Set();
 
-	accepts(string) {
-		if (this.startState === null) return false;
-
-		/**
-		 * Finds all reachable states from the given states
-		 * by taking any number of epsilon transitions.
-		 */
-		const getReachableStates = (/** @type {Set<number>} */ states) => {
-			let current = new Set(states);
-			while (current.size) {
-				const next = new Set();
-				for (const state of current) {
-					for (const nextState of this.transitions[state]?.["ε"] ?? []) {
-						if (!states.has(nextState)) {
-							states.add(nextState);
-							next.add(nextState);
-						}
-					}
-				}
-				current = next;
-			}
-			return states;
-		};
-
-		// Run the machine on the string.
-		let states = getReachableStates(new Set([ this.startState ]));
-		for (const symbol of string) {
-			const next = new Set();
-			for (const state of states) {
-				for (const nextState of this.transitions[state]?.[symbol] ?? []) {
-					next.add(nextState);
-				}
-			}
-			states = getReachableStates(next);
-		}
-
-		// Check if any path ends at a final state.
-		const [ A, B ] = [ states, this.finalStates ].sort((a, b) => a.size - b.size);
-		for (const state of A) {
-			if (B.has(state)) {
-				return true;
-			}
-		}
-		return false;
+		let states = this.getReachableStates(new Set([ this.startState ]));
+		for (const symbol of string) states = this.step(states, symbol);
+		return states;
 	}
 
-	acceptsDeterministically(string) {
-		if (this.startState === null) return false;
+	/**
+	 * Reads a single input symbol from a given set of states.
+	 * 
+	 * It is assumed that all states which are reachable via epsilon transitions
+	 * before reading the symbol are given.
+	 * @param {Set<Number>} states - The states to transition from.
+	 * @param {String} symbol - The symbol to read.
+	 * @returns {Set<Number>} The resulting set of states.
+	 */
+	step(states, symbol) {
+		const next = new Set();
+		for (const state of states) {
+			for (const nextState of this.transitions[state]?.[symbol] ?? []) {
+				next.add(nextState);
+			}
+		}
+		return this.getReachableStates(next);
+	}
+
+	/**
+	 * @param {String} string - The input string.
+	 * @returns {Number | null} The resulting state.
+	 */
+	runDeterministically(string) {
+		if (this.startState === null) return null;
 
 		let state = this.startState;
 		for (const symbol of string) {
-			if (state === undefined) return false;
-			state = this.transitions[state][symbol];
+			if (state === null) return null;
+			state = this.stepDeterministically(state, symbol);
 		}
-		return this.finalStates.has(state);
+		return state;
+	}
+
+	/**
+	 * @param {Number} state - The state to transition from.
+	 * @param {String} symbol - The symbol to read.
+	 * @returns {Number | null} The resulting state.
+	 */
+	stepDeterministically(state = null, symbol) {
+		return this.transitions[state]?.[symbol] ?? null;
+	}
+
+	/**
+	 * Finds all reachable states from the given states
+	 * by taking any number of epsilon transitions.
+	 * @param {Iterable<Number>} states - The initial set of states.
+	 * @returns {Set<Number>} - The resulting set of states.
+	 */
+	getReachableStates(states) {
+		let current = new Set(states);
+		while (current.size) {
+			const next = new Set();
+			for (const state of current) {
+				for (const nextState of this.transitions[state]?.["ε"] ?? []) {
+					if (!states.has(nextState)) {
+						states.add(nextState);
+						next.add(nextState);
+					}
+				}
+			}
+			current = next;
+		}
+		return states;
 	}
 
 }

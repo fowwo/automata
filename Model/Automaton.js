@@ -17,13 +17,31 @@ export default class Automaton {
 		this.transitions = transitions;
 	}
 
+	/** Runs the automaton on a given string. */
+	run() { throw new Error("Method not implemented."); }
+
+	/** Deterministically runs the automaton on a given string. */
+	runDeterministically() { throw new Error("Method not implemented."); }
+
+	/** Reads a single input symbol from a given set of states. */
+	step() { throw new Error("Method not implemented."); }
+
+	/** Deterministically reads a single input symbol from a given state. */
+	stepDeterministically() { throw new Error("Method not implemented."); }
+
 	/**
 	 * Determines whether a string is in the language.
 	 * @param {String} string - A string over the alphabet.
 	 * @returns {Boolean}
 	 */
 	accepts(string) {
-		throw new Error("Method not implemented.");
+		const [ A, B ] = [ this.run(string), this.finalStates ].sort((a, b) => a.size - b.size);
+		for (const state of A) {
+			if (B.has(state)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -32,7 +50,8 @@ export default class Automaton {
 	 * @returns {Boolean}
 	 */
 	acceptsDeterministically(string) {
-		throw new Error("Method not implemented.");
+		const state = this.runDeterministically(string);
+		return this.finalStates.has(state);
 	}
 
 	/**
