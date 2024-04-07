@@ -6,7 +6,7 @@ suite("NFA", () => {
 	test("1", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
-			stateCount: 5,
+			states: 5,
 			startState: 0,
 			finalStates: [ 4 ],
 			transitions: {
@@ -33,7 +33,7 @@ suite("NFA", () => {
 	test("2", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b", "c" ],
-			stateCount: 4,
+			states: 4,
 			startState: 0,
 			finalStates: [ 3 ],
 			transitions: {
@@ -64,7 +64,7 @@ suite("NFA", () => {
 	test("3", () => {
 		const machine = new NFA({
 			alphabet: [ "d", "e", "h", "l", "o", "r", "w", " " ],
-			stateCount: 12,
+			states: 12,
 			startState: 0,
 			finalStates: [ 11 ],
 			transitions: {
@@ -95,7 +95,7 @@ suite("NFA", () => {
 	test("4", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
-			stateCount: 7,
+			states: 7,
 			startState: 0,
 			finalStates: [ 5 ],
 			transitions: {
@@ -132,7 +132,7 @@ suite("NFA", () => {
 	test("5", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
-			stateCount: 16,
+			states: 16,
 			startState: 0,
 			finalStates: [ 15 ],
 			transitions: {

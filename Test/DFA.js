@@ -6,7 +6,7 @@ suite("DFA", () => {
 	test("1", () => {
 		const machine = new DFA({
 			alphabet: [ "a", "b" ],
-			stateCount: 2,
+			states: 2,
 			startState: 0,
 			finalStates: [ 1 ],
 			transitions: {
@@ -32,7 +32,7 @@ suite("DFA", () => {
 		const alphabet = [ "a", "b", "c" ];
 		const machine = new DFA({
 			alphabet,
-			stateCount: 5,
+			states: 5,
 			startState: 0,
 			finalStates: [ 2, 3 ],
 			transitions: {
@@ -63,7 +63,7 @@ suite("DFA", () => {
 	test("3", () => {
 		const machine = new DFA({
 			alphabet: [ "a", "b", "c" ],
-			stateCount: 4,
+			states: 4,
 			startState: 0,
 			finalStates: [ 0 ],
 			transitions: {

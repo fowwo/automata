@@ -2,16 +2,23 @@
 export default class Automaton {
 
 	/**
-	 * @param {Object} x
-	 * @param {Iterable<String>} x.alphabet - The symbols of the language.
-	 * @param {Number} x.stateCount - The number of states.
-	 * @param {Number} x.startState - The index of the start state.
-	 * @param {Iterable<Number>} x.finalStates - The indices of the final states.
-	 * @param {{[state: Number]: {[symbol: String]: Number}}} x.transitions - An object mapping each state and each symbol to a state.
+	 * @param {Object} automaton - An object containing the properties of the automaton.
+	 * @param {Iterable<String>} automaton.alphabet - The symbols of the language.
+	 * @param {Iterable<Number> | Number} automaton.states - The states or number of states.
+	 * @param {Number} automaton.startState - The start state.
+	 * @param {Iterable<Number>} automaton.finalStates - The final states.
+	 * @param {{[state: Number]: {[symbol: String]: Number}}} automaton.transitions - An object mapping each state and each symbol to a state.
 	 */
-	constructor({ alphabet = [], stateCount = 0, startState = null, finalStates = [], transitions = {} } = {}) {
+	constructor({ alphabet = [], states = [], startState = null, finalStates = [], transitions = {} } = {}) {
 		this.alphabet = new Set(alphabet);
-		this.stateCount = stateCount;
+		if (typeof states === "number") {
+			this.states = new Set();
+			for (let i = 0; i < states; i++) {
+				this.states.add(i);
+			}
+		} else {
+			this.states = new Set(states);
+		}
 		this.startState = startState;
 		this.finalStates = new Set(finalStates);
 		this.transitions = transitions;
