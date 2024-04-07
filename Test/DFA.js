@@ -1,6 +1,6 @@
 import { describe as suite, test } from "node:test";
 import { strict as assert } from "node:assert";
-import DFA from "../Model/DFA.js";
+import DFA from "../Model/RegularAutomaton.js";
 
 suite("DFA", () => {
 	test("1", () => {
@@ -15,18 +15,18 @@ suite("DFA", () => {
 			}
 		});
 
-		assert(machine.accepts("b"));
-		assert(machine.accepts("bbb"));
-		assert(machine.accepts("ab"));
-		assert(machine.accepts("abab"));
-		assert(machine.accepts("aaaabaaab"));
+		assert(machine.acceptsDeterministically("b"));
+		assert(machine.acceptsDeterministically("bbb"));
+		assert(machine.acceptsDeterministically("ab"));
+		assert(machine.acceptsDeterministically("abab"));
+		assert(machine.acceptsDeterministically("aaaabaaab"));
 
-		assert(machine.rejects(""));
-		assert(machine.rejects("a"));
-		assert(machine.rejects("ba"));
-		assert(machine.rejects("aba"));
-		assert(machine.rejects("baba"));
-		assert(machine.rejects("bbbbba"));
+		assert(machine.rejectsDeterministically(""));
+		assert(machine.rejectsDeterministically("a"));
+		assert(machine.rejectsDeterministically("ba"));
+		assert(machine.rejectsDeterministically("aba"));
+		assert(machine.rejectsDeterministically("baba"));
+		assert(machine.rejectsDeterministically("bbbbba"));
 	});
 	test("2", () => {
 		const alphabet = [ "a", "b", "c" ];
@@ -45,20 +45,20 @@ suite("DFA", () => {
 		});
 
 		for (let i = 0; i < alphabet.length; i++) {
-			assert(machine.rejects(alphabet[i]));
+			assert(machine.rejectsDeterministically(alphabet[i]));
 			for (let j = 0; j < alphabet.length; j++) {
-				assert(machine.accepts([ i, j ].map(x => alphabet[x]).join("")));
+				assert(machine.acceptsDeterministically([ i, j ].map(x => alphabet[x]).join("")));
 				for (let k = 0; k < alphabet.length; k++) {
-					assert(machine.accepts([ i, j, k ].map(x => alphabet[x]).join("")));
+					assert(machine.acceptsDeterministically([ i, j, k ].map(x => alphabet[x]).join("")));
 					for (let l = 0; l < alphabet.length; l++) {
-						assert(machine.rejects([ i, j, k, l ].map(x => alphabet[x]).join("")));
+						assert(machine.rejectsDeterministically([ i, j, k, l ].map(x => alphabet[x]).join("")));
 					}
 				}
 			}
 		}
 
-		assert(machine.rejects(""));
-		assert(machine.rejects("bcabcabcabbca"));
+		assert(machine.rejectsDeterministically(""));
+		assert(machine.rejectsDeterministically("bcabcabcabbca"));
 	});
 	test("3", () => {
 		const machine = new DFA({
@@ -74,19 +74,19 @@ suite("DFA", () => {
 			}
 		});
 
-		assert(machine.accepts(""));
-		assert(machine.accepts("abc"));
-		assert(machine.accepts("abcabc"));
-		assert(machine.accepts("abcabcabc"));
-		assert(machine.accepts("abcabcabcabc"));
-		assert(machine.accepts("abcabcabcabcabc"));
+		assert(machine.acceptsDeterministically(""));
+		assert(machine.acceptsDeterministically("abc"));
+		assert(machine.acceptsDeterministically("abcabc"));
+		assert(machine.acceptsDeterministically("abcabcabc"));
+		assert(machine.acceptsDeterministically("abcabcabcabc"));
+		assert(machine.acceptsDeterministically("abcabcabcabcabc"));
 
-		assert(machine.rejects("a"));
-		assert(machine.rejects("b"));
-		assert(machine.rejects("c"));
-		assert(machine.rejects("abca"));
-		assert(machine.rejects("aabc"));
-		assert(machine.rejects("abbc"));
-		assert(machine.rejects("abcabcabcab"));
+		assert(machine.rejectsDeterministically("a"));
+		assert(machine.rejectsDeterministically("b"));
+		assert(machine.rejectsDeterministically("c"));
+		assert(machine.rejectsDeterministically("abca"));
+		assert(machine.rejectsDeterministically("aabc"));
+		assert(machine.rejectsDeterministically("abbc"));
+		assert(machine.rejectsDeterministically("abcabcabcab"));
 	});
 });

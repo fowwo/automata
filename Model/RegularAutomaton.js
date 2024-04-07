@@ -1,7 +1,7 @@
 import Automaton from "./Automaton.js";
 
-/** A nondeterministic finite automaton. */
-export default class NFA extends Automaton {
+/** A finite automaton that recognizes a regular language. */
+export default class RegularAutomaton extends Automaton {
 
 	/**
 	 * @param {Object} x
@@ -59,6 +59,17 @@ export default class NFA extends Automaton {
 			}
 		}
 		return false;
+	}
+
+	acceptsDeterministically(string) {
+		if (this.startState === null) return false;
+
+		let state = this.startState;
+		for (const symbol of string) {
+			if (state === undefined) return false;
+			state = this.transitions[state][symbol];
+		}
+		return this.finalStates.has(state);
 	}
 
 }
