@@ -27,56 +27,13 @@ export default class Automaton {
 	/** Runs the automaton on a given string. */
 	run() { throw new Error("Method not implemented."); }
 
-	/** Deterministically runs the automaton on a given string. */
-	runDeterministically() { throw new Error("Method not implemented."); }
-
-	/** Reads a single input symbol from a given set of states. */
+	/** Runs the automaton from a given context over one input symbol. */
 	step() { throw new Error("Method not implemented."); }
 
-	/** Deterministically reads a single input symbol from a given state. */
-	stepDeterministically() { throw new Error("Method not implemented."); }
+	/** Determines whether a string is in the language. */
+	accepts() { throw new Error("Method not implemented."); }
 
-	/**
-	 * Determines whether a string is in the language.
-	 * @param {String} string - A string over the alphabet.
-	 * @returns {Boolean}
-	 */
-	accepts(string) {
-		const [ A, B ] = [ this.run(string), this.finalStates ].sort((a, b) => a.size - b.size);
-		for (const state of A) {
-			if (B.has(state)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Deterministically determines whether a string is in the language.
-	 * @param {String} string - A string over the alphabet.
-	 * @returns {Boolean}
-	 */
-	acceptsDeterministically(string) {
-		const state = this.runDeterministically(string);
-		return this.finalStates.has(state);
-	}
-
-	/**
-	 * Determines whether a string is not in the language.
-	 * @param {String} string - A string over the alphabet.
-	 * @returns {Boolean}
-	 */
-	rejects(string) {
-		return !this.accepts(string);
-	}
-
-	/**
-	 * Deterministically determines whether a string is not in the language.
-	 * @param {String} string - A string over the alphabet.
-	 * @returns {Boolean}
-	 */
-	rejectsDeterministically(string) {
-		return !this.acceptsDeterministically(string);
-	}
+	/** Determines whether a string is not in the language. */
+	rejects() { throw new Error("Method not implemented."); }
 
 }

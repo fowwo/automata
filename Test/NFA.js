@@ -1,6 +1,6 @@
 import { describe as suite, test } from "node:test";
 import { strict as assert } from "node:assert";
-import NFA from "../Model/RegularAutomaton.js";
+import NFA from "../Model/NondeterministicFiniteAutomaton.js";
 
 suite("NFA", () => {
 	test("1", () => {
