@@ -3,7 +3,7 @@ import { strict as assert } from "node:assert";
 import NFA from "../Model/NondeterministicFiniteAutomaton.js";
 
 suite("NFA", () => {
-	test("1", () => {
+	test("1 - 'abba'", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
 			states: 5,
@@ -30,7 +30,7 @@ suite("NFA", () => {
 		assert(machine.rejects("abbaa"));
 		assert(machine.rejects("abbab"));
 	});
-	test("2", () => {
+	test("2 - a^n(b|bb|bbb)c^m", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b", "c" ],
 			states: 4,
@@ -61,7 +61,7 @@ suite("NFA", () => {
 		assert(machine.rejects("aaaacccccccccccc"));
 		assert(machine.rejects("aaaabbbbcccccccccccc"));
 	});
-	test("3", () => {
+	test("3 - 'hello world'", () => {
 		const machine = new NFA({
 			alphabet: [ "d", "e", "h", "l", "o", "r", "w", " " ],
 			states: 12,
@@ -92,7 +92,7 @@ suite("NFA", () => {
 		assert(machine.rejects("hello mom"));
 		assert(machine.rejects("accept me"));
 	});
-	test("4", () => {
+	test("4 - Σ(a|ba)", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
 			states: 7,
@@ -129,7 +129,7 @@ suite("NFA", () => {
 		assert(machine.rejects("bbaa"));
 		assert(machine.rejects("bbab"));
 	});
-	test("5", () => {
+	test("5 - Large and Dense", () => {
 		const machine = new NFA({
 			alphabet: [ "a", "b" ],
 			states: 16,

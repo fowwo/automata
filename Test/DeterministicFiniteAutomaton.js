@@ -3,7 +3,7 @@ import { strict as assert } from "node:assert";
 import DFA from "../Model/DeterministicFiniteAutomaton.js";
 
 suite("DFA", () => {
-	test("1", () => {
+	test("1 - Ends with a 'b'", () => {
 		const machine = new DFA({
 			alphabet: [ "a", "b" ],
 			states: 2,
@@ -28,7 +28,7 @@ suite("DFA", () => {
 		assert(machine.rejects("baba"));
 		assert(machine.rejects("bbbbba"));
 	});
-	test("2", () => {
+	test("2 - Length is Two or Three", () => {
 		const alphabet = [ "a", "b", "c" ];
 		const machine = new DFA({
 			alphabet,
@@ -60,7 +60,7 @@ suite("DFA", () => {
 		assert(machine.rejects(""));
 		assert(machine.rejects("bcabcabcabbca"));
 	});
-	test("3", () => {
+	test("3 - (abc)^n", () => {
 		const machine = new DFA({
 			alphabet: [ "a", "b", "c" ],
 			states: 4,
