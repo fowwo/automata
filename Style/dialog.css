@@ -1,0 +1,113 @@
+dialog {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	inset: 0;
+	width: auto;
+	height: auto;
+	max-height: 100vh;
+	max-width: 100vw;
+	background-color: hsl(0 0 0 / 40%);
+	backdrop-filter: blur(5px);
+	border: none;
+	opacity: 0;
+	z-index: 100;
+	transition: opacity var(--transition-fast) var(--transition-zip);
+
+	&[open] {
+		opacity: 1;
+		scale: 1;
+	}
+	&:not([open]) {
+		pointer-events: none;
+	}
+	&::backdrop {
+		background: none;
+	}
+	& > div {
+		background-color: hsl(var(--background-color-hsl));
+		border-radius: 10px;
+		overflow: hidden;
+		min-height: 0;
+		/* z-index: 0; */
+		filter: drop-shadow(0 0 50px #0008);
+		transition: scale var(--transition-fast) var(--transition-zip);
+
+		:not([open]) > & {
+			scale: 0.9;
+		}
+		& > div {
+			padding: 10px 20px;
+			max-width: calc(100vw - 50px);
+			max-height: calc(100vh - 50px);
+			overflow-y: auto;
+		}
+	}
+}
+
+dialog#new-diagram-select > div > div {
+	& > header {
+		position: relative;
+		height: 40px;
+		font-size: 1.25em;
+
+		& > span {
+			flex-grow: 1;
+			line-height: 40px;
+		}
+		& > button {
+			position: absolute;
+			aspect-ratio: 1;
+			height: 100%;
+			top: 0;
+			right: -10px;
+		}
+	}
+	& > div {
+		text-align: center;
+
+		& > :first-child {
+			font-size: 1.25em;
+			& > span:nth-child(2n + 1) {
+				color: hsl(var(--text-color-hsl));
+			}
+		}
+		& > :last-child {
+			color: hsl(var(--text-color-hsl) / 35%);
+			font-size: 0.75em;
+		}
+	}
+	& > button {
+		display: flex;
+		width: 100%;
+		height: 50px;
+
+		&:disabled > :first-child > span::after {
+			color: hsl(var(--text-color-hsl) / 10%);
+		}
+		& > div {
+			display: flex;
+			flex-shrink: 0;
+			height: 100%;
+			justify-content: center;
+			align-items: center;
+		}
+		& > div:first-child {
+			width: 40px;
+			justify-content: left;
+			font-size: 2em;
+			& > span {
+				height: 0;
+			}
+		}
+		& > div:last-child {
+			flex-direction: column;
+			justify-content: space-evenly;
+			align-items: start;
+
+			& > span:last-child {
+				opacity: 50%;
+			}
+		}
+	}
+}

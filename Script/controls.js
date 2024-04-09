@@ -11,6 +11,20 @@ document.getElementById("zoom-out").onclick = zoomOut;
 
 document.getElementById("color-scheme").onclick = toggleTheme;
 
+// Enable dialogs.
+const newDiagram = document.getElementById("new-diagram-select");
+document.querySelector("#new-diagram").onclick = () => newDiagram.showModal();
+newDiagram.querySelector("header > button").onclick = () => newDiagram.close();
+
+// Close dialogs when clicking on the background.
+for (const dialog of document.getElementsByTagName("dialog")) {
+	dialog.onclick = (event) => {
+		if (event.target === dialog) {
+			dialog.close();
+		}
+	}
+}
+
 function zoomIn() {
 	const scale = parseFloat(diagram.style.getPropertyValue("--scale"));
 	setScale(Math.min(4, Math.SQRT2 * scale));

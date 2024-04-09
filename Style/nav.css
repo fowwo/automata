@@ -20,6 +20,9 @@ body > nav {
 		}
 	}
 
+	#new-diagram {
+		background-color: hsl(var(--accent-color-hsl));
+	}
 	#color-scheme {
 		html:has(&:hover) * {
 			/*
