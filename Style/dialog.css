@@ -36,41 +36,38 @@ dialog {
 		:not([open]) > & {
 			scale: 0.9;
 		}
+		& > header {
+			position: relative;
+			display: flex;
+			padding: 0 20px;
+			height: 60px;
+			align-items: center;
+			font-size: 1.25em;
+
+			& > button {
+				position: absolute;
+				aspect-ratio: 1;
+				height: 100%;
+				top: 0;
+				right: 0;
+			}
+		}
 		& > div {
-			padding: 10px 20px;
 			max-width: calc(100vw - 50px);
 			max-height: calc(100vh - 50px);
-			overflow-y: auto;
+			overflow: auto;
 		}
 	}
 }
 
 dialog#new-diagram-select > div > div {
-	& > header {
-		position: relative;
-		height: 40px;
-		font-size: 1.25em;
+	padding: 15px 20px;
 
-		& > span {
-			flex-grow: 1;
-			line-height: 40px;
-		}
-		& > button {
-			position: absolute;
-			aspect-ratio: 1;
-			height: 100%;
-			top: 0;
-			right: -10px;
-		}
-	}
 	& > div {
 		text-align: center;
 
 		& > :first-child {
 			font-size: 1.25em;
-			& > span:nth-child(2n + 1) {
-				color: hsl(var(--text-color-hsl));
-			}
 		}
 		& > :last-child {
 			color: hsl(var(--text-color-hsl) / 35%);
