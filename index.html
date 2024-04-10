@@ -54,24 +54,7 @@
 			<header>
 				<input type="text" class="small-inset-shadow" value="Diagram 1" disabled>
 			</header>
-			<h1>States</h1>
-			<table id="states">
-				<thead>
-					<tr>
-						<th title="Start State" class="symbol">&#xF6FE;</th>
-						<th title="Final State" class="symbol">&#xF12E;</th>
-						<th>Name</th>
-					</tr>
-				</thead>
-				<tbody></tbody>
-			</table>
-			<button id="new-state" class="symbol small-shadow">&#xE145;</button>
-			<hr>
-			<h1>Transitions</h1>
-			<table id="transitions">
-				<thead><tr></tr></thead>
-				<tbody></tbody>
-			</table>
+			<button id="edit-automaton" class="small-shadow">Edit Automaton</button>
 		</div>
 	</div>
 	<dialog id="new-diagram-select">
@@ -160,6 +143,51 @@
 						<span>NTM</span>
 					</div>
 				</button>
+			</div>
+		</div>
+	</dialog>
+	<dialog id="automaton-modal">
+		<div>
+			<header class="large-shadow">
+				<span>Automaton Settings</span>
+				<button class="symbol">&#xE5CD;</button>
+			</header>
+			<div>
+				<nav class="small-inset-shadow">
+					<ul>
+						<li class="toggle large-shadow">
+							<input type="radio" name="automaton-modal-nav" checked>
+							<span>States</span>
+						</li>
+						<li class="toggle large-shadow">
+							<input type="radio" name="automaton-modal-nav">
+							<span>Transitions</span>
+						</li>
+					</ul>
+				</nav>
+				<div>
+					<div id="states">
+						<h1>States</h1>
+						<table>
+							<thead>
+								<tr>
+									<th title="Start State" class="symbol">&#xF6FE;</th>
+									<th title="Final State" class="symbol">&#xF12E;</th>
+									<th>Name</th>
+								</tr>
+							</thead>
+							<tbody></tbody>
+						</table>
+						<button id="new-state" class="symbol small-shadow">&#xE145;</button>
+					</div>
+					<div id="transitions">
+						<h1>Transitions</h1>
+						<table>
+							<thead><tr></tr></thead>
+							<tbody></tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</dialog>

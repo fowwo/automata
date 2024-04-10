@@ -4,7 +4,7 @@ import Transition from "../Element/Transition.js";
 
 const diagram = document.getElementById("diagram");
 const statesList = document.querySelector("#states tbody");
-const transitionsList = document.getElementById("transitions");
+const transitionsList = document.querySelector("#transitions table");
 const transitionHeadRow = transitionsList.firstElementChild.firstElementChild;
 const transitionBody = transitionsList.lastElementChild;
 

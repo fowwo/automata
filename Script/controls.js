@@ -11,13 +11,17 @@ document.getElementById("zoom-out").onclick = zoomOut;
 
 document.getElementById("color-scheme").onclick = toggleTheme;
 
-// Enable dialogs.
-const newDiagram = document.getElementById("new-diagram-select");
-document.querySelector("#new-diagram").onclick = () => newDiagram.showModal();
-newDiagram.querySelector("header > button").onclick = () => newDiagram.close();
+// Enable modals.
+document.getElementById("new-diagram").onclick = () => 
+	document.getElementById("new-diagram-select").showModal();
+document.getElementById("edit-automaton").onclick = () =>
+	document.getElementById("automaton-modal").showModal();
 
-// Close dialogs when clicking on the background.
 for (const dialog of document.getElementsByTagName("dialog")) {
+	// Close dialogs when clicking on the 'X' button.
+	dialog.querySelector("header > button").onclick = () => dialog.close();
+
+	// Close dialogs when clicking on the background.
 	dialog.onclick = (event) => {
 		if (event.target === dialog) {
 			dialog.close();
