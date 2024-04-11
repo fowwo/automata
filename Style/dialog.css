@@ -188,6 +188,11 @@ dialog#automaton-modal > div {
 					}
 				}
 			}
+			> #transitions {
+				&:has(thead th + th) > .error {
+					display: none;
+				}
+			}
 			:has(nav > ul > li:nth-child(1) > input:not(:checked)) > & #states {
 				display: none;
 			}
