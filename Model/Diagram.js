@@ -112,23 +112,19 @@ export default class Diagram {
 
 	/**
 	 * Changes the label of the given state.
-	 * @param {State} state - The state to rename.
+	 * @param {Number} id - The state to rename.
 	 * @param {String} name - The new state name.
 	 */
-	renameState(state, name) {
-		for (const th of transitionBody.querySelectorAll("th")) {
-			if (th.innerText === state.label) {
-				th.innerText = name;
-				th.setAttribute("data-value", name);
-			}
-		}
-		for (const input of transitionBody.querySelectorAll("input")) {
-			if (input.value === state.label) {
-				input.value = name;
-				input.setAttribute("data-value", name);
-			}
-		}
+	renameState(id, name) {
+		const state = this.states[id];
 		state.label = name;
+
+		const th = transitionBody.querySelector(`tr[data-state='${id}'] > th`);
+		th.innerText = name;
+
+		for (const input of transitionBody.querySelectorAll(`input[data-state='${id}']`)) {
+			input.value = name;
+		}
 	}
 
 	/**
@@ -138,6 +134,7 @@ export default class Diagram {
 	#createStateEntry(id) {
 		const state = this.states[id];
 		const tr = document.createElement("tr");
+		tr.setAttribute("data-state", id);
 
 		// Start state toggle
 		const radio = document.createElement("div");
@@ -182,7 +179,7 @@ export default class Diagram {
 				return;
 			}
 
-			this.renameState(state, label.value);
+			this.renameState(id, label.value);
 			label.setAttribute("data-value", state.label);
 		});
 
@@ -205,6 +202,7 @@ export default class Diagram {
 		const state = this.states[id];
 		const tr = document.createElement("tr");
 		const th = document.createElement("th");
+		tr.setAttribute("data-state", id);
 		th.innerText = state.label;
 		tr.appendChild(th);
 
@@ -215,11 +213,12 @@ export default class Diagram {
 			input.onchange = () => input.blur();
 			input.addEventListener("change", () => {
 				input.value = input.value.trim();
-				if (input.value === input.getAttribute("data-value")) return;
-				
+
 				// Delete transition?
 				if (input.value === "") {
-					const prev = Object.entries(this.states).find(x => x[1].label === input.getAttribute("data-value"))[0];
+					const prev = Object.keys(this.states).find(x => this.states[x].label === input.getAttribute("data-state"));
+					if (prev === undefined) return;
+
 					this.transitions[from][prev].symbols.delete(symbol);
 					if (this.transitions[from][prev].symbols.size) {
 						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
@@ -228,20 +227,21 @@ export default class Diagram {
 						delete this.transitions[from][prev];
 					}
 					delete this.automaton.transitions[from][symbol];
-					input.setAttribute("data-value", "");
+					input.removeAttribute("data-state");
 					return;
 				}
 
-				// Check if state exists.
-				const to = Object.entries(this.states).find(x => x[1].label === input.value)?.[0] ?? null;
-				if (to === null) {
-					input.value = input.getAttribute("data-value");
+				// Check if state exists and is different.
+				const to = Object.keys(this.states).find(x => this.states[x].label === input.value);
+				if (to === undefined || to == input.getAttribute("data-state")) {
+					const state = this.states[to ?? input.getAttribute("data-state")];
+					input.value = state ? state.label : "";
 					return;
 				}
 
 				// Remove symbol from current transitions.
-				const prev = Object.entries(this.states).find(x => x[1].label === input.getAttribute("data-value"))?.[0] ?? null;
-				if (prev !== null) {
+				const prev = Object.keys(this.states).find(x => this.states[x].label === input.getAttribute("data-state"));
+				if (prev !== undefined) {
 					this.transitions[from][prev].symbols.delete(symbol);
 					if (this.transitions[from][prev].symbols.size) {
 						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
@@ -265,11 +265,11 @@ export default class Diagram {
 
 				if (!(from in this.automaton.transitions)) this.automaton.transitions[from] = {};
 				this.automaton.transitions[from][symbol] = to;
-				input.setAttribute("data-value", input.value);
+				input.setAttribute("data-state", to);
 			});
 			if (symbol in (this.automaton.transitions[from] ?? {})) {
 				input.value = this.states[this.automaton.transitions[from][symbol]].label;
-				input.setAttribute("data-value", input.value);
+				input.setAttribute("data-state", to);
 			}
 			tr.appendChild(document.createElement("td")).appendChild(input);
 		}
