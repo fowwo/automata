@@ -1,4 +1,4 @@
-import DFA from "./DFA.js";
+import DFA from "./DeterministicFiniteAutomaton.js";
 import State from "../Element/State.js";
 import Transition from "../Element/Transition.js";
 
@@ -14,38 +14,39 @@ export default class Diagram {
 	/**
 	 * @param {Object} x
 	 * @param {String} x.name - The name of the diagram.
-	 * @param {String} x.type - The type of the machine.
-	 * @param {Object} x.machine - The machine.
+	 * @param {String} x.type - The type of the automaton.
+	 * @param {Object} x.automaton - The automaton.
 	 * @param {Object} x.elements - The properties of the elements in the diagram.
 	 */
-	constructor({ name, type, machine, elements }) {
+	constructor({ name = "", type, automaton, elements: { states = {}, transitions = {}, startState = {} } = {} }) {
 		this.type = type;
 		this.name = name;
-		this.machine = new {
+		this.automaton = new {
 			"DFA": DFA
-		}[type](machine);
+		}[type](automaton);
 
-		this.states = elements.states.map(({ x, y, ...options }, i) => {
-			if (this.machine.finalStates.has(i)) options.final = true;
-			return new State(x, y, options);
-		});
-		if (this.states[machine.startState]) this.states[machine.startState].start = elements.startState;
+		this.states = Object.fromEntries(automaton.states.values().map(i => {
+			const { x, y, ...options } = states[i];
+			if (this.automaton.finalStates.has(i)) options.final = true;
+			return [ i, new State(x, y, options) ];
+		}));
+		if (automaton.states.has(automaton.startState)) this.states[automaton.startState].start = startState;
 
-		this.transitions = this.machine.transitions.map((transitions, from) => {
+		this.transitions = Object.fromEntries(Object.entries(automaton.transitions).map(([ from, automatonTransitions ]) => {
 			// Merge transitions of the same states and symbols.
 			const merge = {};
-			Object.entries(transitions).forEach(([ symbol, to ]) => {
+			Object.entries(automatonTransitions).forEach(([ symbol, to ]) => {
 				if (to in merge) merge[to].add(symbol);
 				else merge[to] = new Set([ symbol ]);
 			});
 
 			for (const [ to, symbols ] of Object.entries(merge)) {
-				const angle = elements.transitions[from]?.[to];
+				const angle = transitions[from]?.[to];
 				const transition = new Transition(this.states[from], this.states[to], Array.from(symbols).sort().join(","), angle);
 				merge[to] = { symbols, transition };
 			}
-			return merge;
-		});
+			return [ from, merge ];
+		}));
 	}
 
 	/** Renders the diagram and displays its info. */
@@ -57,7 +58,7 @@ export default class Diagram {
 		transitionBody.innerHTML = "";
 
 		// Render elements.
-		for (const state of this.states) state.render();
+		for (const state of Object.values(this.states)) state.render();
 		for (const stateTransitions of Object.values(this.transitions)) {
 			for (const transitionEntry of Object.values(stateTransitions)) {
 				transitionEntry.transition.render();
@@ -66,14 +67,14 @@ export default class Diagram {
 
 		// Create transition table head.
 		transitionHeadRow.appendChild(document.createElement("th"));
-		for (const symbol of this.machine.alphabet) {
+		for (const symbol of this.automaton.alphabet) {
 			const th = document.createElement("th");
 			th.innerText = symbol;
 			transitionHeadRow.appendChild(th);
 		}
 
 		// Display state and transition info.
-		for (const state of this.states) {
+		for (const state of Object.keys(this.states)) {
 			this.#createStateEntry(state);
 			this.#createTransitionEntry(state);
 		}
@@ -92,22 +93,20 @@ export default class Diagram {
 	/** Creates a new state and adds it to the diagram. */
 	createState() {
 		// Find unused state label.
-		let label = this.states.length;
-		const labels = new Set(this.states.map(x => x.label));
+		let label = Object.keys(this.states).length;
+		const labels = new Set(Object.values(this.states).map(x => x.label));
 		while (labels.has(String(label))) label++;
 
 		// Create new state.
 		const px = parseFloat(diagram.style.getPropertyValue("--px"));
 		const py = parseFloat(diagram.style.getPropertyValue("--py"));
 		const state = new State(-px, -py, { label });
-		this.states.push(state);
-		this.transitions.push({});
-		this.machine.stateCount++;
-		this.machine.transitions.push({});
+		const id = this.automaton.addState();
+		this.states[id] = state;
 
 		// Render state and show info.
-		this.#createStateEntry(state).querySelector("input[type=text]").focus();
-		this.#createTransitionEntry(state);
+		this.#createStateEntry(id).querySelector("input[type=text]").focus();
+		this.#createTransitionEntry(id);
 		state.render();
 	}
 
@@ -134,9 +133,10 @@ export default class Diagram {
 
 	/**
 	 * Creates a state table entry for the given state.
-	 * @param {State} state - The state.
+	 * @param {Number} id - The state id.
 	 */
-	#createStateEntry(state) {
+	#createStateEntry(id) {
+		const state = this.states[id];
 		const tr = document.createElement("tr");
 
 		// Start state toggle
@@ -147,11 +147,11 @@ export default class Diagram {
 		start.name = "start";
 		start.checked = Boolean(state.start);
 		start.addEventListener("change", () => {
-			if (this.states[this.machine.startState]) {
-				state.start = this.states[this.machine.startState].start;
-				this.states[this.machine.startState].start = null;
+			if (this.states[this.automaton.startState]) {
+				state.start = this.states[this.automaton.startState].start;
+				this.states[this.automaton.startState].start = null;
 			}
-			this.machine.startState = this.states.findIndex(x => x === state);
+			this.automaton.startState = Object.entries(this.states).find(x => x[1] === state)[0];
 		});
 		radio.appendChild(start);
 
@@ -177,7 +177,7 @@ export default class Diagram {
 			if (label.value === start.label) return;
 
 			// Prevent blank or duplicate state name.
-			if (label.value === "" || this.states.findIndex(x => x.label === label.value) !== -1) {
+			if (label.value === "" || Object.values(this.states).find(x => x.label === label.value)) {
 				label.value = label.getAttribute("data-value");
 				return;
 			}
@@ -199,16 +199,17 @@ export default class Diagram {
 
 	/**
 	 * Creates a transition table entry for the given state.
-	 * @param {State} state - The state.
+	 * @param {Number} id - The state id.
 	 */
-	#createTransitionEntry(state) {
+	#createTransitionEntry(id) {
+		const state = this.states[id];
 		const tr = document.createElement("tr");
 		const th = document.createElement("th");
 		th.innerText = state.label;
 		tr.appendChild(th);
 
-		const from = this.states.findIndex(x => x === state);
-		for (const symbol of this.machine.alphabet) {
+		const from = Object.entries(this.states).find(x => x[1] === state)[0];
+		for (const symbol of this.automaton.alphabet) {
 			const input = document.createElement("input");
 			input.type = "text";
 			input.onchange = () => input.blur();
@@ -218,7 +219,7 @@ export default class Diagram {
 				
 				// Delete transition?
 				if (input.value === "") {
-					const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"));
+					const prev = Object.entries(this.states).find(x => x[1].label === input.getAttribute("data-value"))[0];
 					this.transitions[from][prev].symbols.delete(symbol);
 					if (this.transitions[from][prev].symbols.size) {
 						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
@@ -226,21 +227,21 @@ export default class Diagram {
 						this.transitions[from][prev].transition.remove();
 						delete this.transitions[from][prev];
 					}
-					delete this.machine.transitions[from][symbol];
+					delete this.automaton.transitions[from][symbol];
 					input.setAttribute("data-value", "");
 					return;
 				}
 
 				// Check if state exists.
-				const to = this.states.findIndex(x => x.label === input.value);
-				if (to === -1) {
+				const to = Object.entries(this.states).find(x => x[1].label === input.value)?.[0] ?? null;
+				if (to === null) {
 					input.value = input.getAttribute("data-value");
 					return;
 				}
 
 				// Remove symbol from current transitions.
-				const prev = this.states.findIndex(x => x.label === input.getAttribute("data-value"));
-				if (prev !== -1) {
+				const prev = Object.entries(this.states).find(x => x[1].label === input.getAttribute("data-value"))?.[0] ?? null;
+				if (prev !== null) {
 					this.transitions[from][prev].symbols.delete(symbol);
 					if (this.transitions[from][prev].symbols.size) {
 						this.transitions[from][prev].transition.label = Array.from(this.transitions[from][prev].symbols).sort().join(",");
@@ -251,6 +252,7 @@ export default class Diagram {
 				}
 
 				// Add symbol to new transition.
+				if (!(from in this.transitions)) this.transitions[from] = {};
 				if (this.transitions[from][to]) {
 					this.transitions[from][to].symbols.add(symbol);
 					this.transitions[from][to].transition.label = Array.from(this.transitions[from][to].symbols).sort().join(",");
@@ -260,12 +262,13 @@ export default class Diagram {
 					transition.render();
 					this.transitions[from][to] = { symbols, transition };
 				}
-				
-				this.machine.transitions[from][symbol] = to;
+
+				if (!(from in this.automaton.transitions)) this.automaton.transitions[from] = {};
+				this.automaton.transitions[from][symbol] = to;
 				input.setAttribute("data-value", input.value);
 			});
-			if (symbol in this.machine.transitions[from]) {
-				input.value = this.states[this.machine.transitions[from][symbol]].label;
+			if (symbol in (this.automaton.transitions[from] ?? {})) {
+				input.value = this.states[this.automaton.transitions[from][symbol]].label;
 				input.setAttribute("data-value", input.value);
 			}
 			tr.appendChild(document.createElement("td")).appendChild(input);
