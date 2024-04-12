@@ -88,6 +88,8 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 	 */
 	removeState(state) {
 		this.states.delete(state);
+		if (this.startState === state) this.startState = null;
+		this.finalStates.delete(state);
 		delete this.transitions[state];
 		for (const transitions of Object.values(this.transitions)) {
 			for (const [ symbol, to ] of Object.entries(transitions)) {

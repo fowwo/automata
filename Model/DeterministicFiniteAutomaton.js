@@ -59,6 +59,8 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 	 */
 	removeState(state) {
 		this.states.delete(state);
+		if (this.startState === state) this.startState = null;
+		this.finalStates.delete(state);
 		delete this.transitions[state];
 		for (const [ from, transitions ] of Object.entries(this.transitions)) {
 			for (const [ symbol, to ] of Object.entries(transitions)) {
