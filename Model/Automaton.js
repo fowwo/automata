@@ -47,4 +47,9 @@ export default class Automaton {
 		return i;
 	}
 
+	/** Removes a state. */
+	removeState() {
+		throw new Error("Method not implemented.");
+	}
+
 }

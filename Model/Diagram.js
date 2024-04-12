@@ -111,6 +111,47 @@ export default class Diagram {
 	}
 
 	/**
+	 * Removes the state from the diagram.
+	 * @param {Number} id - The state to remove.
+	 */
+	removeState(id) {
+		const state = this.states[id];
+
+		// Remove state.
+		state.remove();
+		this.automaton.removeState(id);
+		delete this.states[id];
+
+		// Remove outgoing transitions.
+		if (id in this.transitions) {
+			for (const { transition } of Object.values(this.transitions[id])) {
+				transition.remove();
+			}
+			delete this.transitions[id];
+		}
+
+		// Remove incoming transitions.
+		for (const transitions of Object.values(this.transitions)) {
+			if (id in transitions) {
+				transitions[id].transition.remove();
+				delete transitions[id];
+			}
+		}
+
+		// Remove state table entry.
+		statesList.querySelector(`[data-state='${id}']`).remove();
+
+		// Remove transition table entry.
+		transitionBody.querySelector(`[data-state='${id}']`).remove();
+
+		// Remove transition table entries which map to state.
+		for (const input of transitionBody.querySelectorAll(`input[data-state='${id}']`)) {
+			input.value = "";
+			input.removeAttribute("data-value");
+		}
+	}
+
+	/**
 	 * Changes the label of the given state.
 	 * @param {Number} id - The state to rename.
 	 * @param {String} name - The new state name.
@@ -183,8 +224,14 @@ export default class Diagram {
 			label.setAttribute("data-value", state.label);
 		});
 
+		// Remove
+		const remove = document.createElement("button");
+		remove.classList.add("symbol");
+		remove.innerHTML = "&#xE872;"; // trash can
+		remove.onclick = () => { this.removeState(id); };
+
 		// Append elements to table row.
-		for (const element of [ radio, checkbox, label ]) {
+		for (const element of [ radio, checkbox, label, remove ]) {
 			const td = document.createElement("td");
 			td.appendChild(element);
 			tr.appendChild(td);
