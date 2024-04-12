@@ -36,4 +36,15 @@ export default class Automaton {
 	/** Determines whether a string is not in the language. */
 	rejects() { throw new Error("Method not implemented."); }
 
+	/**
+	 * Adds a state.
+	 * @returns {Number} The new state.
+	 */
+	addState() {
+		let i = 0;
+		while (this.states.has(i)) i++;
+		this.states.add(i);
+		return i;
+	}
+
 }
