@@ -11,6 +11,8 @@ const transitionBody = transitionsList.lastElementChild;
 /** A diagram. */
 export default class Diagram {
 
+	#entry;
+
 	/**
 	 * @param {Object} x
 	 * @param {String} x.name - The name of the diagram.
@@ -47,6 +49,10 @@ export default class Diagram {
 			}
 			return [ from, merge ];
 		}));
+
+		// Add diagram to the list.
+		this.#entry = this.#createDiagramEntry();
+		document.querySelector("#diagrams hr").before(this.#entry);
 	}
 
 	/** Renders the diagram and displays its info. */
@@ -88,6 +94,9 @@ export default class Diagram {
 
 		// Enable add state button.
 		document.getElementById("new-state").onclick = this.createState.bind(this);
+
+		// Ensure entry button is checked.
+		this.#entry.querySelector("input").checked = true;
 	}
 
 	/** Creates a new state and adds it to the diagram. */
@@ -323,6 +332,25 @@ export default class Diagram {
 
 		transitionBody.appendChild(tr);
 		return tr;
+	}
+
+	/** Creates a button to load the diagram. */
+	#createDiagramEntry() {
+		const button = document.createElement("button");
+		button.classList.add("toggle", "symbol");
+
+		const input = document.createElement("input");
+		input.type = "radio";
+		input.name = "diagram";
+		input.onchange = () => { this.load(); };
+
+		const span = document.createElement("span");
+		span.classList.add(`${this.type.toLowerCase()}-icon`);
+
+		button.appendChild(input);
+		button.appendChild(span);
+
+		return button;
 	}
 
 	/** Returns a JSON representation of the diagram. */
