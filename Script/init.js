@@ -1,6 +1,6 @@
 (() => {
 	// Override localStorage methods.
-	const namespace = "fsa";
+	const namespace = "automata";
 	const getItem = localStorage.getItem.bind(localStorage);
 	const setItem = localStorage.setItem.bind(localStorage);
 	const removeItem = localStorage.removeItem.bind(localStorage);
@@ -10,7 +10,7 @@
 	localStorage.getItem = getItemOverride.bind(localStorage);
 	localStorage.setItem = setItemOverride.bind(localStorage);
 	localStorage.removeItem = removeItemOverride.bind(localStorage);
-	
+
 	// Initialize preferred color scheme.
 	if (!localStorage.getItem("color-scheme"))
 		localStorage.setItem("color-scheme", matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");

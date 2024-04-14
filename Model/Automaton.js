@@ -52,4 +52,15 @@ export default class Automaton {
 		throw new Error("Method not implemented.");
 	}
 
+	/** Returns a JSON representation of the automaton. */
+	toJSON() {
+		return {
+			alphabet: Array.from(this.alphabet),
+			states: Array.from(this.states),
+			startState: this.startState,
+			finalStates: Array.from(this.finalStates),
+			transitions: this.transitions
+		};
+	}
+
 }

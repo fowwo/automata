@@ -18,21 +18,21 @@ export default class Diagram {
 	 * @param {Object} x.automaton - The automaton.
 	 * @param {Object} x.elements - The properties of the elements in the diagram.
 	 */
-	constructor({ name = "", type, automaton, elements: { states = {}, transitions = {}, startState = {} } = {} }) {
+	constructor({ name = "", type, automaton, elements: { states = {}, transitions = {}, startState = {} } = {} } = {}) {
 		this.type = type;
 		this.name = name;
 		this.automaton = new {
 			"DFA": DFA
 		}[type](automaton);
 
-		this.states = Object.fromEntries(automaton.states.values().map(i => {
+		this.states = Object.fromEntries(this.automaton.states.values().map(i => {
 			const { x, y, ...options } = states[i];
 			if (this.automaton.finalStates.has(i)) options.final = true;
 			return [ i, new State(x, y, options) ];
 		}));
-		if (automaton.states.has(automaton.startState)) this.states[automaton.startState].start = startState;
+		if (this.automaton.states.has(this.automaton.startState)) this.states[this.automaton.startState].start = startState;
 
-		this.transitions = Object.fromEntries(Object.entries(automaton.transitions).map(([ from, automatonTransitions ]) => {
+		this.transitions = Object.fromEntries(Object.entries(this.automaton.transitions).map(([ from, automatonTransitions ]) => {
 			// Merge transitions of the same states and symbols.
 			const merge = {};
 			Object.entries(automatonTransitions).forEach(([ symbol, to ]) => {
@@ -323,6 +323,26 @@ export default class Diagram {
 
 		transitionBody.appendChild(tr);
 		return tr;
+	}
+
+	/** Returns a JSON representation of the diagram. */
+	toJSON() {
+		return {
+			name: this.name,
+			type: this.type,
+			automaton: this.automaton,
+			elements: {
+				states: Object.fromEntries(Object.entries(this.states).map(([ i, state ]) => 
+					[ i, { x: state.x, y: state.y, label: state.label } ]
+				)),
+				transitions: Object.fromEntries(Object.entries(this.transitions).map(([ from, transitions ]) => 
+					[ from, Object.fromEntries(Object.entries(transitions).map(([ to, { transition } ]) => 
+						[ to, console.log(transition) ]
+					)) ]
+				)),
+				startState: this.states[this.automaton.startState]?.start ?? {}
+			} 
+		};
 	}
 
 }
