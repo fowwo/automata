@@ -27,16 +27,4 @@
 			padding: 0 10px;
 		}
 	}
-	> button {
-		margin-top: 10px;
-		width: 100%;
-		height: 40px;		
-
-		&:hover {
-			background-color: hsl(var(--accent-color-hsl));
-		}
-		&:active {
-			background-color: hsl(var(--accent-color-hsl) / 50%);
-		}
-	}
 }
