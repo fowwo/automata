@@ -1,0 +1,48 @@
+dialog#new-diagram-select > div > div {
+	padding: 15px 20px;
+
+	& > div {
+		text-align: center;
+
+		& > :first-child {
+			font-size: 1.25em;
+		}
+		& > :last-child {
+			color: hsl(var(--text-color-hsl) / 35%);
+			font-size: 0.75em;
+		}
+	}
+	& > button {
+		display: flex;
+		width: 100%;
+		height: 50px;
+
+		&:disabled > :first-child > span::after {
+			color: hsl(var(--text-color-hsl) / 10%);
+		}
+		& > div {
+			display: flex;
+			flex-shrink: 0;
+			height: 100%;
+			justify-content: center;
+			align-items: center;
+		}
+		& > div:first-child {
+			width: 40px;
+			justify-content: left;
+			font-size: 2em;
+			& > span {
+				height: 0;
+			}
+		}
+		& > div:last-child {
+			flex-direction: column;
+			justify-content: space-evenly;
+			align-items: start;
+
+			& > span:last-child {
+				opacity: 50%;
+			}
+		}
+	}
+}
