@@ -124,6 +124,7 @@ button, .button {
 	display: block;
 	appearance: none;
 	border: none;
+	height: 40px;
 	font: inherit;
 	line-height: 0;
 	background-color: transparent;
@@ -156,6 +157,7 @@ hr {
 .checkbox, .radio {
 	position: relative;
 	aspect-ratio: 1;
+	height: 40px;
 	box-shadow: var(--small-inset-shadow);
 	border-radius: 5px;
 
@@ -230,6 +232,9 @@ hr {
 			visibility: hidden;
 		}
 	}
+}
+input {
+	height: 40px;
 }
 input[type=text] {
 	border: none;
