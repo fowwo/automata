@@ -41,6 +41,32 @@ dialog#automaton-modal > div {
 				padding: 20px;
 				overflow: auto;
 			}
+			> #general {
+				> div {
+					display: flex;
+					margin-top: 10px;
+					gap: 10px;
+
+					> div:first-child {
+						flex-grow: 1;
+
+						> label {
+							line-height: 40px;
+						}
+						> p {
+							font-size: 0.8em;
+							color: hsl(var(--text-color-hsl) / 65%);
+						}
+					}
+					> div:last-child {
+						display: flex;
+						max-width: 250px;
+						height: min-content;
+						align-items: center;
+						flex-grow: 1;
+					}
+				}
+			}
 			> #states {
 				> table {
 					width: 100%;
@@ -97,10 +123,13 @@ dialog#automaton-modal > div {
 					}
 				}
 			}
-			:has(nav > ul > li:nth-child(1) > input:not(:checked)) > & #states {
+			:has(nav > ul > li:nth-child(1) > input:not(:checked)) > & #general {
 				display: none;
 			}
-			:has(nav > ul > li:nth-child(2) > input:not(:checked)) > & #transitions {
+			:has(nav > ul > li:nth-child(2) > input:not(:checked)) > & #states {
+				display: none;
+			}
+			:has(nav > ul > li:nth-child(3) > input:not(:checked)) > & #transitions {
 				display: none;
 			}
 		}

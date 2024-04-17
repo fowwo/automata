@@ -56,11 +56,7 @@
 		<div id="diagram"></div>
 	</main>
 	<div id="diagram-info-container" class="large-shadow">
-		<div id="diagram-info">
-			<header>
-				<input type="text" class="small-inset-shadow" value="Diagram 1" disabled>
-			</header>
-		</div>
+		<div id="diagram-info"></div>
 	</div>
 	<dialog id="new-diagram-select">
 		<div>
@@ -162,6 +158,10 @@
 					<ul>
 						<li class="toggle large-shadow">
 							<input type="radio" name="automaton-modal-nav" checked>
+							<span>General</span>
+						</li>
+						<li class="toggle large-shadow">
+							<input type="radio" name="automaton-modal-nav">
 							<span>States</span>
 						</li>
 						<li class="toggle large-shadow">
@@ -171,6 +171,18 @@
 					</ul>
 				</nav>
 				<div>
+					<div id="general">
+						<h1>General</h1>
+						<hr>
+						<div>
+							<div>
+								<label for="diagram-rename">Name</label>
+							</div>
+							<div>
+								<input id="diagram-rename" type="text" class="small-inset-shadow">
+							</div>
+						</div>
+					</div>
 					<div id="states">
 						<h1>States</h1>
 						<table>

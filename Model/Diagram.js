@@ -86,8 +86,8 @@ export default class Diagram {
 		}
 
 		// Enable renaming input field.
-		const rename = document.querySelector("#diagram-info > header > input");
-		rename.disabled = false;
+		const rename = document.getElementById("diagram-rename");
+		rename.value = this.name;
 		rename.onchange = (event) => {
 			this.name = event.target.value;
 		};
