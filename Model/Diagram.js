@@ -3,6 +3,7 @@ import State from "../Element/State.js";
 import Transition from "../Element/Transition.js";
 
 const diagram = document.getElementById("diagram");
+const alphabetList = document.querySelector("#alphabet ul");
 const statesList = document.querySelector("#states tbody");
 const transitionsList = document.querySelector("#transitions table");
 const transitionHeadRow = transitionsList.firstElementChild.firstElementChild;
@@ -69,6 +70,11 @@ export default class Diagram {
 			for (const transitionEntry of Object.values(stateTransitions)) {
 				transitionEntry.transition.render();
 			}
+		}
+
+		// Display alphabet symbols.
+		for (const symbol of this.automaton.alphabet) {
+			this.#createAlphabetEntry(symbol);
 		}
 
 		// Create transition table head.
@@ -175,6 +181,25 @@ export default class Diagram {
 		for (const input of transitionBody.querySelectorAll(`input[data-state='${id}']`)) {
 			input.value = name;
 		}
+	}
+
+	/**
+	 * Creates an alphabet entry for the given symbol.
+	 * @param {String} symbol - The symbol.
+	 */
+	#createAlphabetEntry(symbol) {
+		const li = document.createElement("li");
+		const input = document.createElement("input");
+		input.type = "text";
+		input.size = 1;
+		input.value = symbol;
+		input.oninput = () => {
+			li.setAttribute("data-value", input.value);
+		};
+		li.classList.add("small-shadow");
+		li.setAttribute("data-value", symbol);
+		li.appendChild(input);
+		alphabetList.appendChild(li);
 	}
 
 	/**
