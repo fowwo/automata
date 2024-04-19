@@ -34,10 +34,10 @@ html {
 }
 html.dark {
 	color-scheme: dark;
-	--background-color-hsl: 240 20% 10%;
+	--background-color-hsl: 240 20% 14%;
 	--text-color-hsl: 0 0 100%;
 	--shadow-color-hsl: 240 50% 5%;
-	--shadow-opacity: 100%;
+	--shadow-opacity: 60%;
 }
 body {
 	position: relative;
