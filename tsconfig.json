@@ -1,0 +1,16 @@
+{
+	"include": [
+		"Model/**/*",
+		"View/**/*",
+		"Test/**/*",
+		"vite.config.ts"
+	],
+	"compilerOptions": {
+		"strict": true,
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"esModuleInterop": true,
+		"noEmit": true,
+		"skipLibCheck": true
+	}
+}

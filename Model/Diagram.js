@@ -1,6 +1,6 @@
 import DFA from "./DeterministicFiniteAutomaton.js";
-import State from "../Element/State.js";
-import Transition from "../Element/Transition.js";
+import State from "../View/Element/State.js";
+import Transition from "../View/Element/Transition.js";
 
 const diagram = document.getElementById("diagram");
 const alphabetList = document.querySelector("#alphabet ul");
