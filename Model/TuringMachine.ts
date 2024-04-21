@@ -1,18 +1,16 @@
-import Automaton from "./Automaton.js";
+import Automaton, { AutomatonArguments } from "./Automaton.js";
 
 export default class TuringMachine extends Automaton {
 
-	/**
-	 * @param {Object} automaton - An object containing the properties of the automaton.
-	 * @param {Iterable<String>} automaton.alphabet - The symbols of the language.
-	 * @param {Iterable<String>} automaton.tapeAlphabet - The symbols allowed on the tape.
-	 * @param {String} automaton.blankSymbol - The symbol in tape cells which have not been written to.
-	 * @param {Iterable<Number> | Number} automaton.states - The states or number of states.
-	 * @param {Number} automaton.startState - The start state.
-	 * @param {Iterable<Number>} automaton.finalStates - The final states.
-	 * @param {{[state: Number]: {[symbol: String]: Number}}} automaton.transitions - An object mapping each state and each symbol to a state.
-	 */
-	constructor({ alphabet, tapeAlphabet = [], blankSymbol = null, states, startState, finalStates, transitions } = {}) {
+	/** The symbols allowed on the tape. */
+	tapeAlphabet: Set<string>;
+
+	/** The symbol in tape cells which have not been written to. */
+	blankSymbol: string | null;
+
+	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; };
+
+	constructor({ alphabet, tapeAlphabet = [], blankSymbol = null, states, startState, finalStates, transitions }: TuringMachineArguments = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
 		this.tapeAlphabet = new Set(tapeAlphabet);
 		this.blankSymbol = blankSymbol;
@@ -24,10 +22,11 @@ export default class TuringMachine extends Automaton {
 	 * @returns {{ state: Number | null, tape: { [index: Number]: String }, head: Number, halt: Boolean }}
 	 * 	An object containing the resulting state, tape, tape head position, and whether the automaton halted within the step limit.
 	 */
-	run(string, stepLimit) {
+	run(string: string, stepLimit?: number): { state: number | null; tape: { [index: number]: string; }; head: number; halt: boolean; } {
 		let state = this.startState;
-		let tape = { ...string };
+		let tape: { [index: number]: string } = { ...string.split("") };
 		let head = 0;
+		if (state === null) return { state: null, tape, head, halt: true };
 
 		// Run the automaton for `stepLimit` steps (if specified).
 		for (let i = 0; i !== stepLimit; i++) {
@@ -48,9 +47,9 @@ export default class TuringMachine extends Automaton {
 	 * @param {Number} head - The position of the tape head.
 	 * @returns {{ state: Number | null, head: Number }} An object containing the next state and tape head position.
 	 */
-	step(state, tape, head) {
+	step(state: number, tape: { [index: number]: string | null; }, head: number): { state: number | null; head: number; } {
 		const symbol = head in tape ? tape[head] : this.blankSymbol;
-		const transition = this.transitions[state]?.[symbol];
+		const transition = this.transitions[state]?.[symbol ?? "null"];
 		if (!transition) return { state: null, head };
 
 		const [ nextState, newSymbol, direction ] = transition;
@@ -72,14 +71,10 @@ export default class TuringMachine extends Automaton {
 		return { state: nextState, head };
 	}
 
-	/**
-	 * @param {String} string - The input string.
-	 * @param {Number} [stepLimit] - The maximum number of transitions to take.
-	 * @returns {Boolean}
-	 */
-	accepts(string, stepLimit) {
+	/** @param stepLimit - The maximum number of transitions to take. */
+	accepts(string: string, stepLimit?: number): boolean {
 		const { state, halt } = this.run(string, stepLimit);
-		return halt && this.finalStates.has(state);
+		return halt && state !== null && this.finalStates.has(state);
 	}
 
 	/**
@@ -87,24 +82,23 @@ export default class TuringMachine extends Automaton {
 	 * 
 	 * If the input string does not halt within the step limit (if specified),
 	 * this method will return `false`.
-	 * @param {String} string - The input string.
-	 * @param {Number} [stepLimit] - The maximum number of transitions to take.
-	 * @returns {Boolean}
 	 */
-	rejects(string, stepLimit) {
+	rejects(string: string, stepLimit?: number): boolean {
 		const { state, halt } = this.run(string, stepLimit);
-		return halt && !this.finalStates.has(state);
+		return halt && !(state !== null && this.finalStates.has(state));
 	}
 
+	removeState(state: number): void {
+		throw new Error("Method not implemented.");
+	}
 }
 
 /**
  * Returns the tape in string form.
  * 
  * Any blank symbols in between written tape cells are converted to spaces.
- * @param {{ state: Number | null, head: Number }} tape - The tape.
  */
-export function tapeToString(tape) {
+export function tapeToString(tape: { [index: number]: string | null }) {
 	const indices = Object.keys(tape).map(Number);
 	if (indices.length === 0) return "";
 
@@ -114,4 +108,17 @@ export function tapeToString(tape) {
 		string += i in tape ? tape[i] : " ";
 	}
 	return string;
+}
+
+export interface TuringMachineArguments extends AutomatonArguments {
+
+	/** The symbols allowed on the tape. */
+	tapeAlphabet?: Iterable<string>;
+
+	/** The symbol in tape cells which have not been written to. */
+	blankSymbol?: string | null;
+
+	/** An object mapping each state and symbol to a tape instruction. */
+	transitions?: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; }
+
 }

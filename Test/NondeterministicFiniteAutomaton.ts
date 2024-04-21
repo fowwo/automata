@@ -17,19 +17,13 @@ suite("NFA", () => {
 					3: { "a": [ 4 ] },
 				}
 			});
-	
-			assert(machine.accepts("abba"));
-	
-			assert(machine.rejects(""));
-			assert(machine.rejects("a"));
-			assert(machine.rejects("ab"));
-			assert(machine.rejects("abb"));
-			assert(machine.rejects("b"));
-			assert(machine.rejects("aa"));
-			assert(machine.rejects("aba"));
-			assert(machine.rejects("abbb"));
-			assert(machine.rejects("abbaa"));
-			assert(machine.rejects("abbab"));
+
+			for (const string of [ "abba" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "", "a", "ab", "abb", "b", "aa", "aba", "abbb", "abbaa", "abbab" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("2 - a^n(b|bb|bbb)c^m", () => {
 			const machine = new NFA({
@@ -44,23 +38,13 @@ suite("NFA", () => {
 					3: { "c": [ 3 ] },
 				}
 			});
-	
-			assert(machine.accepts("b"));
-			assert(machine.accepts("abc"));
-			assert(machine.accepts("abbc"));
-			assert(machine.accepts("abbbc"));
-			assert(machine.accepts("aaaabcccccccccccc"));
-			assert(machine.accepts("aaaabbcccccccccccc"));
-			assert(machine.accepts("aaaabbbcccccccccccc"));
-	
-			assert(machine.rejects(""));
-			assert(machine.rejects("ac"));
-			assert(machine.rejects("bac"));
-			assert(machine.rejects("acb"));
-			assert(machine.rejects("cab"));
-			assert(machine.rejects("abbbbc"));
-			assert(machine.rejects("aaaacccccccccccc"));
-			assert(machine.rejects("aaaabbbbcccccccccccc"));
+
+			for (const string of [ "b", "abc", "abbc", "abbbc", "aaaabcccccccccccc", "aaaabbcccccccccccc", "aaaabbbcccccccccccc" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "", "ac", "bac", "acb", "cab", "abbbbc", "aaaacccccccccccc", "aaaabbbbcccccccccccc" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("3 - 'hello world'", () => {
 			const machine = new NFA({
@@ -82,16 +66,13 @@ suite("NFA", () => {
 					10: { "d": [ 11 ] }
 				}
 			});
-	
-			assert(machine.accepts("hello world"));
-	
-			assert(machine.rejects("helloworld"));
-			assert(machine.rejects("hello worl"));
-			assert(machine.rejects("hello world!"));
-			assert(machine.rejects("hell world"));
-			assert(machine.rejects("goodbye world"));
-			assert(machine.rejects("hello mom"));
-			assert(machine.rejects("accept me"));
+
+			for (const string of [ "hello world" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "helloworld", "hello worl", "hello world!", "hell world", "goodbye world", "hello mom", "accept me" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("4 - Σ(a|ba)", () => {
 			const machine = new NFA({
@@ -108,27 +89,13 @@ suite("NFA", () => {
 					5: { "a": [ 6 ], "b": [ 6 ], "ε": [ 6 ] }
 				}
 			});
-	
-			assert(machine.accepts("aa"));
-			assert(machine.accepts("ba"));
-			assert(machine.accepts("aba"));
-			assert(machine.accepts("bba"));
-	
-			assert(machine.rejects(""));
-			assert(machine.rejects("a"));
-			assert(machine.rejects("b"));
-			assert(machine.rejects("ab"));
-			assert(machine.rejects("bb"));
-			assert(machine.rejects("aaa"));
-			assert(machine.rejects("aab"));
-			assert(machine.rejects("abb"));
-			assert(machine.rejects("baa"));
-			assert(machine.rejects("bab"));
-			assert(machine.rejects("bbb"));
-			assert(machine.rejects("abaa"));
-			assert(machine.rejects("abab"));
-			assert(machine.rejects("bbaa"));
-			assert(machine.rejects("bbab"));
+
+			for (const string of [ "aa", "ba", "aba", "bba" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "", "a", "b", "ab", "bb", "aaa", "aab", "abb", "baa", "bab", "bbb", "abaa", "abab", "bbaa", "bbab" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("5 - Large and Dense", () => {
 			const machine = new NFA({
@@ -155,16 +122,13 @@ suite("NFA", () => {
 					15: { "a": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ], "b": [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 ] },
 				}
 			});
-	
-			assert(machine.accepts("a"));
-			assert(machine.accepts("b"));
-			assert(machine.accepts("abab"));
-			assert(machine.accepts("bbabbababab"));
-			assert(machine.accepts("aaaaaaaaaaaaaaaa"));
-			assert(machine.accepts("bbbbbbbbbbbbbbbb"));
-			assert(machine.accepts("abaaabababaaabababababbaaaaabbabbbbababbbbbbbabababbaaaaababbabababbbbbababbbbaaaa"));
-	
-			assert(machine.rejects(""));
+
+			for (const string of [ "a", "b", "abab", "bbabbababab", "aaaaaaaaaaaaaaaa", "bbbbbbbbbbbbbbbb", "abaaabababaaabababababbaaaaabbabbbbababbbbbbbabababbaaaaababbabababbbbbababbbbaaaa" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 	});
 	test(".removeState", () => {

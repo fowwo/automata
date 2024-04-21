@@ -45,9 +45,9 @@ suite("TM", () => {
 		for (let n = 1; n <= 64; n++) {
 			input += "0";
 			if (n & (n - 1)) {
-				assert(machine.rejects(input));
+				assert(machine.rejects(input), `"${input}" is accepted but should be rejected.`);
 			} else {
-				assert(machine.accepts(input));
+				assert(machine.accepts(input), `"${input}" is rejected but should be accepted.`);
 			}
 		}
 	});

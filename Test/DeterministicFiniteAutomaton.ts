@@ -15,19 +15,13 @@ suite("DFA", () => {
 					1: { "a": 0, "b": 1 }
 				}
 			});
-	
-			assert(machine.accepts("b"));
-			assert(machine.accepts("bbb"));
-			assert(machine.accepts("ab"));
-			assert(machine.accepts("abab"));
-			assert(machine.accepts("aaaabaaab"));
-	
-			assert(machine.rejects(""));
-			assert(machine.rejects("a"));
-			assert(machine.rejects("ba"));
-			assert(machine.rejects("aba"));
-			assert(machine.rejects("baba"));
-			assert(machine.rejects("bbbbba"));
+
+			for (const string of [ "b", "bbb", "ab", "abab", "aaaabaaab" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "", "a", "ba", "aba", "baba", "bbbbba" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("2 - Length is Two or Three", () => {
 			const alphabet = [ "a", "b", "c" ];
@@ -44,22 +38,27 @@ suite("DFA", () => {
 					4: { "a": 4, "b": 4, "c": 4 }
 				}
 			});
-	
+
 			for (let i = 0; i < alphabet.length; i++) {
-				assert(machine.rejects(alphabet[i]));
+				assert(machine.rejects(alphabet[i]),
+					`"${alphabet[i]}" is accepted but should be rejected.`);
 				for (let j = 0; j < alphabet.length; j++) {
-					assert(machine.accepts([ i, j ].map(x => alphabet[x]).join("")));
+					assert(machine.accepts([ i, j ].map(x => alphabet[x]).join("")),
+						`"${[ i, j ].map(x => alphabet[x]).join("")}" is rejected but should be accepted.`);
 					for (let k = 0; k < alphabet.length; k++) {
-						assert(machine.accepts([ i, j, k ].map(x => alphabet[x]).join("")));
+						assert(machine.accepts([ i, j, k ].map(x => alphabet[x]).join("")),
+							`"${[ i, j, k ].map(x => alphabet[x]).join("")}" is rejected but should be accepted.`);
 						for (let l = 0; l < alphabet.length; l++) {
-							assert(machine.rejects([ i, j, k, l ].map(x => alphabet[x]).join("")));
+							assert(machine.rejects([ i, j, k, l ].map(x => alphabet[x]).join("")),
+								`"${[ i, j, k, l ].map(x => alphabet[x]).join("")}" is accepted but should be rejected.`);
 						}
 					}
 				}
 			}
-	
-			assert(machine.rejects(""));
-			assert(machine.rejects("bcabcabcabbca"));
+
+			for (const string of [ "", "bcabcabcabbca" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("3 - (abc)^n", () => {
 			const machine = new DFA({
@@ -74,21 +73,13 @@ suite("DFA", () => {
 					3: { "a": 3, "b": 3, "c": 3 }
 				}
 			});
-	
-			assert(machine.accepts(""));
-			assert(machine.accepts("abc"));
-			assert(machine.accepts("abcabc"));
-			assert(machine.accepts("abcabcabc"));
-			assert(machine.accepts("abcabcabcabc"));
-			assert(machine.accepts("abcabcabcabcabc"));
-	
-			assert(machine.rejects("a"));
-			assert(machine.rejects("b"));
-			assert(machine.rejects("c"));
-			assert(machine.rejects("abca"));
-			assert(machine.rejects("aabc"));
-			assert(machine.rejects("abbc"));
-			assert(machine.rejects("abcabcabcab"));
+
+			for (const string of [ "", "abc", "abcabc", "abcabcabc", "abcabcabcabc", "abcabcabcabcabc" ]) {
+				assert(machine.accepts(string), `"${string}" is rejected but should be accepted.`);
+			}
+			for (const string of [ "a", "b", "c", "abca", "aabc", "abbc", "abcabcabcab" ]) {
+				assert(machine.rejects(string), `"${string}" is accepted but should be rejected.`);
+			}
 		});
 		await t.test("4 - Length Modulo 13", () => {
 			const machine = new DFA({
@@ -111,10 +102,10 @@ suite("DFA", () => {
 					12: { "a": 0, "b": 0, "c": 0 }
 				}
 			});
-	
+
 			for (const input of [ "", "abc", "aaaaaa", "abacbbcabccb", "bacbabcabcabbcabcbabcabcbabcabca" ]) {
 				const state = machine.run(input);
-				assert.equal(state, input.length % 13);
+				assert.equal(state, input.length % 13, `DFA halts on state ${state} instead of state ${input.length % 13}`);
 			}
 		});
 	});
