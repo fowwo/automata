@@ -1,4 +1,5 @@
-import RegularAutomaton, { RegularAutomatonArguments } from "./RegularAutomaton.js";
+import RegularAutomaton from "./RegularAutomaton";
+import NondeterministicFiniteAutomatonData from "../Type/NondeterministicFiniteAutomatonData";
 
 /** A nondeterministic finite automaton. */
 export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
@@ -6,7 +7,7 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 	/** An object mapping each state and symbol to one or more states. */
 	declare transitions: { [state: number]: { [symbol: string]: number[]; }; };
 
-	constructor({ alphabet, states, startState, finalStates, transitions }: NondeterministicFiniteAutomatonArguments = {}) {
+	constructor({ alphabet, states, startState, finalStates, transitions }: NondeterministicFiniteAutomatonData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
 	}
 
@@ -84,11 +85,4 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 			}
 		}
 	}
-}
-
-export interface NondeterministicFiniteAutomatonArguments extends RegularAutomatonArguments {
-
-	/** An object mapping each state and symbol to one or more states. */
-	transitions?: { [state: number]: { [symbol: string]: number[] } };
-
 }

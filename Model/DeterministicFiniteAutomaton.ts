@@ -1,4 +1,5 @@
-import RegularAutomaton, { RegularAutomatonArguments } from "./RegularAutomaton.js";
+import RegularAutomaton from "./RegularAutomaton";
+import DeterministicFiniteAutomatonData from "../Type/DeterministicFiniteAutomatonData";
 
 /**
  * A deterministic finite automaton.
@@ -11,7 +12,7 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 	/** An object mapping each state and symbol to a state. */
 	declare transitions: { [state: number]: { [symbol: string]: number; }; };
 
-	constructor({ alphabet, states, startState, finalStates, transitions }: DeterministicFiniteAutomatonArguments = {}) {
+	constructor({ alphabet, states, startState, finalStates, transitions }: DeterministicFiniteAutomatonData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
 	}
 
@@ -53,11 +54,4 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 			}
 		}
 	}
-}
-
-export interface DeterministicFiniteAutomatonArguments extends RegularAutomatonArguments {
-	
-	/** An object mapping each state and symbol to a state. */
-	transitions?: { [state: number]: { [symbol: string]: number } };
-
 }

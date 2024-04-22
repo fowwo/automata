@@ -1,4 +1,5 @@
-import Automaton, { AutomatonArguments } from "./Automaton.js";
+import Automaton from "./Automaton";
+import TuringMachineData from "../Type/TuringMachineData";
 
 export default class TuringMachine extends Automaton {
 
@@ -10,7 +11,7 @@ export default class TuringMachine extends Automaton {
 
 	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; };
 
-	constructor({ alphabet, tapeAlphabet = [], blankSymbol = null, states, startState, finalStates, transitions }: TuringMachineArguments = {}) {
+	constructor({ alphabet, tapeAlphabet = [], blankSymbol = null, states, startState, finalStates, transitions }: TuringMachineData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
 		this.tapeAlphabet = new Set(tapeAlphabet);
 		this.blankSymbol = blankSymbol;
@@ -108,17 +109,4 @@ export function tapeToString(tape: { [index: number]: string | null }) {
 		string += i in tape ? tape[i] : " ";
 	}
 	return string;
-}
-
-export interface TuringMachineArguments extends AutomatonArguments {
-
-	/** The symbols allowed on the tape. */
-	tapeAlphabet?: Iterable<string>;
-
-	/** The symbol in tape cells which have not been written to. */
-	blankSymbol?: string | null;
-
-	/** An object mapping each state and symbol to a tape instruction. */
-	transitions?: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; }
-
 }

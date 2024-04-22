@@ -1,3 +1,5 @@
+import AutomatonData from "../Type/AutomatonData";
+
 /** An abstract finite automaton. */
 export default abstract class Automaton {
 
@@ -16,7 +18,7 @@ export default abstract class Automaton {
 	/** An object mapping states and symbols to states. */
 	transitions: { [state: number]: unknown };
 
-	constructor({ alphabet = [], states = [], startState = null, finalStates = [], transitions = {} }: AutomatonArguments = {}) {
+	constructor({ alphabet = [], states = [], startState = null, finalStates = [], transitions = {} }: AutomatonData = {}) {
 		this.alphabet = new Set(alphabet);
 		if (typeof states === "number") {
 			this.states = new Set();
@@ -58,7 +60,7 @@ export default abstract class Automaton {
 	abstract removeState(state: number): void;
 
 	/** Returns a JSON representation of the automaton. */
-	toJSON() {
+	toJSON(): AutomatonData {
 		return {
 			alphabet: Array.from(this.alphabet),
 			states: Array.from(this.states),
@@ -67,24 +69,5 @@ export default abstract class Automaton {
 			transitions: this.transitions
 		};
 	}
-
-}
-
-export interface AutomatonArguments {
-
-	/** The symbols of the language. */
-	alphabet?: Iterable<string>;
-
-	/** The states or number of states. */
-	states?: number | Iterable<number>;
-
-	/** The start state. */
-	startState?: number | null;
-
-	/** The final states. */
-	finalStates?: Iterable<number>;
-
-	/** An object mapping states and symbols to states. */
-	transitions?: { [state: number]: unknown; };
 
 }
