@@ -1,12 +1,16 @@
 <script setup lang="ts">
+	import { ref } from "vue";
 	import Diagram from "./Component/Diagram.vue";
+	import Modal from "./Component/Modal.vue";
+
+	const newAutomatonModal = ref<InstanceType<typeof Modal> | null>(null);
 </script>
 <template>
 	<nav class="large-shadow">
 		<div></div>
 		<div id="diagrams">
 			<hr>
-			<button id="new-diagram" class="symbol small-shadow">&#xE145;</button>
+			<button id="new-diagram" class="symbol small-shadow" @click="newAutomatonModal?.open()">&#xE145;</button>
 		</div>
 		<div>
 			<button id="color-scheme" class="small-shadow">
@@ -22,166 +26,85 @@
 	<div id="diagram-info-container" class="large-shadow">
 		<div id="diagram-info"></div>
 	</div>
-	<dialog id="new-diagram-select">
+	<Modal title="New Automaton" id="new-diagram-select" ref="newAutomatonModal">
+		<hr>
 		<div>
-			<header class="large-shadow">
-				<span>New Automaton</span>
-				<button class="symbol">&#xE5CD;</button>
-			</header>
 			<div>
-				<hr>
-				<div>
-					<div>
-						<span class="symbol">&#xEF4A;</span>
-						<span class="symbol">&#xE941;</span>
-						<span class="symbol">&#xE86B;</span>
-						<span class="symbol">&#xE941;</span>
-						<span class="symbol">&#xEB36;</span>
-						<span class="symbol">&#xE941;</span>
-						<span class="symbol">&#xEB50;</span>
-						<span class="symbol">&#xE941;</span>
-						<span class="symbol">&#xEB39;</span>
-					</div>
-					<div>more edges = higher computational power</div>
-				</div>
-				<hr>
-				<button>
-					<div>
-						<span class="dfa-icon"></span>
-					</div>
-					<div>
-						<span>Deterministic Finite Automaton</span>
-						<span>DFA</span>
-					</div>
-				</button>
-				<button>
-					<div>
-						<span class="nfa-icon"></span>
-					</div>
-					<div>
-						<span>Nondeterministic Finite Automaton</span>
-						<span>NFA</span>
-					</div>
-				</button>
-				<button disabled>
-					<div>
-						<span class="dpda-icon"></span>
-					</div>
-					<div>
-						<span>Deterministic Pushdown Automaton</span>
-						<span>DPDA</span>
-					</div>
-				</button>
-				<button disabled>
-					<div>
-						<span class="pda-icon"></span>
-					</div>
-					<div>
-						<span>Pushdown Automaton</span>
-						<span>PDA</span>
-					</div>
-				</button>
-				<button disabled>
-					<div>
-						<span class="lba-icon"></span>
-					</div>
-					<div>
-						<span>Linear Bounded Automaton</span>
-						<span>LBA</span>
-					</div>
-				</button>
-				<button>
-					<div>
-						<span class="tm-icon"></span>
-					</div>
-					<div>
-						<span>Turing Machine</span>
-						<span>TM</span>
-					</div>
-				</button>
-				<button disabled>
-					<div>
-						<span class="ntm-icon"></span>
-					</div>
-					<div>
-						<span>Nondeterministic Turing Machine</span>
-						<span>NTM</span>
-					</div>
-				</button>
+				<span class="symbol">&#xEF4A;</span>
+				<span class="symbol">&#xE941;</span>
+				<span class="symbol">&#xE86B;</span>
+				<span class="symbol">&#xE941;</span>
+				<span class="symbol">&#xEB36;</span>
+				<span class="symbol">&#xE941;</span>
+				<span class="symbol">&#xEB50;</span>
+				<span class="symbol">&#xE941;</span>
+				<span class="symbol">&#xEB39;</span>
 			</div>
+			<div>more edges = higher computational power</div>
 		</div>
-	</dialog>
-	<dialog id="automaton-modal">
-		<div>
-			<header class="large-shadow">
-				<span>Automaton Settings</span>
-				<button class="symbol">&#xE5CD;</button>
-			</header>
+		<hr>
+		<button>
 			<div>
-				<nav class="small-inset-shadow">
-					<ul>
-						<li class="toggle large-shadow">
-							<input type="radio" name="automaton-modal-nav" checked>
-							<span>General</span>
-						</li>
-						<li class="toggle large-shadow">
-							<input type="radio" name="automaton-modal-nav">
-							<span>Alphabet</span>
-						</li>
-						<li class="toggle large-shadow">
-							<input type="radio" name="automaton-modal-nav">
-							<span>States</span>
-						</li>
-						<li class="toggle large-shadow">
-							<input type="radio" name="automaton-modal-nav">
-							<span>Transitions</span>
-						</li>
-					</ul>
-				</nav>
-				<div>
-					<div id="general">
-						<h1>General</h1>
-						<hr>
-						<div>
-							<div>
-								<label for="diagram-rename">Name</label>
-							</div>
-							<div>
-								<input id="diagram-rename" type="text" class="small-inset-shadow">
-							</div>
-						</div>
-					</div>
-					<div id="alphabet">
-						<h1>Alphabet</h1>
-						<hr>
-						<ul></ul>
-					</div>
-					<div id="states">
-						<h1>States</h1>
-						<table>
-							<thead>
-								<tr>
-									<th title="Start State" class="symbol">&#xF6FE;</th>
-									<th title="Final State" class="symbol">&#xF12E;</th>
-									<th>Name</th>
-								</tr>
-							</thead>
-							<tbody></tbody>
-						</table>
-						<button id="new-state" class="symbol small-shadow">&#xE145;</button>
-					</div>
-					<div id="transitions">
-						<h1>Transitions</h1>
-						<div class="error">
-							Your automaton must have symbols in the alphabet before creating transitions.
-						</div>
-						<table>
-							<thead><tr></tr></thead>
-							<tbody></tbody>
-						</table>
-					</div>
-				</div>
+				<span class="dfa-icon"></span>
 			</div>
-		</div>
-	</dialog>
+			<div>
+				<span>Deterministic Finite Automaton</span>
+				<span>DFA</span>
+			</div>
+		</button>
+		<button>
+			<div>
+				<span class="nfa-icon"></span>
+			</div>
+			<div>
+				<span>Nondeterministic Finite Automaton</span>
+				<span>NFA</span>
+			</div>
+		</button>
+		<button disabled>
+			<div>
+				<span class="dpda-icon"></span>
+			</div>
+			<div>
+				<span>Deterministic Pushdown Automaton</span>
+				<span>DPDA</span>
+			</div>
+		</button>
+		<button disabled>
+			<div>
+				<span class="pda-icon"></span>
+			</div>
+			<div>
+				<span>Pushdown Automaton</span>
+				<span>PDA</span>
+			</div>
+		</button>
+		<button disabled>
+			<div>
+				<span class="lba-icon"></span>
+			</div>
+			<div>
+				<span>Linear Bounded Automaton</span>
+				<span>LBA</span>
+			</div>
+		</button>
+		<button>
+			<div>
+				<span class="tm-icon"></span>
+			</div>
+			<div>
+				<span>Turing Machine</span>
+				<span>TM</span>
+			</div>
+		</button>
+		<button disabled>
+			<div>
+				<span class="ntm-icon"></span>
+			</div>
+			<div>
+				<span>Nondeterministic Turing Machine</span>
+				<span>NTM</span>
+			</div>
+		</button>
+	</Modal>
 </template>
