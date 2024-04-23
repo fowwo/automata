@@ -47,17 +47,6 @@ body {
 	font-family: 'Roboto Slab', serif;
 	color: hsl(var(--text-color-hsl));
 }
-main {
-	position: relative;
-	width: 100%;
-	user-select: none;
-}
-main > * {
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-}
 dialog {
 	display: flex;
 	justify-content: center;

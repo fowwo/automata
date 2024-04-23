@@ -1,3 +1,6 @@
+<script setup lang="ts">
+	import Diagram from "./Component/Diagram.vue";
+</script>
 <template>
 	<nav class="large-shadow">
 		<div></div>
@@ -15,24 +18,7 @@
 			</a>
 		</div>
 	</nav>
-	<main>
-		<div id="workspace">
-			<div>
-				<button id="edit-automaton" class="widget symbol large-shadow">&#xF535;</button>
-			</div>
-			<div id="open-diagram-info" class="widget button toggle large-shadow">
-				<input type="checkbox">
-				<span class="symbol">&#xF535;</span>
-				<span class="symbol">&#xE5CD;</span>
-			</div>
-			<div id="zoom">
-				<span id="zoom-label">1.00</span>
-				<button id="zoom-in" class="widget symbol large-shadow">&#xE8FF;</button>
-				<button id="zoom-out" class="widget symbol large-shadow">&#xE900;</button>
-			</div>
-		</div>
-		<div id="diagram"></div>
-	</main>
+	<Diagram />
 	<div id="diagram-info-container" class="large-shadow">
 		<div id="diagram-info"></div>
 	</div>
