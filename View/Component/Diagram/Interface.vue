@@ -2,14 +2,14 @@
 	import { ref } from "vue";
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
-	import Modal from "../Modal.vue";
+	import AutomatonSettings from "../Modal/AutomatonSettings.vue";
 
 	defineProps<{
 		diagram: Diagram;
 		transform: Transform;
 	}>();
 
-	const automatonModal = ref<InstanceType<typeof Modal> | null>(null);
+	const automatonModal = ref<InstanceType<typeof AutomatonSettings> | null>(null);
 </script>
 <template>
 	<div class="interface">
@@ -27,71 +27,7 @@
 			<button class="widget symbol large-shadow" @click="transform.zoomOut()">&#xE900;</button>
 		</div>
 	</div>
-	<Modal title="Automaton Settings" id="automaton-modal" ref="automatonModal">
-		<nav class="small-inset-shadow">
-			<ul>
-				<li class="toggle large-shadow">
-					<input type="radio" name="automaton-modal-nav" checked>
-					<span>General</span>
-				</li>
-				<li class="toggle large-shadow">
-					<input type="radio" name="automaton-modal-nav">
-					<span>Alphabet</span>
-				</li>
-				<li class="toggle large-shadow">
-					<input type="radio" name="automaton-modal-nav">
-					<span>States</span>
-				</li>
-				<li class="toggle large-shadow">
-					<input type="radio" name="automaton-modal-nav">
-					<span>Transitions</span>
-				</li>
-			</ul>
-		</nav>
-		<div>
-			<div id="general">
-				<h1>General</h1>
-				<hr>
-				<div>
-					<div>
-						<label for="diagram-rename">Name</label>
-					</div>
-					<div>
-						<input id="diagram-rename" type="text" class="small-inset-shadow">
-					</div>
-				</div>
-			</div>
-			<div id="alphabet">
-				<h1>Alphabet</h1>
-				<hr>
-				<ul></ul>
-			</div>
-			<div id="states">
-				<h1>States</h1>
-				<table>
-					<thead>
-						<tr>
-							<th title="Start State" class="symbol">&#xF6FE;</th>
-							<th title="Final State" class="symbol">&#xF12E;</th>
-							<th>Name</th>
-						</tr>
-					</thead>
-					<tbody></tbody>
-				</table>
-				<button id="new-state" class="symbol small-shadow">&#xE145;</button>
-			</div>
-			<div id="transitions">
-				<h1>Transitions</h1>
-				<div class="error">
-					Your automaton must have symbols in the alphabet before creating transitions.
-				</div>
-				<table>
-					<thead><tr></tr></thead>
-					<tbody></tbody>
-				</table>
-			</div>
-		</div>
-	</Modal>
+	<AutomatonSettings :automaton="diagram.automaton" ref="automatonModal" />
 </template>
 <style scoped>
 	.interface {
