@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import Modal from "../Modal.vue";
+	import DiagramIcon from "../DiagramIcon.vue";
 
 	defineExpose({
 		open: () => modal.value?.open(),
@@ -28,63 +29,49 @@
 		</div>
 		<hr>
 		<button>
-			<div>
-				<span class="dfa-icon"></span>
-			</div>
+			<DiagramIcon type="DFA" />
 			<div>
 				<span>Deterministic Finite Automaton</span>
 				<span>DFA</span>
 			</div>
 		</button>
 		<button>
-			<div>
-				<span class="nfa-icon"></span>
-			</div>
+			<DiagramIcon type="NFA" />
 			<div>
 				<span>Nondeterministic Finite Automaton</span>
 				<span>NFA</span>
 			</div>
 		</button>
 		<button disabled>
-			<div>
-				<span class="dpda-icon"></span>
-			</div>
+			<DiagramIcon type="DPDA" />
 			<div>
 				<span>Deterministic Pushdown Automaton</span>
 				<span>DPDA</span>
 			</div>
 		</button>
 		<button disabled>
-			<div>
-				<span class="pda-icon"></span>
-			</div>
+			<DiagramIcon type="PDA" />
 			<div>
 				<span>Pushdown Automaton</span>
 				<span>PDA</span>
 			</div>
 		</button>
 		<button disabled>
-			<div>
-				<span class="lba-icon"></span>
-			</div>
+			<DiagramIcon type="LBA" />
 			<div>
 				<span>Linear Bounded Automaton</span>
 				<span>LBA</span>
 			</div>
 		</button>
 		<button>
-			<div>
-				<span class="tm-icon"></span>
-			</div>
+			<DiagramIcon type="TM" />
 			<div>
 				<span>Turing Machine</span>
 				<span>TM</span>
 			</div>
 		</button>
 		<button disabled>
-			<div>
-				<span class="ntm-icon"></span>
-			</div>
+			<DiagramIcon type="NTM" />
 			<div>
 				<span>Nondeterministic Turing Machine</span>
 				<span>NTM</span>
@@ -112,31 +99,34 @@
 			width: 100%;
 			height: 50px;
 
-			&:disabled > div:first-child > span::after {
-				color: hsl(var(--text-color-hsl) / 10%);
+			> span {
+				display: flex;
+				margin-right: 0.25em;
+				align-items: center;
+				height: 100%;
+				font-size: 2em;
+
+				button:disabled > & {
+					color: hsl(var(--text-color-hsl) / 10%);
+				}
 			}
 			> div {
 				display: flex;
-				flex-shrink: 0;
-				height: 100%;
-				justify-content: center;
-				align-items: center;
-			}
-			> div:first-child {
-				width: 40px;
-				justify-content: left;
-				font-size: 2em;
-				& > span {
-					height: 0;
-				}
-			}
-			> div:last-child {
 				flex-direction: column;
-				justify-content: space-evenly;
-				align-items: start;
+				justify-content: center;
+				height: 100%;
+				min-width: 0;
 
-				> span:last-child {
-					opacity: 50%;
+				> span {
+					line-height: 20px;
+					text-align: left;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+					overflow: hidden;
+
+					&:last-child {
+						opacity: 50%;
+					}
 				}
 			}
 		}
