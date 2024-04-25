@@ -1,7 +1,10 @@
 <script setup lang="ts">
 	import { ref } from "vue";
+	import { diagram, diagrams } from "../../State/Diagram";
 	import Modal from "../Modal.vue";
 	import DiagramIcon from "../DiagramIcon.vue";
+	import Diagram from "../../../Model/Diagram";
+	import DiagramData from "../../../Type/DiagramData";
 
 	defineExpose({
 		open: () => modal.value?.open(),
@@ -9,6 +12,20 @@
 	});
 
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
+
+	function createDiagram(type: DiagramData["type"]) {
+		const newDiagram = new Diagram({
+			name: `Diagram ${diagrams.length + 1}`,
+			type,
+			automaton: { states: 1, startState: 1 },
+			states: { 0: { x: 0, y: 0, label: "0" } },
+			transitions: {},
+			startTransition: { angle: Math.PI, length: 75 }
+		});
+		diagrams.push(newDiagram);
+		diagram.value = newDiagram;
+		modal.value?.close();
+	}
 </script>
 <template>
 	<Modal title="New Automaton" :class="$style['new-automaton-modal']" ref="modal">
@@ -28,14 +45,14 @@
 			<div>more edges = higher computational power</div>
 		</div>
 		<hr>
-		<button>
+		<button @click="createDiagram('DFA')">
 			<DiagramIcon type="DFA" />
 			<div>
 				<span>Deterministic Finite Automaton</span>
 				<span>DFA</span>
 			</div>
 		</button>
-		<button>
+		<button @click="createDiagram('NFA')">
 			<DiagramIcon type="NFA" />
 			<div>
 				<span>Nondeterministic Finite Automaton</span>
@@ -63,7 +80,7 @@
 				<span>LBA</span>
 			</div>
 		</button>
-		<button>
+		<button @click="createDiagram('TM')">
 			<DiagramIcon type="TM" />
 			<div>
 				<span>Turing Machine</span>
