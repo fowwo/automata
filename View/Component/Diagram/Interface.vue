@@ -19,15 +19,15 @@
 			<DiagramIcon :type="diagram.type" />
 			<span>{{ diagram.name }}</span>
 		</div>
-		<div id="open-diagram-info" class="widget button toggle large-shadow">
+		<div id="open-diagram-info" class="widget button toggle small-shadow">
 			<input type="checkbox">
 			<span class="symbol">&#xF535;</span>
 			<span class="symbol">&#xE5CD;</span>
 		</div>
 		<div class="zoom">
 			<span>{{ transform.scale.toFixed(2) }}</span>
-			<button class="widget symbol large-shadow" @click="transform.zoomIn()">&#xE8FF;</button>
-			<button class="widget symbol large-shadow" @click="transform.zoomOut()">&#xE900;</button>
+			<button class="widget symbol small-shadow" @click="transform.zoomIn()">&#xE8FF;</button>
+			<button class="widget symbol small-shadow" @click="transform.zoomOut()">&#xE900;</button>
 		</div>
 	</div>
 	<DiagramSettings :diagram ref="diagramModal" />
@@ -74,9 +74,7 @@
 			right: var(--margin);
 			padding: 0;
 			font-size: 24px;
-			transition-property: right, background-color;
-			transition-duration: var(--transition-duration);
-			transition-timing-function: var(--transition-smooth);
+			transition: right var(--transition-duration) var(--transition-smooth);
 
 			&:hover {
 				font-size: 27px;
