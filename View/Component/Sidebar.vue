@@ -10,6 +10,11 @@
 	}>();
 
 	const newAutomatonModal = ref<InstanceType<typeof NewAutomatonModal> | null>(null);
+
+	function toggleColorScheme() {
+		const dark = document.documentElement.classList.toggle("dark");
+		localStorage.setItem("color-scheme", dark ? "dark" : "light");
+	}
 </script>
 <template>
 	<nav class="sidebar large-shadow">
@@ -19,7 +24,7 @@
 			<button id="new-diagram" class="symbol small-shadow" @click="newAutomatonModal?.open()">&#xE145;</button>
 		</div>
 		<div>
-			<button id="color-scheme" class="small-shadow">
+			<button id="color-scheme" class="small-shadow" @click="toggleColorScheme()">
 				<span class="symbol">&#xE430;</span>
 				<span class="filled-symbol">&#xE3A8;</span>
 			</button>
