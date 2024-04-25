@@ -2,7 +2,7 @@
 	import { ref } from "vue";
 	import { diagram, diagrams } from "../../State/Diagram";
 	import Modal from "../Modal.vue";
-	import DiagramIcon from "../DiagramIcon.vue";
+	import DiagramIcon from "../Diagram/Icon.vue";
 	import Diagram from "../../../Model/Diagram";
 	import DiagramData from "../../../Type/DiagramData";
 

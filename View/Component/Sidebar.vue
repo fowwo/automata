@@ -2,7 +2,7 @@
 	import { ref } from "vue";
 	import { diagram as selectedDiagram } from "../State/Diagram";
 	import NewAutomatonModal from "./Modal/NewAutomaton.vue";
-	import DiagramIcon from "./DiagramIcon.vue";
+	import DiagramIcon from "./Diagram/Icon.vue";
 	import Diagram from "../../Model/Diagram";
 
 	defineProps<{

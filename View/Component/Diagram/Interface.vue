@@ -3,7 +3,7 @@
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
 	import DiagramSettings from "../Modal/DiagramSettings.vue";
-	import DiagramIcon from "../DiagramIcon.vue";
+	import DiagramIcon from "./Icon.vue";
 
 	defineProps<{
 		diagram: Diagram;
