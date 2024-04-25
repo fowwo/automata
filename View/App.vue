@@ -2,6 +2,7 @@
 	import { ref } from "vue";
 	import Diagram from "./Component/Diagram.vue";
 	import NewAutomatonModal from "./Component/Modal/NewAutomaton.vue";
+	import { diagram, diagrams } from "./State/Diagram";
 
 	const newAutomatonModal = ref<InstanceType<typeof NewAutomatonModal> | null>(null);
 </script>
@@ -22,7 +23,7 @@
 			</a>
 		</div>
 	</nav>
-	<Diagram />
+	<Diagram :diagram />
 	<div id="diagram-info-container" class="large-shadow">
 		<div id="diagram-info"></div>
 	</div>

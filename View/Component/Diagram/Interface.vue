@@ -2,19 +2,19 @@
 	import { ref } from "vue";
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
-	import AutomatonSettings from "../Modal/AutomatonSettings.vue";
+	import DiagramSettings from "../Modal/DiagramSettings.vue";
 
 	defineProps<{
 		diagram: Diagram;
 		transform: Transform;
 	}>();
 
-	const automatonModal = ref<InstanceType<typeof AutomatonSettings> | null>(null);
+	const diagramModal = ref<InstanceType<typeof DiagramSettings> | null>(null);
 </script>
 <template>
 	<div class="interface">
 		<div>
-			<button id="edit-automaton" class="widget symbol large-shadow" @click="automatonModal?.open()">&#xF535;</button>
+			<button id="edit-automaton" class="widget symbol large-shadow" @click="diagramModal?.open()">&#xF535;</button>
 		</div>
 		<div id="open-diagram-info" class="widget button toggle large-shadow">
 			<input type="checkbox">
@@ -27,7 +27,7 @@
 			<button class="widget symbol large-shadow" @click="transform.zoomOut()">&#xE900;</button>
 		</div>
 	</div>
-	<AutomatonSettings :automaton="diagram.automaton" ref="automatonModal" />
+	<DiagramSettings :diagram ref="diagramModal" />
 </template>
 <style scoped>
 	.interface {

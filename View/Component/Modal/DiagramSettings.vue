@@ -2,11 +2,9 @@
 	import { ref } from "vue";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
-	import Automaton from "../../../Model/Automaton";
+	import Diagram from "../../../Model/Diagram";
 
-	defineProps<{
-		automaton: Automaton;
-	}>();
+	defineProps<{ diagram: Diagram; }>();
 	defineExpose({
 		open: () => modal.value?.open(),
 		close: () => modal.value?.close()
