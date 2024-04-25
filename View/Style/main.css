@@ -81,59 +81,6 @@ hr {
 	height: 1px;
 	background-color: hsl(var(--text-color-hsl) / 15%);
 }
-.checkbox, .radio {
-	position: relative;
-	aspect-ratio: 1;
-	height: 40px;
-	box-shadow: var(--small-inset-shadow);
-	border-radius: 5px;
-
-	&:has(> input:checked) {
-		background-color: #08f;
-		box-shadow: none;
-		&::after {
-			content: ""; 
-			display: flex;
-			position: absolute;
-			inset: 3px;
-			justify-content: center;
-			align-items: center;
-			background-color: hsl(var(--background-color-hsl));
-			border-radius: 3px;
-			pointer-events: none;
-		}
-	}
-	> input {
-		position: absolute;
-		inset: 0;
-		appearance: none;
-		border-radius: inherit;
-		cursor: pointer;
-	}
-}
-.checkbox {
-	font-size: 1.25em;
-
-	&:has(> input:checked) {
-		&.symbol::after {
-			content: "\e876";
-		}
-	}
-}
-.radio {
-	font-size: 0.75em;
-	border-radius: 50%;
-
-	&:has(> input:checked) {
-		&::after {
-			border-radius: 50%;
-		}
-		&.symbol::after {
-			content: "\e061";
-			font-variation-settings: "FILL" 1;
-		}
-	}
-}
 .toggle {
 	position: relative;
 
