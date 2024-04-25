@@ -4,7 +4,7 @@
 	import Sidebar from "./Component/Sidebar.vue";
 </script>
 <template>
-	<Sidebar :diagram :diagrams />
+	<Sidebar :diagrams />
 	<Diagram :diagram />
 	<div id="diagram-info-container" class="large-shadow">
 		<div id="diagram-info"></div>

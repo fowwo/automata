@@ -1,11 +1,11 @@
 <script setup lang="ts">
 	import { ref } from "vue";
+	import { diagram as selectedDiagram } from "../State/Diagram";
 	import NewAutomatonModal from "./Modal/NewAutomaton.vue";
 	import DiagramIcon from "./DiagramIcon.vue";
 	import Diagram from "../../Model/Diagram";
 
 	defineProps<{
-		diagram: Diagram;
 		diagrams: Diagram[];
 	}>();
 
@@ -20,6 +20,10 @@
 	<nav class="sidebar large-shadow">
 		<div></div>
 		<div class="diagram-list">
+			<button v-for="diagram of diagrams">
+				<input type="radio" name="diagram" :value="diagram" v-model="selectedDiagram">
+				<DiagramIcon :type="diagram.type" />
+			</button>
 			<hr>
 			<button id="new-diagram" class="symbol small-shadow" @click="newAutomatonModal?.open()">&#xE145;</button>
 		</div>
