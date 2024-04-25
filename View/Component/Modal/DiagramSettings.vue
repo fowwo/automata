@@ -44,7 +44,7 @@
 						<label for="diagram-rename">Name</label>
 					</div>
 					<div>
-						<input id="diagram-rename" type="text" class="small-inset-shadow">
+						<input id="diagram-rename" type="text" class="small-inset-shadow" v-model.lazy="diagram.name">
 					</div>
 				</div>
 			</div>
