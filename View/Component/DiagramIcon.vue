@@ -1,7 +1,7 @@
 <script setup lang="ts">
-	import DiagramType from "../../Type/DiagramType";
+	import AutomatonType from "../../Type/AutomatonType";
 
-	const { type } = defineProps<{ type: DiagramType; }>();
+	const { type } = defineProps<{ type: AutomatonType; }>();
 	const symbol = {
 		DFA: "\uEF4A",
 		NFA: "\uEF4A",
