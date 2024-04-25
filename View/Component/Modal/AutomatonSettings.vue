@@ -1,6 +1,7 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import Modal from "../Modal.vue";
+	import Note from "../Note.vue";
 	import Automaton from "../../../Model/Automaton";
 
 	defineProps<{
@@ -70,9 +71,9 @@
 			</div>
 			<div :class="$style.transitions" v-if="nav === 'transitions'">
 				<h1>Transitions</h1>
-				<div class="error">
+				<Note type="error">
 					Your automaton must have symbols in the alphabet before creating transitions.
-				</div>
+				</Note>
 				<table>
 					<thead><tr></tr></thead>
 					<tbody></tbody>
