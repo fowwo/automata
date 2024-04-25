@@ -3,6 +3,7 @@
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
 	import DiagramSettings from "../Modal/DiagramSettings.vue";
+	import DiagramIcon from "../DiagramIcon.vue";
 
 	defineProps<{
 		diagram: Diagram;
@@ -13,8 +14,10 @@
 </script>
 <template>
 	<div class="interface">
-		<div>
-			<button id="edit-automaton" class="widget symbol large-shadow" @click="diagramModal?.open()">&#xF535;</button>
+		<div class="diagram-info">
+			<button id="edit-automaton" class="widget symbol small-shadow" @click="diagramModal?.open()">&#xF535;</button>
+			<DiagramIcon :type="diagram.type" />
+			<span>{{ diagram.name }}</span>
 		</div>
 		<div id="open-diagram-info" class="widget button toggle large-shadow">
 			<input type="checkbox">
@@ -55,10 +58,15 @@
 			backdrop-filter: blur(8px);
 			pointer-events: all;
 		}
-		#edit-automaton {
+		> .diagram-info {
 			top: var(--margin);
 			left: var(--margin);
+			align-items: center;
 			font-size: 24px;
+
+			> button {
+				margin-right: 5px;
+			}
 		}
 		> #open-diagram-info {
 			position: absolute;
