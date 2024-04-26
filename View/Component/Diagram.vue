@@ -1,12 +1,20 @@
 <script setup lang="ts">
+	import { watch } from "vue";
+	import { useTransform } from "../Composable/Transform";
 	import Interface from "./Diagram/Interface.vue";
 	import Workspace from "./Diagram/Workspace.vue";
 	import Diagram from "../../Model/Diagram";
-	import { useTransform } from "../Composable/Transform";
 
-	defineProps<{ diagram: Diagram }>();
+	const props = defineProps<{ diagram: Diagram }>();
 
 	const transform = useTransform();
+
+	// Reset the transform when changing diagrams.
+	watch(props, () => {
+		transform.x = 0;
+		transform.y = 0;
+		transform.scale = 1;
+	}, { deep: false });
 </script>
 <template>
 	<div class="diagram">
