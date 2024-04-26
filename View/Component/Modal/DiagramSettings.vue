@@ -2,6 +2,7 @@
 	import { ref } from "vue";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
+	import TextInput from "../Input/Text.vue";
 	import Diagram from "../../../Model/Diagram";
 
 	defineProps<{ diagram: Diagram; }>();
@@ -44,7 +45,7 @@
 						<label for="diagram-rename">Name</label>
 					</div>
 					<div>
-						<input id="diagram-rename" type="text" class="small-inset-shadow" v-model.lazy="diagram.name">
+						<TextInput id="diagram-rename" v-model.lazy.trim="diagram.name" />
 					</div>
 				</div>
 			</div>
