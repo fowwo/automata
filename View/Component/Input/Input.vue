@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { useAttrs } from "vue";
+	import { computed, useAttrs } from "vue";
 
 	const [ modelValue, modelModifiers ] = defineModel();
 	const attributes = useAttrs();
@@ -16,20 +16,24 @@
 		"popovertargetaction", "readonly", "required", "size", "src",
 		"step", "type", "value", "width"
 	];
-	const inputAttributes: { [key: string]: unknown } = {};
-	const wrapperAttributes: { [key: string]: unknown } = {};
-	for (const [ attribute, value ] of Object.entries(attributes)) {
-		if (attribute.startsWith("on") || inputAttributeTypes.includes(attribute)) {
-			inputAttributes[attribute] = value;
-		} else {
-			wrapperAttributes[attribute] = value;
+
+	const computedAttributes = computed(() => {
+		const input: { [key: string]: unknown } = {};
+		const wrapper: { [key: string]: unknown } = {};
+		for (const [ attribute, value ] of Object.entries(attributes)) {
+			if (attribute.startsWith("on") || inputAttributeTypes.includes(attribute)) {
+				input[attribute] = value;
+			} else {
+				wrapper[attribute] = value;
+			}
 		}
-	}
+		return { wrapper, input };
+	});
 </script>
 <template>
-	<div v-bind="wrapperAttributes">
+	<div v-bind="computedAttributes.wrapper">
 		<input
-			v-bind="inputAttributes"
+			v-bind="computedAttributes.input"
 			:value="modelValue"
 			@input="!modelModifiers.lazy && $emit('update:modelValue', ($event.target as HTMLInputElement).value)"
 			@change="modelModifiers.lazy && $emit('update:modelValue', ($event.target as HTMLInputElement).value)"
