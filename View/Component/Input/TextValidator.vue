@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref, watch } from "vue";
+	import { computed, ref, watch } from "vue";
 	import TextInput from "./Text.vue";
 
 	const props = defineProps<{
@@ -10,39 +10,44 @@
 	const [ model, modelModifiers ] = defineModel<string | number>();
 
 	const current = ref(String(model.value));
-	const previous = ref(model.value);
-	const invalid = ref(!props.validator(model.value));
+	const invalid = computed(() => !props.validator(modifyValue(current.value)));
 
-	watch(current, input);
+	// When the model value is changed from outside, the current value needs to be updated.
+	let externalChange = true;
 	watch(model, () => {
-		current.value = String(model.value);
+		if (externalChange) {
+			current.value = String(model.value);
+		}
+		externalChange = true;
 	});
 
-	function input(value: string) {
-		const modifiedValue = modifyValue(value);
-		invalid.value = !props.validator(modifiedValue);
+	// Using watch instead of @input because @input fires before updating the value.
+	watch(current, (value) => {
 		if (!invalid.value && !modelModifiers.lazy) {
+			const modifiedValue = modifyValue(value);
+			if (model.value === modifiedValue) return;
+
+			externalChange = false;
 			model.value = modifiedValue;
 		}
-	}
-	function change(value: string) {
-		const modifiedValue = modifyValue(value);
-		invalid.value = !props.validator(modifiedValue);
+	});
+
+	function change(value: string | number) {
 		if (!invalid.value) {
-			model.value = modifiedValue;
-			previous.value = modifiedValue;
-			current.value = String(modifiedValue);
+			current.value = String(value);
+			if (model.value === value) return;
+
+			externalChange = false;
+			model.value = value;
 			return;
 		}
 
-		// Revert the input value if requested.
-		if (props.revert) {
-			model.value = previous.value;
-			current.value = String(previous.value);
-		}
+		// Revert the input value when invalid, if requested.
+		if (props.revert) current.value = String(model.value);
 	}
 	function modifyValue(value: string) {
 		if (modelModifiers.trim) value = value.trim();
+		if (modelModifiers.collapse) value = value.replace(/\s+/g, " ");
 		if (modelModifiers.number) return Number(value);
 		return value;
 	}
@@ -50,7 +55,7 @@
 <template>
 	<TextInput
 		:class="{ invalid }"
-		@change="change($event.target.value)"
+		@change="change(modifyValue($event.target.value))"
 		v-model="current"
 	/>
 </template>
