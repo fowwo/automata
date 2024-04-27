@@ -45,4 +45,46 @@ export default class Diagram {
 		}
 	}
 
+	/** Adds a state to the diagram. */
+	addState(x: number = 0, y: number = 0) {
+
+		// Add state to the automaton.
+		const state = this.automaton.addState();
+
+		// Find unique label.
+		let label = this.automaton.states.size - 1;
+		const labels = new Set(Object.values(this.states).map(state => state.label));
+		while (labels.has(String(label))) label++;
+
+		// Add state properties.
+		this.states[state] = { x, y, label: String(label) };
+	}
+
+	/** Removes a state from the diagram. */
+	removeState(state: number) {
+
+		// Remove state from the automaton.
+		this.automaton.removeState(state);
+
+		// If the start state was removed, reassign it to an existing state.
+		if (this.automaton.startState === null && this.automaton.states.size > 0) {
+			this.automaton.startState = this.automaton.states.values().next().value;
+		}
+
+		// Remove state properties.
+		delete this.states[state];
+
+		// Remove outgoing transitions.
+		if (state in this.transitions) {
+			delete this.transitions[state];
+		}
+
+		// Remove incoming transitions.
+		for (const transitions of Object.values(this.transitions)) {
+			if (state in transitions) {
+				delete transitions[state];
+			}
+		}
+	}
+
 }

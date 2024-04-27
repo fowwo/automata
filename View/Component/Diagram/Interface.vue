@@ -30,7 +30,7 @@
 			<button class="widget symbol small-shadow" @click="transform.zoomOut()">&#xE900;</button>
 		</div>
 	</div>
-	<DiagramSettings :diagram ref="diagramModal" />
+	<DiagramSettings :diagram :transform ref="diagramModal" />
 </template>
 <style scoped>
 	.interface {

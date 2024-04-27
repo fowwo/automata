@@ -32,11 +32,7 @@
 </script>
 <template>
 	<div v-bind="computedAttributes.wrapper">
-		<input
-			v-bind="computedAttributes.input"
-			:value="modelValue"
-			@input="!modelModifiers.lazy && $emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-			@change="modelModifiers.lazy && $emit('update:modelValue', ($event.target as HTMLInputElement).value)"
-		>
+		<input v-if="modelModifiers.lazy" v-bind="computedAttributes.input" v-model.lazy="modelValue">
+		<input v-else="modelModifiers.lazy" v-bind="computedAttributes.input" v-model="modelValue">
 	</div>
 </template>

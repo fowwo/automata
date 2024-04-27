@@ -1,12 +1,18 @@
 <script setup lang="ts">
 	import { ref } from "vue";
 	import { diagrams } from "../../State/Diagram";
+	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
+	import Checkbox from "../Input/Checkbox.vue";
+	import Radio from "../Input/Radio.vue";
 	import TextValidatorInput from "../Input/TextValidator.vue";
 	import Diagram from "../../../Model/Diagram";
 
-	const props = defineProps<{ diagram: Diagram; }>();
+	const props = defineProps<{
+		diagram: Diagram;
+		transform?: Transform;
+	}>();
 	defineExpose({
 		open: () => modal.value?.open(),
 		close: () => modal.value?.close()
@@ -15,10 +21,19 @@
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
 	const nav = ref("general");
 
-	function isUniqueName(name: string) {
+	function isValidDiagramName(name: string) {
 		if (name === "") return false;
 		for (const otherDiagram of diagrams) {
 			if (otherDiagram !== props.diagram && otherDiagram.name === name) {
+				return false;
+			}
+		}
+		return true;
+	}
+	function isValidStateLabel(state: number, name: string) {
+		if (name === "") return false;
+		for (const [ s, { label } ] of Object.entries(props.diagram.states)) {
+			if (+s !== state && label === name) {
 				return false;
 			}
 		}
@@ -55,7 +70,7 @@
 					<div>
 						<label for="diagram-rename">Name</label>
 					</div>
-					<TextValidatorInput id="diagram-rename" :validator="isUniqueName" revert v-model.trim.collapse.lazy="diagram.name" />
+					<TextValidatorInput id="diagram-rename" :validator="isValidDiagramName" revert v-model.trim.collapse.lazy="diagram.name" />
 				</div>
 			</div>
 			<div :class="$style.alphabet" v-if="nav === 'alphabet'">
@@ -65,6 +80,7 @@
 			</div>
 			<div :class="$style.states" v-if="nav === 'states'">
 				<h1>States</h1>
+				<hr>
 				<table>
 					<thead>
 						<tr>
@@ -73,9 +89,24 @@
 							<th>Name</th>
 						</tr>
 					</thead>
-					<tbody></tbody>
+					<tbody>
+						<tr v-for="state in diagram.automaton.states" :key="state">
+							<td>
+								<Radio name="start-state" :value="state" v-model="diagram.automaton.startState" />
+							</td>
+							<td>
+								<Checkbox name="final-state" :value="state" v-model="diagram.automaton.finalStates" />
+							</td>
+							<td>
+								<TextValidatorInput :validator="(label) => isValidStateLabel(state, label)" revert v-model.trim.collapse.lazy="diagram.states[state].label" />
+							</td>
+							<td>
+								<button class="symbol" @click="diagram.removeState(state)">&#xE872;</button>
+							</td>
+						</tr>
+					</tbody>
 				</table>
-				<button class="symbol small-shadow">&#xE145;</button>
+				<button class="symbol small-shadow" @click="diagram.addState(transform ? -transform.x : 0, transform ? -transform.y : 0)">&#xE145;</button>
 			</div>
 			<div :class="$style.transitions" v-if="nav === 'transitions'">
 				<h1>Transitions</h1>
