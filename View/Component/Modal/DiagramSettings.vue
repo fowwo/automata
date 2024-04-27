@@ -55,9 +55,7 @@
 					<div>
 						<label for="diagram-rename">Name</label>
 					</div>
-					<div>
-						<TextValidatorInput id="diagram-rename" :validator="isUniqueName" revert v-model.trim.collapse.lazy="diagram.name" />
-					</div>
+					<TextValidatorInput id="diagram-rename" :validator="isUniqueName" revert v-model.trim.collapse.lazy="diagram.name" />
 				</div>
 			</div>
 			<div :class="$style.alphabet" v-if="nav === 'alphabet'">
@@ -157,11 +155,7 @@
 				}
 			}
 			> div:last-child {
-				display: flex;
 				max-width: 250px;
-				height: min-content;
-				align-items: center;
-				flex-grow: 1;
 			}
 		}
 	}
