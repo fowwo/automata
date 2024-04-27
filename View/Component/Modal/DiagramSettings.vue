@@ -1,11 +1,12 @@
 <script setup lang="ts">
 	import { ref } from "vue";
+	import { diagrams } from "../../State/Diagram";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
-	import TextInput from "../Input/Text.vue";
+	import TextValidatorInput from "../Input/TextValidator.vue";
 	import Diagram from "../../../Model/Diagram";
 
-	defineProps<{ diagram: Diagram; }>();
+	const props = defineProps<{ diagram: Diagram; }>();
 	defineExpose({
 		open: () => modal.value?.open(),
 		close: () => modal.value?.close()
@@ -13,6 +14,16 @@
 
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
 	const nav = ref("general");
+
+	function isUniqueName(name: string) {
+		if (name === "") return false;
+		for (const otherDiagram of diagrams) {
+			if (otherDiagram !== props.diagram && otherDiagram.name === name) {
+				return false;
+			}
+		}
+		return true;
+	}
 </script>
 <template>
 	<Modal title="Automaton Settings" :class="$style['automaton-settings']" ref="modal">
@@ -45,7 +56,7 @@
 						<label for="diagram-rename">Name</label>
 					</div>
 					<div>
-						<TextInput id="diagram-rename" v-model.lazy.trim="diagram.name" />
+						<TextValidatorInput id="diagram-rename" :validator="isUniqueName" revert v-model.trim.collapse.lazy="diagram.name" />
 					</div>
 				</div>
 			</div>

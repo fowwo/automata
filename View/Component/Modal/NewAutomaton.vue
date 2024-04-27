@@ -14,8 +14,18 @@
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
 
 	function createDiagram(type: DiagramData["type"]) {
+
+		// Create a unique name.
+		const names = new Set(diagrams.map(diagram => diagram.name));
+		let diagramNumber = diagrams.length + 1;
+		let name = `Diagram ${diagramNumber}`;
+		while (names.has(name)) {
+			diagramNumber++;
+			name = `Diagram ${diagramNumber}`;
+		}
+
 		const newDiagram = new Diagram({
-			name: `Diagram ${diagrams.length + 1}`,
+			name,
 			type,
 			automaton: { states: 1, startState: 1 },
 			states: { 0: { x: 0, y: 0, label: "0" } },
