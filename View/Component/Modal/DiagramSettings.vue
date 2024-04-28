@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import { ref } from "vue";
+	import { nextTick, ref } from "vue";
 	import { diagrams } from "../../State/Diagram";
 	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
@@ -20,6 +20,7 @@
 
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
 	const nav = ref("general");
+	const states = ref<HTMLTableSectionElement | null>(null);
 
 	function isValidDiagramName(name: string) {
 		if (name === "") return false;
@@ -38,6 +39,12 @@
 			}
 		}
 		return true;
+	}
+	async function addState() {
+		const [ x, y ] = [ props.transform?.x ?? 0, props.transform?.y ?? 0 ];
+		props.diagram.addState(-x, -y);
+		await nextTick();
+		(states.value?.lastElementChild?.querySelector("input[type=text]") as HTMLInputElement).focus();
 	}
 </script>
 <template>
@@ -89,7 +96,7 @@
 							<th>Name</th>
 						</tr>
 					</thead>
-					<tbody>
+					<tbody ref="states">
 						<tr v-for="state in diagram.automaton.states" :key="state">
 							<td>
 								<Radio name="start-state" :value="state" v-model="diagram.automaton.startState" />
@@ -106,7 +113,7 @@
 						</tr>
 					</tbody>
 				</table>
-				<button class="symbol small-shadow" @click="diagram.addState(transform ? -transform.x : 0, transform ? -transform.y : 0)">&#xE145;</button>
+				<button class="symbol small-shadow" @click="addState()">&#xE145;</button>
 			</div>
 			<div :class="$style.transitions" v-if="nav === 'transitions'">
 				<h1>Transitions</h1>
