@@ -16,7 +16,7 @@ export default abstract class Automaton {
 	finalStates: Set<number>;
 
 	/** An object mapping states and symbols to states. */
-	transitions: { [state: number]: unknown };
+	transitions: { [state: number]: { [symbol: string]: unknown } };
 
 	constructor({ alphabet = [], states = [], startState = null, finalStates = [], transitions = {} }: AutomatonData = {}) {
 		this.alphabet = new Set(alphabet);

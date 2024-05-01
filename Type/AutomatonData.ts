@@ -13,7 +13,7 @@ type AutomatonData = {
 	finalStates?: Iterable<number>;
 
 	/** An object mapping states and symbols to states. */
-	transitions?: { [state: number]: unknown; };
+	transitions?: { [state: number]: { [symbol: string]: unknown } };
 
 };
 export default AutomatonData;

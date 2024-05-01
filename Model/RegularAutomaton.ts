@@ -5,7 +5,7 @@ import RegularAutomatonData from "../Type/RegularAutomatonData";
 export default abstract class RegularAutomaton extends Automaton {
 
 	/** An object mapping each state and symbol to states. */
-	declare transitions: { [state: number]: { [symbol: string]: unknown; }; };
+	declare transitions;
 
 	constructor({ alphabet, states, startState, finalStates, transitions }: RegularAutomatonData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
