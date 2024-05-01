@@ -4,9 +4,9 @@
 	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
+	import TransitionTable from "./Diagram/TransitionTable.vue";
 	import Checkbox from "../Input/Checkbox.vue";
 	import Radio from "../Input/Radio.vue";
-	import Select from "../Input/Select.vue";
 	import TextValidatorInput from "../Input/TextValidator.vue";
 	import Diagram from "../../../Model/Diagram";
 
@@ -122,37 +122,7 @@
 				<Note type="error" v-if="diagram.automaton.alphabet.size === 0">
 					Your automaton must have symbols in the alphabet before creating transitions.
 				</Note>
-				<div v-else :class="$style['transition-table']">
-					<span></span>
-					<span v-for="symbol in diagram.automaton.alphabet">{{ symbol }}</span>
-					<template v-for="state in diagram.automaton.states">
-						<span>{{ diagram.states[state].label }}</span>
-						<div v-for="symbol in diagram.automaton.alphabet">
-							<template v-if="diagram.type === 'DFA'">
-								<Select
-									:name="`${state}-${symbol}`"
-									:options="[[ '', null ] as [string, any]].concat([ ...diagram.automaton.states ].map(state => [ diagram.states[state].label, state ]))"
-									:modelValue="diagram.automaton.transitions[state]?.[symbol] ?? null"
-									@update:modelValue="
-										($event === null) ? (
-											// Remove the transition from the automaton.
-											(state in diagram.automaton.transitions)
-											&& (delete diagram.automaton.transitions[state][symbol])
-											
-											// Remove the state from the transition object if it has no outgoing transitions.
-											&& (Object.keys(diagram.automaton.transitions[state]).length === 0)
-											&& (delete diagram.automaton.transitions[state])
-										) : (
-											// Set the transition state.
-											(diagram.automaton.transitions[state] ??= {})
-											&& (diagram.automaton.transitions[state][symbol] = $event)
-										)
-									"
-								/>
-							</template>
-						</div>
-					</template>
-				</div>
+				<TransitionTable v-else :diagram />
 			</div>
 		</div>
 	</Modal>
@@ -297,24 +267,6 @@
 			}
 			&:active {
 				background-color: hsl(var(--accent-color-hsl) / 50%);
-			}
-		}
-	}
-	.transitions {
-		> .transition-table {
-			display: grid;
-			grid-template-columns: fit-content(200px) repeat(v-bind("diagram.automaton.alphabet.size"), minmax(0, 1fr));
-			gap: 5px;
-			width: 100%;
-
-			> span {
-				padding: 0.25em 0.5em;
-				align-self: center;
-				text-align: center;
-				font-weight: bold;
-				text-overflow: ellipsis;
-				white-space: nowrap;
-				overflow: hidden;
 			}
 		}
 	}
