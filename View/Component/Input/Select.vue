@@ -3,20 +3,21 @@
 
 	const props = defineProps<{
 		name: string;
-		options: [label: string, value: any][];
+		options: any[];
 		multiple?: boolean;
 	}>();
 
 	const model = defineModel();
+	const options = computed(() => props.options.map(x => Array.isArray(x) ? x : [ x, x ]));
 	const label = computed(() => {
 		if (props.multiple) {
 			const values = new Set(model.value as Iterable<any>);
-			return props.options
+			return options.value
 				.filter(([ label, value ]) => values.has(value))
 				.map(([ label, value ]) => label)
 				.join(", ");
 		}
-		return props.options.find(([ label, value ]) => value === model.value)?.[0];
+		return options.value.find(([ label, value ]) => value === model.value)?.[0];
 	});
 
 	const button = ref<HTMLButtonElement | null>(null);
@@ -34,7 +35,7 @@
 			<span>{{ label }}</span>
 		</button>
 		<ul class="small-shadow" @click="popover?.showPopover()">
-			<li v-for="([label, value], index) in props.options" :key="index">
+			<li v-for="([label, value], index) in options" :key="index">
 				<input :type="multiple ? 'checkbox' : 'radio'" :name :value v-model="model">
 				<span>{{ label }}</span>
 			</li>
