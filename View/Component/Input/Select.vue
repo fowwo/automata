@@ -5,6 +5,7 @@
 		name: string;
 		options: any[];
 		multiple?: boolean;
+		disabled?: boolean;
 	}>();
 
 	const model = defineModel();
@@ -31,7 +32,7 @@
 </script>
 <template>
 	<div class="select">
-		<button class="selection small-shadow" ref="button" popovertargetaction="toggle">
+		<button class="selection small-shadow" ref="button" popovertargetaction="toggle" :disabled>
 			<span>{{ label }}</span>
 		</button>
 		<ul class="small-shadow" @click="popover?.showPopover()">
