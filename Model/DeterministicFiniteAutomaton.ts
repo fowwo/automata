@@ -5,7 +5,8 @@ import DeterministicFiniteAutomatonData from "../Type/DeterministicFiniteAutomat
  * A deterministic finite automaton.
  * 
  * This implementation does **NOT** require the automaton to be complete;
- * the transition function may be partial.
+ * the transition function may be partial. To check if the automaton is
+ * complete, use `DeterministicFiniteAutomaton.isComplete()`.
  */
 export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 
@@ -53,5 +54,21 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 				delete this.transitions[from as unknown as number];
 			}
 		}
+	}
+
+	/**
+	 * Determines whether the automaton is complete.
+	 * 
+	 * An automaton is complete if each state has a transition for each input symbol.
+	 */
+	isComplete(): boolean {
+		for (const state of this.states) {
+			for (const symbol of this.alphabet) {
+				if (this.transitions[state]?.[symbol] === undefined) {
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 }

@@ -171,4 +171,84 @@ suite("DFA", () => {
 		assert.deepEqual(automaton.finalStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 	});
+	test(".isComplete", async (t) => {
+		await t.test("1 - 'abba' (Complete)", () => {
+			const automaton = new DFA({
+				alphabet: [ "a", "b" ],
+				states: 6,
+				startState: 0,
+				finalStates: [ 4 ],
+				transitions: {
+					0: { "a": 1, "b": 5 },
+					1: { "a": 5, "b": 2 },
+					2: { "a": 5, "b": 3 },
+					3: { "a": 4, "b": 5 },
+					4: { "a": 5, "b": 5 },
+					5: { "a": 5, "b": 5 }
+				}
+			});
+
+			assert(automaton.accepts("abba"));
+			assert(automaton.isComplete());
+		});
+		await t.test("2 - 'abba' (Partial)", () => {
+			const automaton = new DFA({
+				alphabet: [ "a", "b" ],
+				states: 5,
+				startState: 0,
+				finalStates: [ 4 ],
+				transitions: {
+					0: { "a": 1 },
+					1: { "b": 2 },
+					2: { "b": 3 },
+					3: { "a": 4 }
+				}
+			});
+
+			assert(automaton.accepts("abba"));
+			assert(!automaton.isComplete());
+		});
+		await t.test("3 - Integer Does Not Have Consecutive Zeros (Complete)", () => {
+			const automaton = new DFA({
+				alphabet: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+				states: 3,
+				startState: 0,
+				finalStates: [ 0, 1 ],
+				transitions: {
+					0: { "0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
+					1: { "0": 2, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
+					2: { "0": 2, "1": 2, "2": 2, "3": 2, "4": 2, "5": 2, "6": 2, "7": 2, "8": 2, "9": 2 }
+				}
+			});
+
+			assert(automaton.accepts("10"), '"10" is rejected but should be accepted.');
+			assert(automaton.accepts("101"), '"101" is rejected but should be accepted.');
+			assert(automaton.rejects("100"), '"100" is accepted but should be rejected.');
+			assert(automaton.rejects("1001"), '"1001" is accepted but should be rejected.');
+			assert(automaton.isComplete());
+		});
+		await t.test("4 - Integer Does Not Have Consecutive Zeros (Partial)", () => {
+			const automaton = new DFA({
+				alphabet: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
+				states: 2,
+				startState: 0,
+				finalStates: [ 0, 1 ],
+				transitions: {
+					0: { "0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
+					1: { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 }
+				}
+			});
+
+			assert(automaton.accepts("10"), '"10" is rejected but should be accepted.');
+			assert(automaton.accepts("101"), '"101" is rejected but should be accepted.');
+			assert(automaton.rejects("100"), '"100" is accepted but should be rejected.');
+			assert(automaton.rejects("1001"), '"1001" is accepted but should be rejected.');
+			assert(!automaton.isComplete());
+		});
+		await t.test("5 - Empty Automaton", () => {
+			const automaton = new DFA();
+
+			assert(automaton.isComplete());
+		});
+	});
 });
