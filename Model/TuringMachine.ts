@@ -9,7 +9,7 @@ export default class TuringMachine extends Automaton {
 	/** The symbol in tape cells which have not been written to. */
 	blankSymbol: string;
 
-	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; };
+	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string, move: string] }; };
 
 	constructor({ alphabet, tapeAlphabet = [], blankSymbol = "⊔", states, startState, finalStates, transitions }: TuringMachineData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
@@ -90,7 +90,21 @@ export default class TuringMachine extends Automaton {
 	}
 
 	removeState(state: number): void {
-		throw new Error("Method not implemented.");
+		this.states.delete(state);
+		if (this.startState === state) this.startState = null;
+		this.finalStates.delete(state);
+		delete this.transitions[state];
+
+		for (const [ from, transitions ] of Object.entries(this.transitions)) {
+			for (const [ symbol, [ newState, newSymbol, move ] ] of Object.entries(transitions)) {
+				if (newState === state) {
+					delete transitions[symbol];
+				}
+			}
+			if (Object.keys(transitions).length === 0) {
+				delete this.transitions[from as unknown as number];
+			}
+		}
 	}
 }
 
