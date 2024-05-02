@@ -33,6 +33,6 @@
 <template>
 	<div v-bind="computedAttributes.wrapper">
 		<input v-if="modelModifiers.lazy" v-bind="computedAttributes.input" v-model.lazy="modelValue">
-		<input v-else="modelModifiers.lazy" v-bind="computedAttributes.input" v-model="modelValue">
+		<input v-else v-bind="computedAttributes.input" v-model="modelValue">
 	</div>
 </template>
