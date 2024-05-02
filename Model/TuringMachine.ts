@@ -7,11 +7,11 @@ export default class TuringMachine extends Automaton {
 	tapeAlphabet: Set<string>;
 
 	/** The symbol in tape cells which have not been written to. */
-	blankSymbol: string | null;
+	blankSymbol: string;
 
 	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; };
 
-	constructor({ alphabet, tapeAlphabet = [], blankSymbol = null, states, startState, finalStates, transitions }: TuringMachineData = {}) {
+	constructor({ alphabet, tapeAlphabet = [], blankSymbol = "⊔", states, startState, finalStates, transitions }: TuringMachineData = {}) {
 		super({ alphabet, states, startState, finalStates, transitions });
 		this.tapeAlphabet = new Set(tapeAlphabet);
 		this.blankSymbol = blankSymbol;

@@ -6,10 +6,10 @@ type TuringMachineData = AutomatonData & {
 	tapeAlphabet?: Iterable<string>;
 
 	/** The symbol in tape cells which have not been written to. */
-	blankSymbol?: string | null;
+	blankSymbol?: string;
 
 	/** An object mapping each state and symbol to a tape instruction. */
-	transitions?: { [state: number]: { [symbol: string]: [state: number, symbol: string | null, move: string] }; }
+	transitions?: { [state: number]: { [symbol: string]: [state: number, symbol: string, move: string] }; }
 
 };
 export default TuringMachineData;
