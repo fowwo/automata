@@ -138,11 +138,11 @@ suite("NFA", () => {
 			startState: 3,
 			finalStates: [ 1, 2, 3 ],
 			transitions: {
-				0: { "a": [ 1, 2, 3 ], "b": [ 0, 1, 3, 4 ], "c": [ 1, 3, 4 ] },
-				1: { "a": [ 0, 2, 4 ], "b": [ 1, 2, 3 ], "c": [ 0, 2, 3, 4 ] },
-				2: { "a": [ 0, 1, 3, 4 ], "b": [ 0, 1, 4 ], "c": [ 0, 1, 2, 3 ] },
-				3: { "a": [ 0, 2, 4 ], "b": [ 0, 1, 2, 4 ], "c": [ 0, 2, 3 ] },
-				4: { "a": [ 0, 1, 2, 4 ], "b": [ 0, 2, 3, 4 ], "c": [ 1, 2, 3 ] }
+				0: { "a": [ 1, 2 ], "b": [ 3, 4 ], "c": [ 3, 4 ], "ε": [ 2, 4 ] },
+				1: { "a": [ 2 ], "b": [ 4 ], "c": [ 2, 4 ], "ε": [ 2, 4 ] },
+				2: { "a": [ 1, 3, 4 ], "b": [ 0, 1, 4 ], "c": [ 0, 1, 2, 3 ], "ε": [ 0, 1, 2, 3, 4 ] },
+				3: { "a": [ 0, 2 ], "b": [ 0, 1, 2, 4 ], "c": [ 0, 2, 3 ], "ε": [ 2 ] },
+				4: { "a": [ 0, 1, 2 ], "b": [ 0, 3, 4 ], "c": [ 0, 3, 4 ], "ε": [ 0, 2, 4 ] }
 			}
 		});
 
@@ -151,10 +151,10 @@ suite("NFA", () => {
 		assert.equal(automaton.startState, 3);
 		assert.deepEqual(automaton.finalStates, new Set([ 1, 3 ]));
 		assert.deepEqual(automaton.transitions, {
-			0: { "a": [ 1, 3 ], "b": [ 0, 1, 3, 4 ], "c": [ 1, 3, 4 ] },
-			1: { "a": [ 0, 4 ], "b": [ 1, 3 ], "c": [ 0, 3, 4 ] },
-			3: { "a": [ 0, 4 ], "b": [ 0, 1, 4 ], "c": [ 0, 3 ] },
-			4: { "a": [ 0, 1, 4 ], "b": [ 0, 3, 4 ], "c": [ 1, 3 ] }
+			0: { "a": [ 1 ], "b": [ 3, 4 ], "c": [ 3, 4 ], "ε": [ 4 ] },
+			1: { "b": [ 4 ], "c": [ 4 ], "ε": [ 4 ] },
+			3: { "a": [ 0 ], "b": [ 0, 1, 4 ], "c": [ 0, 3 ] },
+			4: { "a": [ 0, 1 ], "b": [ 0, 3, 4 ], "c": [ 0, 3, 4 ], "ε": [ 0, 4 ] }
 		});
 
 		automaton.removeState(4);
@@ -162,29 +162,26 @@ suite("NFA", () => {
 		assert.equal(automaton.startState, 3);
 		assert.deepEqual(automaton.finalStates, new Set([ 1, 3 ]));
 		assert.deepEqual(automaton.transitions, {
-			0: { "a": [ 1, 3 ], "b": [ 0, 1, 3 ], "c": [ 1, 3 ] },
-			1: { "a": [ 0 ], "b": [ 1, 3 ], "c": [ 0, 3 ] },
+			0: { "a": [ 1 ], "b": [ 3 ], "c": [ 3 ] },
 			3: { "a": [ 0 ], "b": [ 0, 1 ], "c": [ 0, 3 ] }
 		});
 
-		automaton.removeState(0);
-		assert.deepEqual(automaton.states, new Set([ 1, 3 ]));
+		automaton.removeState(1);
+		assert.deepEqual(automaton.states, new Set([ 0, 3 ]));
 		assert.equal(automaton.startState, 3);
-		assert.deepEqual(automaton.finalStates, new Set([ 1, 3 ]));
+		assert.deepEqual(automaton.finalStates, new Set([ 3 ]));
 		assert.deepEqual(automaton.transitions, {
-			1: { "b": [ 1, 3 ], "c": [ 3 ] },
-			3: { "b": [ 1 ], "c": [ 3 ] }
+			0: { "b": [ 3 ], "c": [ 3 ] },
+			3: { "a": [ 0 ], "b": [ 0 ], "c": [ 0, 3 ] }
 		});
 
 		automaton.removeState(3);
-		assert.deepEqual(automaton.states, new Set([ 1 ]));
+		assert.deepEqual(automaton.states, new Set([ 0 ]));
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set([ 1 ]));
-		assert.deepEqual(automaton.transitions, {
-			1: { "b": [ 1 ] }
-		});
+		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.transitions, {});
 
-		automaton.removeState(1);
+		automaton.removeState(0);
 		assert.deepEqual(automaton.states, new Set());
 		assert.equal(automaton.startState, null);
 		assert.deepEqual(automaton.finalStates, new Set());
