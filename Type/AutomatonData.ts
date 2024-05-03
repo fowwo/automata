@@ -9,8 +9,8 @@ type AutomatonData = {
 	/** The start state. */
 	startState?: number | null;
 
-	/** The final states. */
-	finalStates?: Iterable<number>;
+	/** The accept states. */
+	acceptStates?: Iterable<number>;
 
 	/** An object mapping states and symbols to states. */
 	transitions?: { [state: number]: { [symbol: string]: unknown } };

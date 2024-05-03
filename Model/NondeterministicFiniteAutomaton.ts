@@ -7,8 +7,8 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 	/** An object mapping each state and symbol to one or more states. */
 	declare transitions: { [state: number]: { [symbol: string]: number[]; }; };
 
-	constructor({ alphabet, states, startState, finalStates, transitions }: NondeterministicFiniteAutomatonData = {}) {
-		super({ alphabet, states, startState, finalStates, transitions });
+	constructor({ alphabet, states, startState, acceptStates, transitions }: NondeterministicFiniteAutomatonData = {}) {
+		super({ alphabet, states, startState, acceptStates, transitions });
 	}
 
 	/** @returns {Set<Number>} The set of reachable states after reading the string. */
@@ -38,7 +38,7 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 	}
 
 	accepts(string: string): boolean {
-		const [ A, B ] = [ this.run(string), this.finalStates ].sort((a, b) => a.size - b.size);
+		const [ A, B ] = [ this.run(string), this.acceptStates ].sort((a, b) => a.size - b.size);
 		for (const state of A) {
 			if (B.has(state)) {
 				return true;
@@ -73,7 +73,7 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 	removeState(state: number): void {
 		this.states.delete(state);
 		if (this.startState === state) this.startState = null;
-		this.finalStates.delete(state);
+		this.acceptStates.delete(state);
 		delete this.transitions[state];
 
 		for (const [ from, transitions ] of Object.entries(this.transitions)) {

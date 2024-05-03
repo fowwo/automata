@@ -32,7 +32,7 @@ suite("TM", () => {
 				tapeAlphabet: [ "x" ],
 				states: 6,
 				startState: 0,
-				finalStates: [ 5 ],
+				acceptStates: [ 5 ],
 				transitions: {
 					0: { "0": [ 1, "⊔", "R" ] },
 					1: { "0": [ 2, "x", "R" ], "x": [ 1, "x", "R" ], "⊔": [ 5, "⊔", "R" ] },
@@ -126,7 +126,7 @@ suite("TM", () => {
 			tapeAlphabet: [ "x" ],
 			states: 6,
 			startState: 0,
-			finalStates: [ 5 ],
+			acceptStates: [ 5 ],
 			transitions: {
 				0: { "0": [ 1, "⊔", "R" ] },
 				1: { "0": [ 2, "x", "R" ], "x": [ 1, "x", "R" ], "⊔": [ 5, "⊔", "R" ] },
@@ -139,7 +139,7 @@ suite("TM", () => {
 		automaton.removeState(4);
 		assert.deepEqual(automaton.states, new Set([ 0, 1, 2, 3, 5 ]));
 		assert.equal(automaton.startState, 0);
-		assert.deepEqual(automaton.finalStates, new Set([ 5 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 5 ]));
 		assert.deepEqual(automaton.transitions, {
 			0: { "0": [ 1, "⊔", "R" ] },
 			1: { "0": [ 2, "x", "R" ], "x": [ 1, "x", "R" ], "⊔": [ 5, "⊔", "R" ] },
@@ -150,7 +150,7 @@ suite("TM", () => {
 		automaton.removeState(1);
 		assert.deepEqual(automaton.states, new Set([ 0, 2, 3, 5 ]));
 		assert.equal(automaton.startState, 0);
-		assert.deepEqual(automaton.finalStates, new Set([ 5 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 5 ]));
 		assert.deepEqual(automaton.transitions, {
 			2: { "x": [ 2, "x", "R" ], "⊔": [ 3, "⊔", "L" ] },
 			3: { "0": [ 3, "0", "L" ], "x": [ 3, "x", "L" ] }
@@ -159,7 +159,7 @@ suite("TM", () => {
 		automaton.removeState(5);
 		assert.deepEqual(automaton.states, new Set([ 0, 2, 3 ]));
 		assert.equal(automaton.startState, 0);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {
 			2: { "x": [ 2, "x", "R" ], "⊔": [ 3, "⊔", "L" ] },
 			3: { "0": [ 3, "0", "L" ], "x": [ 3, "x", "L" ] }
@@ -168,7 +168,7 @@ suite("TM", () => {
 		automaton.removeState(0);
 		assert.deepEqual(automaton.states, new Set([ 2, 3 ]));
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {
 			2: { "x": [ 2, "x", "R" ], "⊔": [ 3, "⊔", "L" ] },
 			3: { "0": [ 3, "0", "L" ], "x": [ 3, "x", "L" ] }
@@ -177,7 +177,7 @@ suite("TM", () => {
 		automaton.removeState(3);
 		assert.deepEqual(automaton.states, new Set([ 2 ]));
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {
 			2: { "x": [ 2, "x", "R" ] }
 		});
@@ -185,13 +185,13 @@ suite("TM", () => {
 		automaton.removeState(2);
 		assert.deepEqual(automaton.states, new Set());
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 
 		automaton.removeState(100);
 		assert.deepEqual(automaton.states, new Set());
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 	});
 });

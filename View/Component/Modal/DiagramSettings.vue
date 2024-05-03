@@ -93,7 +93,7 @@
 					<thead>
 						<tr>
 							<th title="Start State" class="symbol">&#xF6FE;</th>
-							<th title="Final State" class="symbol">&#xF12E;</th>
+							<th title="Accept State" class="symbol">&#xF12E;</th>
 							<th>Name</th>
 						</tr>
 					</thead>
@@ -103,7 +103,7 @@
 								<Radio name="start-state" :value="state" v-model="diagram.automaton.startState" />
 							</td>
 							<td>
-								<Checkbox name="final-state" :value="state" v-model="diagram.automaton.finalStates" />
+								<Checkbox name="accept-state" :value="state" v-model="diagram.automaton.acceptStates" />
 							</td>
 							<td>
 								<TextValidatorInput :validator="(label) => isValidStateLabel(state, label)" revert v-model.trim.collapse.lazy="diagram.states[state].label" />

@@ -13,8 +13,8 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 	/** An object mapping each state and symbol to a state. */
 	declare transitions: { [state: number]: { [symbol: string]: number; }; };
 
-	constructor({ alphabet, states, startState, finalStates, transitions }: DeterministicFiniteAutomatonData = {}) {
-		super({ alphabet, states, startState, finalStates, transitions });
+	constructor({ alphabet, states, startState, acceptStates, transitions }: DeterministicFiniteAutomatonData = {}) {
+		super({ alphabet, states, startState, acceptStates, transitions });
 	}
 
 	/** @returns The resulting state. */
@@ -35,13 +35,13 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 	accepts(string: string): boolean {
 		const state = this.run(string);
 		if (state === null) return false;
-		return this.finalStates.has(state);
+		return this.acceptStates.has(state);
 	}
 
 	removeState(state: number): void {
 		this.states.delete(state);
 		if (this.startState === state) this.startState = null;
-		this.finalStates.delete(state);
+		this.acceptStates.delete(state);
 		delete this.transitions[state];
 
 		for (const [ from, transitions ] of Object.entries(this.transitions)) {

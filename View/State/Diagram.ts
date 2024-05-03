@@ -14,7 +14,7 @@ if (data === null) {
 			alphabet: [ "a", "b" ],
 			states: 2,
 			startState: 0,
-			finalStates: [ 1 ],
+			acceptStates: [ 1 ],
 			transitions: {
 				0: { "a": 0, "b": 1 },
 				1: { "a": 0, "b": 1 }

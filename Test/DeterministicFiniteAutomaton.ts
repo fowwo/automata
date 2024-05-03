@@ -9,7 +9,7 @@ suite("DFA", () => {
 				alphabet: [ "a", "b" ],
 				states: 2,
 				startState: 0,
-				finalStates: [ 1 ],
+				acceptStates: [ 1 ],
 				transitions: {
 					0: { "a": 0, "b": 1 },
 					1: { "a": 0, "b": 1 }
@@ -29,7 +29,7 @@ suite("DFA", () => {
 				alphabet,
 				states: 5,
 				startState: 0,
-				finalStates: [ 2, 3 ],
+				acceptStates: [ 2, 3 ],
 				transitions: {
 					0: { "a": 1, "b": 1, "c": 1 },
 					1: { "a": 2, "b": 2, "c": 2 },
@@ -65,7 +65,7 @@ suite("DFA", () => {
 				alphabet: [ "a", "b", "c" ],
 				states: 4,
 				startState: 0,
-				finalStates: [ 0 ],
+				acceptStates: [ 0 ],
 				transitions: {
 					0: { "a": 1, "b": 3, "c": 3 },
 					1: { "a": 3, "b": 2, "c": 3 },
@@ -114,7 +114,7 @@ suite("DFA", () => {
 			alphabet: [ "a", "b", "c" ],
 			states: [ 0, 1, 2, 3, 4 ],
 			startState: 3,
-			finalStates: [ 1, 2, 3 ],
+			acceptStates: [ 1, 2, 3 ],
 			transitions: {
 				0: { "a": 2, "b": 3, "c": 4 },
 				1: { "a": 1, "b": 1, "c": 2 },
@@ -127,7 +127,7 @@ suite("DFA", () => {
 		automaton.removeState(2);
 		assert.deepEqual(automaton.states, new Set([ 0, 1, 3, 4 ]));
 		assert.equal(automaton.startState, 3);
-		assert.deepEqual(automaton.finalStates, new Set([ 1, 3 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 1, 3 ]));
 		assert.deepEqual(automaton.transitions, {
 			0: { "b": 3, "c": 4 },
 			1: { "a": 1, "b": 1 },
@@ -137,7 +137,7 @@ suite("DFA", () => {
 		automaton.removeState(4);
 		assert.deepEqual(automaton.states, new Set([ 0, 1, 3 ]));
 		assert.equal(automaton.startState, 3);
-		assert.deepEqual(automaton.finalStates, new Set([ 1, 3 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 1, 3 ]));
 		assert.deepEqual(automaton.transitions, {
 			0: { "b": 3 },
 			1: { "a": 1, "b": 1 }
@@ -146,7 +146,7 @@ suite("DFA", () => {
 		automaton.removeState(3);
 		assert.deepEqual(automaton.states, new Set([ 0, 1 ]));
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set([ 1 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 1 ]));
 		assert.deepEqual(automaton.transitions, {
 			1: { "a": 1, "b": 1 }
 		});
@@ -154,7 +154,7 @@ suite("DFA", () => {
 		automaton.removeState(0);
 		assert.deepEqual(automaton.states, new Set([ 1 ]));
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set([ 1 ]));
+		assert.deepEqual(automaton.acceptStates, new Set([ 1 ]));
 		assert.deepEqual(automaton.transitions, {
 			1: { "a": 1, "b": 1 }
 		});
@@ -162,13 +162,13 @@ suite("DFA", () => {
 		automaton.removeState(1);
 		assert.deepEqual(automaton.states, new Set());
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 
 		automaton.removeState(100);
 		assert.deepEqual(automaton.states, new Set());
 		assert.equal(automaton.startState, null);
-		assert.deepEqual(automaton.finalStates, new Set());
+		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 	});
 	test(".isComplete", async (t) => {
@@ -177,7 +177,7 @@ suite("DFA", () => {
 				alphabet: [ "a", "b" ],
 				states: 6,
 				startState: 0,
-				finalStates: [ 4 ],
+				acceptStates: [ 4 ],
 				transitions: {
 					0: { "a": 1, "b": 5 },
 					1: { "a": 5, "b": 2 },
@@ -196,7 +196,7 @@ suite("DFA", () => {
 				alphabet: [ "a", "b" ],
 				states: 5,
 				startState: 0,
-				finalStates: [ 4 ],
+				acceptStates: [ 4 ],
 				transitions: {
 					0: { "a": 1 },
 					1: { "b": 2 },
@@ -213,7 +213,7 @@ suite("DFA", () => {
 				alphabet: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
 				states: 3,
 				startState: 0,
-				finalStates: [ 0, 1 ],
+				acceptStates: [ 0, 1 ],
 				transitions: {
 					0: { "0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
 					1: { "0": 2, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
@@ -232,7 +232,7 @@ suite("DFA", () => {
 				alphabet: [ "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" ],
 				states: 2,
 				startState: 0,
-				finalStates: [ 0, 1 ],
+				acceptStates: [ 0, 1 ],
 				transitions: {
 					0: { "0": 1, "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 },
 					1: { "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0, "9": 0 }

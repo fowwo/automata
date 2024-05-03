@@ -12,13 +12,13 @@ export default abstract class Automaton {
 	/** The start state. */
 	startState: number | null;
 
-	/** The final states. */
-	finalStates: Set<number>;
+	/** The accept states. */
+	acceptStates: Set<number>;
 
 	/** An object mapping states and symbols to states. */
 	transitions: { [state: number]: { [symbol: string]: unknown } };
 
-	constructor({ alphabet = [], states = [], startState = null, finalStates = [], transitions = {} }: AutomatonData = {}) {
+	constructor({ alphabet = [], states = [], startState = null, acceptStates = [], transitions = {} }: AutomatonData = {}) {
 		this.alphabet = new Set(alphabet);
 		if (typeof states === "number") {
 			this.states = new Set();
@@ -29,7 +29,7 @@ export default abstract class Automaton {
 			this.states = new Set(states);
 		}
 		this.startState = startState;
-		this.finalStates = new Set(finalStates);
+		this.acceptStates = new Set(acceptStates);
 		this.transitions = transitions;
 	}
 
@@ -65,7 +65,7 @@ export default abstract class Automaton {
 			alphabet: Array.from(this.alphabet),
 			states: Array.from(this.states),
 			startState: this.startState,
-			finalStates: Array.from(this.finalStates),
+			acceptStates: Array.from(this.acceptStates),
 			transitions: this.transitions
 		};
 	}

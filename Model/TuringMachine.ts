@@ -11,8 +11,8 @@ export default class TuringMachine extends Automaton {
 
 	declare transitions: { [state: number]: { [symbol: string]: [state: number, symbol: string, move: string] }; };
 
-	constructor({ alphabet, tapeAlphabet = [], blankSymbol = "⊔", states, startState, finalStates, transitions }: TuringMachineData = {}) {
-		super({ alphabet, states, startState, finalStates, transitions });
+	constructor({ alphabet, tapeAlphabet = [], blankSymbol = "⊔", states, startState, acceptStates, transitions }: TuringMachineData = {}) {
+		super({ alphabet, states, startState, acceptStates, transitions });
 		this.tapeAlphabet = new Set(tapeAlphabet);
 		this.blankSymbol = blankSymbol;
 	}
@@ -75,7 +75,7 @@ export default class TuringMachine extends Automaton {
 	/** @param stepLimit - The maximum number of transitions to take. */
 	accepts(string: string, stepLimit?: number): boolean {
 		const { state, halt } = this.run(string, stepLimit);
-		return halt && state !== null && this.finalStates.has(state);
+		return halt && state !== null && this.acceptStates.has(state);
 	}
 
 	/**
@@ -86,13 +86,13 @@ export default class TuringMachine extends Automaton {
 	 */
 	rejects(string: string, stepLimit?: number): boolean {
 		const { state, halt } = this.run(string, stepLimit);
-		return halt && !(state !== null && this.finalStates.has(state));
+		return halt && !(state !== null && this.acceptStates.has(state));
 	}
 
 	removeState(state: number): void {
 		this.states.delete(state);
 		if (this.startState === state) this.startState = null;
-		this.finalStates.delete(state);
+		this.acceptStates.delete(state);
 		delete this.transitions[state];
 
 		for (const [ from, transitions ] of Object.entries(this.transitions)) {

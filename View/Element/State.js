@@ -19,9 +19,9 @@ export default class State extends Draggable {
 	 * @param {Object} [options.start] - The properties of the start transition.
 	 * @param {Number} [options.start.angle] - The angle of the start transition.
 	 * @param {Number} [options.start.length] - The length of the start transition.
-	 * @param {Boolean} [options.final] - Whether the state is a final state.
+	 * @param {Boolean} [options.accept] - Whether the state is an accept state.
 	 */
-	constructor(x, y, { label = "", start = null, final = false } = {}) {
+	constructor(x, y, { label = "", start = null, accept = false } = {}) {
 		const element = document.createElement("div");
 		element.classList.add("state");
 		super(element, x, y);
@@ -61,7 +61,7 @@ export default class State extends Draggable {
 
 		this.label = label;
 		this.start = start !== null ? { angle, length } : null;
-		this.final = final;
+		this.accept = accept;
 
 		let blockAnchorListener = false;
 		this.addMoveListener(([ x, y ], [ px, py ]) => {
@@ -122,10 +122,10 @@ export default class State extends Draggable {
 		];
 	}
 
-	get final() { return this.element.classList.contains("final"); }
-	set final(value) {
-		if (value) this.element.classList.add("final");
-		else this.element.classList.remove("final");
+	get accept() { return this.element.classList.contains("accept"); }
+	set accept(value) {
+		if (value) this.element.classList.add("accept");
+		else this.element.classList.remove("accept");
 
 		this.#rescaleLabel();
 	}
@@ -144,7 +144,7 @@ export default class State extends Draggable {
 
 	#rescaleLabel() {
 		const width = this.#span.clientWidth;
-		const maxWidth = this.final ? 60 : 80;
+		const maxWidth = this.accept ? 60 : 80;
 		this.#span.style.scale = Math.min(1, maxWidth / width);
 	}
 
