@@ -1,0 +1,20 @@
+name: Continuous Integration
+
+permissions:
+  pages: write
+  id-token: write
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Test
+    uses: ./.github/workflows/test.yml
+  build-and-deploy:
+    name: Build + Deploy
+    uses: ./.github/workflows/build-and-deploy.yml
+    needs: test

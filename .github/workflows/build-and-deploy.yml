@@ -1,0 +1,54 @@
+name: Build + Deploy
+
+on:
+  workflow_call:
+
+permissions:
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Cache
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: build ${{ hashFiles('dist') }}
+      - name: Upload artifact
+        if: steps.cache.outputs.cache-hit != 'true'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+    outputs:
+      no-changes: ${{ steps.cache.outputs.cache-hit }}
+  deploy:
+    name: Deploy
+    needs: build
+    if: needs.build.outputs.no-changes != 'true'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
