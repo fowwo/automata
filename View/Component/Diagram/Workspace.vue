@@ -41,5 +41,14 @@
 		--px: v-bind("transform.x");
 		--py: v-bind("transform.y");
 		--scale: v-bind("transform.scale");
+
+		& > * {
+			:deep(& > svg) {
+				fill: none;
+				stroke: currentColor;
+				stroke-width: 5px;
+				stroke-linecap: round;
+			}
+		}
 	}
 </style>
