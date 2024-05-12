@@ -19,4 +19,6 @@
 			calc(var(--scale, 1) * calc(var(--py, 0) + v-bind("y")) * 1px - 50%);
 		scale: var(--scale, 1);
 	}
+	:deep(.grab) { cursor: grab; }
+	:deep(.grab:active) { cursor: grabbing; }
 </style>
