@@ -79,7 +79,6 @@
 		<StraightArrow
 			v-bind="{ ...transform, ...arrowProperties }"
 			:offset="50"
-			:headLength="15 * Math.SQRT2"
 		/>
 		<Anchor
 			v-bind="anchorPosition"

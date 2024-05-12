@@ -2,14 +2,19 @@
 	import { computed } from "vue";
 	import Element from "./Element.vue";
 
-	const props = defineProps<{
+	const props = withDefaults(defineProps<{
 		x: number;
 		y: number;
-		length: number;
-		headLength: number;
-		angle: number;
-		offset: number;
-	}>();
+		length?: number;
+		headLength?: number;
+		angle?: number;
+		offset?: number;
+	}>(), {
+		length: 75,
+		headLength: 15 * Math.SQRT2,
+		angle: 0,
+		offset: 0
+	});
 
 	const n = computed(() => props.headLength / Math.SQRT2);
 </script>
