@@ -13,6 +13,14 @@ export class Transform {
 		this.scale = scale;
 	}
 
+	get position() {
+		return [ this.x, this.y ];
+	}
+	set position([ x, y ]) {
+		this.x = x;
+		this.y = y;
+	}
+
 	zoomIn() {
 		this.scale = Math.min(4, Math.SQRT2 * this.scale);
 	}
