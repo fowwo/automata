@@ -1,4 +1,5 @@
 <script setup lang="ts">
+	import { ref } from "vue";
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
 	import State from "./Element/State.vue";
@@ -7,6 +8,8 @@
 		diagram: Diagram;
 		transform: Transform;
 	}>();
+
+	const states = ref<{ [state: number]: any }>({});
 
 	function pan(event: MouseEvent) {
 		const workspace = event.target as HTMLDivElement;
@@ -29,7 +32,7 @@
 </script>
 <template>
 	<div class="workspace" ref="workspace" @mousedown="pan" @wheel="zoom">
-		<State v-for="state of diagram.automaton.states"
+		<State v-for="state in diagram.automaton.states"
 			:key="JSON.stringify(diagram.states[state])"
 			v-model:x="diagram.states[state].x"
 			v-model:y="diagram.states[state].y"
@@ -38,6 +41,7 @@
 			:start="diagram.automaton.startState === state ? diagram.startTransition : undefined"
 			:diagram
 			:diagramTransform="transform"
+			:ref="(element) => states[state] = element"
 		/>
 	</div>
 </template>
