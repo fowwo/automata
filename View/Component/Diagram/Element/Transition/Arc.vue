@@ -1,5 +1,5 @@
 <script setup lang="ts">
-	import Element from "./Element.vue";
+	import Element from "../Element.vue";
 
 	defineProps<{
 		x: number;

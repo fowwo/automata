@@ -1,5 +1,4 @@
 <script setup lang="ts">
-	import { ref } from "vue";
 	import Element from "./Element.vue";
 	
 	defineProps<{
@@ -7,10 +6,6 @@
 		y: number;
 		value: string;
 	}>();
-
-	const span = ref<HTMLSpanElement | null>(null);
-
-	defineExpose({ span });
 </script>
 <template>
 	<Element :x :y class="text">

@@ -2,10 +2,10 @@
 	import { computed, ref } from "vue";
 	import { Transform } from "../../../Composable/Transform";
 	import Anchor from "./Anchor.vue";
-	import Arc from "./Arc.vue";
+	import Arc from "./Transition/Arc.vue";
 	import State from "./State.vue";
 	import StraightArrow from "./StraightArrow.vue";
-	import Text from "./Text.vue";
+	import Label from "./Transition/Label.vue";
 	import Diagram from "../../../../Model/Diagram";
 
 	const props = withDefaults(defineProps<{
@@ -137,37 +137,27 @@
 		return Math.PI - angle + t;
 	});
 
-	const labelPosition = computed(() => {
-		if (!props.from || !props.to || !anchor.value || !text.value) return midpoint.value;
+	const labelProperties = computed(() => {
+		if (!props.from || !props.to || !anchor.value) return midpoint.value;
+
+		const { x, y } = anchor.value.transform;
+		if (props.from === props.to) {
+			const angle = calculateAngle();
+			return { x, y, angle };
+		}
 
 		const [ ax, ay ] = props.from.transform.position;
 		const [ bx, by ] = props.to.transform.position;
 		const { x: cx, y: cy } = midpoint.value;
 		const [ dx, dy ] = [ bx - ax, by - ay ];
-		const [ x, y ] = anchor.value.transform.position;
-
-		const [ width, height ] = [ text.value.span.offsetWidth, text.value.span.offsetHeight ];
-
-		const distance = 10;
-
-		if (props.from === props.to) {
-			const angle = calculateAngle();
-			return {
-				x: x + (distance + width / 2) * Math.cos(angle),
-				y: y + (distance + height / 2) * Math.sin(angle)
-			};
-		}
 
 		const t = Math.atan2(dy, dx);
 		const a = Math.atan2(y - cy, x - cx);
 		const p = t + Math.PI / 2;
-		const [ ox, oy ] = [
-			(distance + width / 2) * Math.cos(p),
-			(distance + height / 2) * Math.sin(p)
-		];
 		const angle = calculateAngle();
 		const flip = angle === 0 ? (0 <= p && p <= Math.PI) : ((t - a + 2 * Math.PI) % (2 * Math.PI) < Math.PI);
-		return flip ? { x: x - ox, y: y - oy } : { x: x + ox, y: y + oy };
+
+		return { x, y, angle: flip ? p + Math.PI : p };
 	});
 
 	function calculateAngle() {
@@ -254,7 +244,7 @@
 		}"
 		:onRelease="() => $emit('anchorMove', calculateAngle())"
 	/>
-	<Text v-if="label" v-bind="labelPosition" :value="label" ref="text" />
+	<Label v-if="label" :label v-bind="labelProperties" ref="text" />
 </template>
 <style scoped>
 	.arc {
