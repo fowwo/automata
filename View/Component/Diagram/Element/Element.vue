@@ -18,6 +18,13 @@
 			calc(var(--scale, 1) * calc(var(--px, 0) + v-bind("x")) * 1px - 50%)
 			calc(var(--scale, 1) * calc(var(--py, 0) + v-bind("y")) * 1px - 50%);
 		scale: var(--scale, 1);
+		
+		& .element {
+			position: relative;
+			inset: 0;
+			translate: none;
+			scale: none;
+		}
 	}
 	:deep(.grab) { cursor: grab; }
 	:deep(.grab:active) { cursor: grabbing; }
