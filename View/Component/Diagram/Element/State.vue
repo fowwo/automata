@@ -24,6 +24,8 @@
 		diagramTransform: props.diagramTransform
 	});
 
+	defineExpose({ transform });
+
 	const radius = 50;
 
 	const state = ref<HTMLDivElement | null>(null);
