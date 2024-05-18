@@ -18,4 +18,17 @@ export default class NondeterministicFiniteAutomatonDiagram extends Diagram {
 			startTransition
 		});
 	}
+
+	get mergedTransitionLabels() {
+		return Object.fromEntries(Object.entries(this.automaton.transitions).map(([ from, automatonTransitions ]) => {
+			const merge: { [state: number]: string[] } = {};
+			Object.entries(automatonTransitions).forEach(([ symbol, transition ]) => {
+				for (const to of transition) {
+					if (to in merge) merge[to].push(symbol);
+					else merge[to] = [ symbol ];
+				}
+			});
+			return [ from, Object.fromEntries(Object.entries(merge).map(([ state, symbols ]) => [ state, symbols.sort().join(", ") ])) ];
+		}));
+	}
 }

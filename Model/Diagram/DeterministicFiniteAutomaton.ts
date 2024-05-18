@@ -18,4 +18,16 @@ export default class DeterministicFiniteAutomatonDiagram extends Diagram {
 			startTransition
 		});
 	}
+
+	get mergedTransitionLabels() {
+		return Object.fromEntries(Object.entries(this.automaton.transitions).map(([ from, automatonTransitions ]) => {
+			const merge: { [state: number]: string[] } = {};
+			Object.entries(automatonTransitions).forEach(([ symbol, to ]) => {
+				if ((to as number) in merge) merge[to as number].push(symbol);
+				else merge[to as number] = [ symbol ];
+			});
+			return [ from, Object.fromEntries(Object.entries(merge).map(([ state, symbols ]) => [ state, symbols.sort().join(", ") ])) ];
+		}));
+	}
+
 }

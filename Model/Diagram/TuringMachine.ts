@@ -18,4 +18,16 @@ export default class TuringMachineDiagram extends Diagram {
 			startTransition
 		});
 	}
+
+	get mergedTransitionLabels() {
+		return Object.fromEntries(Object.entries(this.automaton.transitions).map(([ from, automatonTransitions ]) => {
+			const merge: { [state: number]: string[] } = {};
+			Object.entries(automatonTransitions).forEach(([ symbol, [ to, newSymbol, move ] ]) => {
+				const transition = `${symbol}→${newSymbol}, ${move}`;
+				if (to in merge) merge[to].push(transition);
+				else merge[to] = [ transition ];
+			});
+			return [ from, Object.fromEntries(Object.entries(merge).map(([ state, transitions ]) => [ state, transitions.sort().join("\n") ])) ];
+		}));
+	}
 }

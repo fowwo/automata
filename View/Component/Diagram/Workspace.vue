@@ -3,8 +3,9 @@
 	import { Transform } from "../../Composable/Transform";
 	import Diagram from "../../../Model/Diagram";
 	import State from "./Element/State.vue";
+	import TransitionArrow from "./Element/Transition.vue";
 
-	const { diagram, transform } = defineProps<{
+	const props = defineProps<{
 		diagram: Diagram;
 		transform: Transform;
 	}>();
@@ -14,20 +15,20 @@
 	function pan(event: MouseEvent) {
 		const workspace = event.target as HTMLDivElement;
 		const [ cx, cy ] = [ event.clientX, event.clientY ];
-		const [ px, py ] = [ transform.x, transform.y ];
+		const [ px, py ] = [ props.transform.x, props.transform.y ];
 		workspace.onmouseup = () => {
 			workspace.onmouseup = null;
 			workspace.onmousemove = null;
 		};
 		workspace.onmousemove = (event) => {
-			const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ].map(x => x / transform.scale);
-			transform.x = px + dx;
-			transform.y = py + dy;
+			const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ].map(x => x / props.transform.scale);
+			props.transform.x = px + dx;
+			props.transform.y = py + dy;
 		};
 	}
 	function zoom(event: WheelEvent) {
 		if (event.buttons) return; // Prevent scroll while dragging.
-		event.deltaY > 0 ? transform.zoomOut() : transform.zoomIn();
+		event.deltaY > 0 ? props.transform.zoomOut() : props.transform.zoomIn();
 	}
 </script>
 <template>
@@ -43,6 +44,29 @@
 			:diagramTransform="transform"
 			:ref="(element) => states[state] = element"
 		/>
+		<template v-for="(d, from) in props.diagram.mergedTransitionLabels">
+			<template v-for="(label, to) in d">
+				<TransitionArrow
+					:from="states[from]"
+					:to="states[to]"
+					:angle="diagram.transitions[from]?.[to]"
+					:label
+					:diagram
+					:diagramTransform="transform"
+					@anchorMove="(angle) => {
+						if (angle === 0) {
+							delete diagram.transitions[from]?.[to];
+							if (Object.keys(diagram.transitions[from]).length === 0) {
+								delete diagram.transitions[from];
+							}
+							return;
+						}
+						diagram.transitions[from] ??= {};
+						diagram.transitions[from][to] = angle;
+					}"
+				/>
+			</template>
+		</template>
 	</div>
 </template>
 <style scoped>

@@ -73,6 +73,7 @@ export default abstract class Diagram {
 		}
 	}
 
+	abstract get mergedTransitionLabels(): { [from: number]: { [to: number]: string }};
 }
 
 export type DiagramArguments = {
