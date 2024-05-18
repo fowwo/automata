@@ -11,16 +11,16 @@
 	}>();
 
 	const states = ref<{ [state: number]: any }>({});
+	const workspace = ref<HTMLDivElement | null>(null);
 
 	function pan(event: MouseEvent) {
-		const workspace = event.target as HTMLDivElement;
 		const [ cx, cy ] = [ event.clientX, event.clientY ];
 		const [ px, py ] = [ props.transform.x, props.transform.y ];
-		workspace.onmouseup = () => {
-			workspace.onmouseup = null;
-			workspace.onmousemove = null;
+		workspace.value!.onmouseup = () => {
+			workspace.value!.onmouseup = null;
+			workspace.value!.onmousemove = null;
 		};
-		workspace.onmousemove = (event) => {
+		workspace.value!.onmousemove = (event) => {
 			const [ dx, dy ] = [ event.clientX - cx, event.clientY - cy ].map(x => x / props.transform.scale);
 			props.transform.x = px + dx;
 			props.transform.y = py + dy;
