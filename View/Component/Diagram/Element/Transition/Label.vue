@@ -32,3 +32,8 @@
 		<Text v-for="label in labels" :x="0" :y="0" :value="label" />
 	</Element>
 </template>
+<style scoped>
+	.label {
+		pointer-events: none;
+	}
+</style>
