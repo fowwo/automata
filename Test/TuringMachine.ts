@@ -1,6 +1,6 @@
 import { describe as suite, test } from "node:test";
 import { strict as assert } from "node:assert";
-import TM, { tapeToString } from "../Model/TuringMachine.js";
+import TM, { tapeToString } from "../Model/Automaton/TuringMachine";
 
 suite("TM", () => {
 	test(".run / .accepts / .rejects", async (t) => {

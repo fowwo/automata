@@ -1,5 +1,5 @@
 import RegularAutomaton from "./RegularAutomaton";
-import DeterministicFiniteAutomatonData from "../Type/DeterministicFiniteAutomatonData";
+import DeterministicFiniteAutomatonData from "../../Type/DeterministicFiniteAutomatonData";
 
 /**
  * A deterministic finite automaton.

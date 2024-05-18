@@ -1,8 +1,7 @@
 <script setup lang="ts">
 	import { computed } from "vue";
-	import AutomatonType from "../../../Type/AutomatonType";
 
-	const props = defineProps<{ type: AutomatonType; }>();
+	const props = defineProps<{ type: string; }>();
 	const symbol = computed(() => {
 		return {
 			DFA: "\uEF4A",

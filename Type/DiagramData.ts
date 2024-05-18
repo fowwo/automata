@@ -1,8 +1,4 @@
 import AutomatonData from "./AutomatonData";
-import DFAData from "./DeterministicFiniteAutomatonData";
-import AutomatonType from "./AutomatonType";
-import NFAData from "./NondeterministicFiniteAutomatonData";
-import TMData from "./TuringMachineData";
 
 type DiagramData = {
 
@@ -10,7 +6,7 @@ type DiagramData = {
 	name: string;
 
 	/** The type of the automaton. */
-	type: AutomatonType;
+	type: string;
 
 	/** The data of the automaton. */
 	automaton: AutomatonData;
@@ -37,9 +33,5 @@ type DiagramData = {
 		length: number;
 	};
 
-} & (
-	{ type: "DFA"; automaton: DFAData } |
-	{ type: "NFA"; automaton: NFAData } |
-	{ type: "TM"; automaton: TMData }
-);
+};
 export default DiagramData;

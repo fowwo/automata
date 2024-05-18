@@ -1,6 +1,6 @@
 import { describe as suite, test } from "node:test";
 import { strict as assert } from "node:assert";
-import Automaton from "../Model/DeterministicFiniteAutomaton.js";
+import Automaton from "../Model/Automaton/DeterministicFiniteAutomaton";
 
 suite("Automaton", () => {
 	test(".addState", () => {

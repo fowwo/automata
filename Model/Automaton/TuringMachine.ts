@@ -1,6 +1,7 @@
-import Automaton from "./Automaton";
-import TuringMachineData from "../Type/TuringMachineData";
+import Automaton from "../Automaton";
+import TuringMachineData from "../../Type/TuringMachineData";
 
+/** A Turing machine. */
 export default class TuringMachine extends Automaton {
 
 	/** The symbols allowed on the tape. */

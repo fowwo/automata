@@ -1,6 +1,6 @@
 import { describe as suite, test } from "node:test";
 import { strict as assert } from "node:assert";
-import DFA from "../Model/DeterministicFiniteAutomaton.js";
+import DFA from "../Model/Automaton/DeterministicFiniteAutomaton";
 
 suite("DFA", () => {
 	test(".run / .accepts / .rejects", async (t) => {

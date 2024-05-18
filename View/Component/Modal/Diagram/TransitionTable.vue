@@ -2,7 +2,7 @@
 	import { computed } from "vue";
 	import Select from "../../Input/Select.vue";
 	import Diagram from "../../../../Model/Diagram";
-	import TuringMachine from "../../../../Model/TuringMachine";
+	import TuringMachine from "../../../../Model/Automaton/TuringMachine";
 
 	const props = defineProps<{ diagram: Diagram; }>();
 

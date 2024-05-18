@@ -1,5 +1,5 @@
-import Automaton from "./Automaton";
-import RegularAutomatonData from "../Type/RegularAutomatonData";
+import Automaton from "../Automaton";
+import RegularAutomatonData from "../../Type/RegularAutomatonData";
 
 /** A finite automaton that recognizes a regular language. */
 export default abstract class RegularAutomaton extends Automaton {

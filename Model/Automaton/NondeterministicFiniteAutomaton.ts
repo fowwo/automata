@@ -1,5 +1,5 @@
 import RegularAutomaton from "./RegularAutomaton";
-import NondeterministicFiniteAutomatonData from "../Type/NondeterministicFiniteAutomatonData";
+import NondeterministicFiniteAutomatonData from "../../Type/NondeterministicFiniteAutomatonData";
 
 /** A nondeterministic finite automaton. */
 export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
