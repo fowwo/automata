@@ -2,10 +2,9 @@
 	import { ref } from "vue";
 	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
-	import Note from "../Note.vue";
 	import General from "./Diagram/General.vue";
 	import States from "./Diagram/States.vue";
-	import TransitionTable from "./Diagram/TransitionTable.vue";
+	import Transitions from "./Diagram/Transitions.vue";
 	import Diagram from "../../../Model/Diagram";
 
 	defineProps<{
@@ -50,14 +49,7 @@
 				<ul></ul>
 			</div>
 			<States v-else-if="nav === 'states'" :diagram :transform />
-			<div :class="$style.transitions" v-else-if="nav === 'transitions'">
-				<h1>Transitions</h1>
-				<hr>
-				<Note type="error" v-if="diagram.automaton.alphabet.size === 0">
-					Your automaton must have symbols in the alphabet before creating transitions.
-				</Note>
-				<TransitionTable v-else :diagram />
-			</div>
+			<Transitions v-else-if="nav === 'transitions'" :diagram />
 		</div>
 	</Modal>
 </template>
