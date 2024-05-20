@@ -1,15 +1,14 @@
 <script setup lang="ts">
 	import { ref } from "vue";
-	import { diagrams } from "../../State/Diagram";
 	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
 	import Note from "../Note.vue";
+	import General from "./Diagram/General.vue";
 	import States from "./Diagram/States.vue";
 	import TransitionTable from "./Diagram/TransitionTable.vue";
-	import TextValidatorInput from "../Input/TextValidator.vue";
 	import Diagram from "../../../Model/Diagram";
 
-	const props = defineProps<{
+	defineProps<{
 		diagram: Diagram;
 		transform?: Transform;
 	}>();
@@ -20,16 +19,6 @@
 
 	const modal = ref<InstanceType<typeof Modal> | null>(null);
 	const nav = ref("general");
-
-	function isValidDiagramName(name: string) {
-		if (name === "") return false;
-		for (const otherDiagram of diagrams) {
-			if (otherDiagram !== props.diagram && otherDiagram.name === name) {
-				return false;
-			}
-		}
-		return true;
-	}
 </script>
 <template>
 	<Modal title="Automaton Settings" :class="$style['automaton-settings']" ref="modal">
@@ -54,23 +43,14 @@
 			</ul>
 		</nav>
 		<div>
-			<div :class="$style.general" v-if="nav === 'general'">
-				<h1>General</h1>
-				<hr>
-				<div>
-					<div>
-						<label for="diagram-rename">Name</label>
-					</div>
-					<TextValidatorInput id="diagram-rename" :validator="isValidDiagramName" revert v-model.trim.collapse.lazy="diagram.name" />
-				</div>
-			</div>
-			<div :class="$style.alphabet" v-if="nav === 'alphabet'">
+			<General v-if="nav === 'general'" :diagram />
+			<div :class="$style.alphabet" v-else-if="nav === 'alphabet'">
 				<h1>Alphabet</h1>
 				<hr>
 				<ul></ul>
 			</div>
-			<States v-if="nav === 'states'" :diagram :transform />
-			<div :class="$style.transitions" v-if="nav === 'transitions'">
+			<States v-else-if="nav === 'states'" :diagram :transform />
+			<div :class="$style.transitions" v-else-if="nav === 'transitions'">
 				<h1>Transitions</h1>
 				<hr>
 				<Note type="error" v-if="diagram.automaton.alphabet.size === 0">
@@ -125,28 +105,6 @@
 					padding: 20px;
 					overflow: auto;
 				}
-			}
-		}
-	}
-	.general {
-		> div {
-			display: flex;
-			margin-top: 10px;
-			gap: 10px;
-
-			> div:first-child {
-				flex-grow: 1;
-
-				> label {
-					line-height: 40px;
-				}
-				> p {
-					font-size: 0.8em;
-					color: hsl(var(--text-color-hsl) / 65%);
-				}
-			}
-			> div:last-child {
-				max-width: 250px;
 			}
 		}
 	}
