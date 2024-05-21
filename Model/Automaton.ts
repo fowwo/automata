@@ -59,6 +59,12 @@ export default abstract class Automaton {
 	/** Removes a state and its incoming and outgoing transitions. */
 	abstract removeState(state: number): void;
 
+	/**
+	 * Renames a symbol in the alphabet.
+	 * @returns Whether the symbol was renamed.
+	 */
+	abstract renameSymbol(from: string, to: string): boolean;
+
 	/** Returns a JSON representation of the automaton. */
 	toJSON(): AutomatonData {
 		return {

@@ -107,6 +107,28 @@ export default class TuringMachine extends Automaton {
 			}
 		}
 	}
+
+	renameSymbol(from: string, to: string): boolean {
+		if (!this.alphabet.has(from)) return false;
+		if (from === to) return true;
+		if (this.alphabet.has(to)) return false;
+
+		this.alphabet.delete(from);
+		this.alphabet.add(to);
+
+		for (const transition of Object.values(this.transitions)) {
+			for (const [ symbol, [ state, newSymbol, move ] ] of Object.entries(transition)) {
+				if (newSymbol === from) {
+					transition[symbol][1] = to;
+				}
+				if (symbol === from) {
+					transition[to] = transition[from];
+					delete transition[from];
+				}
+			}
+		}
+		return true;
+	}
 }
 
 /**
