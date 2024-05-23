@@ -111,13 +111,31 @@ export default class TuringMachine extends Automaton {
 	}
 
 	renameSymbol(from: string, to: string): boolean {
-		const i = this.alphabet.indexOf(from);
-		if (i === -1) return false;
-		if (from === to) return true;
-		if (this.alphabet.includes(to)) return false;
 
-		this.alphabet[i] = to;
+		// Rename blank symbol.
+		if (from === this.blankSymbol) {
+			if (from === to) return true;
+			if (this.alphabet.includes(to) || this.tapeAlphabet.includes(to)) return false;
+			this.blankSymbol = to;
+			this.renameSymbolInTransitions(from, to);
+			return true;
+		}
 
+		// Rename symbol in the alphabets.
+		for (const alphabet of [ this.alphabet, this.tapeAlphabet ]) {
+			const i = alphabet.indexOf(from);
+			if (i !== -1) {
+				if (from === to) return true;
+				if (this.blankSymbol === to || this.alphabet.includes(to) || this.tapeAlphabet.includes(to)) return false;
+				alphabet[i] = to;
+				this.renameSymbolInTransitions(from, to);
+				return true;
+			}
+		}
+
+		return false;
+	}
+	private renameSymbolInTransitions(from: string, to: string) {
 		for (const transition of Object.values(this.transitions)) {
 			for (const [ symbol, [ state, newSymbol, move ] ] of Object.entries(transition)) {
 				if (newSymbol === from) {
@@ -129,7 +147,6 @@ export default class TuringMachine extends Automaton {
 				}
 			}
 		}
-		return true;
 	}
 }
 
