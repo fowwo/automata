@@ -9,9 +9,9 @@
 
 	const symbols = computed(() => {
 		switch (props.diagram.type) {
-			case "NFA": return [ ...props.diagram.automaton.alphabet, 'ε' ];
-			case "TM": return [ ...props.diagram.automaton.alphabet, ...(props.diagram.automaton as TuringMachine).tapeAlphabet, (props.diagram.automaton as TuringMachine).blankSymbol ];
-			default: return Array.from(props.diagram.automaton.alphabet);
+			case "NFA": return props.diagram.automaton.alphabet.concat([ "ε" ]);
+			case "TM": return props.diagram.automaton.alphabet.concat((props.diagram.automaton as TuringMachine).tapeAlphabet).concat([ (props.diagram.automaton as TuringMachine).blankSymbol ]);
+			default: return props.diagram.automaton.alphabet;
 		}
 	});
 </script>
@@ -19,7 +19,7 @@
 	<div class="transitions">
 		<h1>Transitions</h1>
 		<hr>
-		<Note type="error" v-if="diagram.automaton.alphabet.size === 0">
+		<Note type="error" v-if="diagram.automaton.alphabet.length === 0">
 			Your automaton must have symbols in the alphabet before creating transitions.
 		</Note>
 		<div v-else>

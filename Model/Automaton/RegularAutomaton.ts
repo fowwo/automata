@@ -16,12 +16,12 @@ export default abstract class RegularAutomaton extends Automaton {
 	}
 
 	renameSymbol(from: string, to: string): boolean {
-		if (!this.alphabet.has(from)) return false;
+		const i = this.alphabet.indexOf(from);
+		if (i === -1) return false;
 		if (from === to) return true;
-		if (this.alphabet.has(to)) return false;
+		if (this.alphabet.includes(to)) return false;
 
-		this.alphabet.delete(from);
-		this.alphabet.add(to);
+		this.alphabet[i] = to;
 
 		for (const transition of Object.values(this.transitions)) {
 			for (const symbol of Object.keys(transition)) {

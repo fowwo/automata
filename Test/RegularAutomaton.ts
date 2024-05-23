@@ -18,7 +18,7 @@ suite("RegularAutomaton", () => {
 		});
 
 		assert(automaton.renameSymbol("c", "d"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "b", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "b", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "d": [ 2 ] },
 			1: { "b": [ 1, 2 ], "d": [ 0, 2 ] },
@@ -26,7 +26,7 @@ suite("RegularAutomaton", () => {
 		});
 
 		assert(!automaton.renameSymbol("b", "d"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "b", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "b", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "d": [ 2 ] },
 			1: { "b": [ 1, 2 ], "d": [ 0, 2 ] },
@@ -34,7 +34,7 @@ suite("RegularAutomaton", () => {
 		});
 
 		assert(automaton.renameSymbol("b", "c"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
@@ -42,7 +42,7 @@ suite("RegularAutomaton", () => {
 		});
 
 		assert(automaton.renameSymbol("a", "A"));
-		assert.deepEqual(automaton.alphabet, new Set([ "A", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
@@ -50,7 +50,7 @@ suite("RegularAutomaton", () => {
 		});
 
 		assert(!automaton.renameSymbol("", ""));
-		assert.deepEqual(automaton.alphabet, new Set([ "A", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },

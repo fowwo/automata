@@ -5,7 +5,7 @@ import TuringMachineData from "../../Type/TuringMachineData";
 export default class TuringMachine extends Automaton {
 
 	/** The symbols allowed on the tape. */
-	tapeAlphabet: Set<string>;
+	tapeAlphabet: string[];
 
 	/** The symbol in tape cells which have not been written to. */
 	blankSymbol: string;
@@ -14,7 +14,7 @@ export default class TuringMachine extends Automaton {
 
 	constructor({ alphabet, tapeAlphabet = [], blankSymbol = "⊔", states, startState, acceptStates, transitions }: TuringMachineData = {}) {
 		super({ alphabet, states, startState, acceptStates, transitions });
-		this.tapeAlphabet = new Set(tapeAlphabet);
+		this.tapeAlphabet = Array.from(tapeAlphabet);
 		this.blankSymbol = blankSymbol;
 	}
 
@@ -111,12 +111,12 @@ export default class TuringMachine extends Automaton {
 	}
 
 	renameSymbol(from: string, to: string): boolean {
-		if (!this.alphabet.has(from)) return false;
+		const i = this.alphabet.indexOf(from);
+		if (i === -1) return false;
 		if (from === to) return true;
-		if (this.alphabet.has(to)) return false;
+		if (this.alphabet.includes(to)) return false;
 
-		this.alphabet.delete(from);
-		this.alphabet.add(to);
+		this.alphabet[i] = to;
 
 		for (const transition of Object.values(this.transitions)) {
 			for (const [ symbol, [ state, newSymbol, move ] ] of Object.entries(transition)) {

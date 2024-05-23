@@ -208,7 +208,7 @@ suite("TM", () => {
 		});
 
 		assert(automaton.renameSymbol("c", "d"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "b", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "b", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, "b", "R" ], "b": [ 1, "d", "R" ], "d": [ 2, "⊔", "L" ] },
 			1: { "b": [ 1, "b", "L" ], "d": [ 0, "a", "L" ] },
@@ -216,7 +216,7 @@ suite("TM", () => {
 		});
 
 		assert(!automaton.renameSymbol("b", "d"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "b", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "b", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, "b", "R" ], "b": [ 1, "d", "R" ], "d": [ 2, "⊔", "L" ] },
 			1: { "b": [ 1, "b", "L" ], "d": [ 0, "a", "L" ] },
@@ -224,7 +224,7 @@ suite("TM", () => {
 		});
 
 		assert(automaton.renameSymbol("b", "c"));
-		assert.deepEqual(automaton.alphabet, new Set([ "a", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "a", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, "c", "R" ], "c": [ 1, "d", "R" ], "d": [ 2, "⊔", "L" ] },
 			1: { "c": [ 1, "c", "L" ], "d": [ 0, "a", "L" ] },
@@ -232,7 +232,7 @@ suite("TM", () => {
 		});
 
 		assert(automaton.renameSymbol("a", "A"));
-		assert.deepEqual(automaton.alphabet, new Set([ "A", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, "c", "R" ], "c": [ 1, "d", "R" ], "d": [ 2, "⊔", "L" ] },
 			1: { "c": [ 1, "c", "L" ], "d": [ 0, "A", "L" ] },
@@ -240,7 +240,7 @@ suite("TM", () => {
 		});
 
 		assert(!automaton.renameSymbol("", ""));
-		assert.deepEqual(automaton.alphabet, new Set([ "A", "c", "d" ]));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, "c", "R" ], "c": [ 1, "d", "R" ], "d": [ 2, "⊔", "L" ] },
 			1: { "c": [ 1, "c", "L" ], "d": [ 0, "A", "L" ] },

@@ -4,7 +4,7 @@ import AutomatonData from "../Type/AutomatonData";
 export default abstract class Automaton {
 
 	/** The symbols of the language. */
-	alphabet: Set<string>;
+	alphabet: string[];
 
 	/** The states or number of states. */
 	states: Set<number>;
@@ -19,7 +19,7 @@ export default abstract class Automaton {
 	transitions: { [state: number]: { [symbol: string]: unknown } };
 
 	constructor({ alphabet = [], states = [], startState = null, acceptStates = [], transitions = {} }: AutomatonData = {}) {
-		this.alphabet = new Set(alphabet);
+		this.alphabet = Array.from(alphabet);
 		if (typeof states === "number") {
 			this.states = new Set();
 			for (let i = 0; i < states; i++) {
