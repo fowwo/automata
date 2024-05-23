@@ -84,6 +84,8 @@ export default class TuringMachine extends Automaton {
 	 * 
 	 * If the input string does not halt within the step limit (if specified),
 	 * this method will return `false`.
+	 * 
+	 * @param stepLimit - The maximum number of transitions to take.
 	 */
 	rejects(string: string, stepLimit?: number): boolean {
 		const { state, halt } = this.run(string, stepLimit);
