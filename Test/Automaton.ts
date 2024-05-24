@@ -26,5 +26,7 @@ suite("Automaton", () => {
 			const symbol = automaton.addSymbol();
 			assert.equal(symbol, expected, `Symbol ${symbol} was added instead of symbol ${expected}.`);
 		}
+		assert.deepEqual(automaton.alphabet, [ "2", "5", "0", "1", "3", "6", "8" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "4", "7" ]);
 	});
 });

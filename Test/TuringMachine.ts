@@ -194,6 +194,19 @@ suite("TM", () => {
 		assert.deepEqual(automaton.acceptStates, new Set());
 		assert.deepEqual(automaton.transitions, {});
 	});
+	test(".addTapeSymbol", () => {
+		const automaton = new TM({
+			alphabet: [ "2", "5" ],
+			tapeAlphabet: [ "4", "7" ]
+		});
+
+		for (const expected of [ "0", "1", "3", "6", "8" ]) {
+			const symbol = automaton.addTapeSymbol();
+			assert.equal(symbol, expected, `Symbol ${symbol} was added instead of symbol ${expected}.`);
+		}
+		assert.deepEqual(automaton.alphabet, [ "2", "5" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "4", "7", "0", "1", "3", "6", "8" ]);
+	});
 	test(".renameSymbol", () => {
 		const automaton = new TM({
 			alphabet: [ "a", "b", "c" ],

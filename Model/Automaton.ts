@@ -66,7 +66,7 @@ export default abstract class Automaton {
 	 * Adds a symbol to the alphabet.
 	 * @returns The new symbol.
 	 */
-	addSymbol() {
+	addSymbol(): string {
 		const symbols = new Set(this.symbols);
 		let i = 0;
 		while (symbols.has(String(i))) i++;

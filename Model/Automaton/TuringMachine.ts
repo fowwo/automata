@@ -114,6 +114,17 @@ export default class TuringMachine extends Automaton {
 		}
 	}
 
+	/**
+	 * Adds a symbol to the tape alphabet.
+	 * @returns The new symbol.
+	 */
+	addTapeSymbol(): string {
+		const symbols = new Set(this.symbols);
+		let i = 0;
+		while (symbols.has(String(i))) i++;
+		this.tapeAlphabet.push(String(i));
+		return String(i);
+	}
 	renameSymbol(from: string, to: string): boolean {
 
 		// Rename blank symbol.
