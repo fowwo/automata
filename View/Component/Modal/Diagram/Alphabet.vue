@@ -47,6 +47,7 @@
 						diagram.automaton.renameSymbol(symbol, newSymbol);
 					}"
 				/>
+				<button class="symbol small-shadow" @click="diagram.automaton.removeSymbol(symbol)">&#xE5CD;</button>
 			</li>
 			<li>
 				<button class="symbol small-shadow" @click="addSymbol()">&#xE145;</button>
@@ -70,6 +71,7 @@
 							diagram.automaton.renameSymbol(symbol, newSymbol);
 						}"
 					/>
+					<button class="symbol small-shadow" @click="diagram.automaton.removeSymbol(symbol)">&#xE5CD;</button>
 				</li>
 				<li>
 					<TextInput auto-width disabled :modelValue="diagram.automaton.blankSymbol" />
@@ -105,6 +107,7 @@
 			flex-wrap: wrap;
 
 			> li {
+				position: relative;
 				display: grid;
 				font-size: 1.25em;
 
@@ -113,14 +116,33 @@
 					height: 50px;
 				}
 				> button {
-					width: 50px;
-					height: 50px;
+					background-color: hsl(var(--background-color-hsl));
 
-					&:hover {
-						background-color: hsl(var(--accent-color-hsl));
+					&:only-child {
+						width: 50px;
+						height: 50px;
+
+						&:hover {
+							background-color: hsl(var(--accent-color-hsl));
+						}
+						&:active {
+							background-color: hsl(var(--accent-color-hsl) / 50%);
+						}
 					}
-					&:active {
-						background-color: hsl(var(--accent-color-hsl) / 50%);
+					&:not(:only-child) {
+						position: absolute;
+						top: -5px;
+						right: -5px;
+						width: 20px;
+						height: 20px;
+						font-size: 0.75em;
+
+						&:hover {
+							background-color: hsl(var(--error-color));
+						}
+						&:active {
+							background-color: hsl(var(--error-color) / 50%);
+						}
 					}
 				}
 			}
