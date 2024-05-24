@@ -1,0 +1,174 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+html {
+	background: hsl(var(--background-color-hsl));
+
+	--accent-color-hsl: 215 100% 50%;
+
+	--small-inset-shadow:
+		inset 0px 0.1px 0.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.25)),
+		inset 0px 0.1px 0.3px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.407)),
+		inset 0px 0.3px 0.6px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.5)),
+		inset 0px 0.4px 1.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.593)),
+		inset 0px 0.8px 2.1px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.72)),
+		inset 0px 2px 5px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity)));
+
+	--transition-smooth: cubic-bezier(0.6, 0, 0.4, 1);
+	--transition-duration: 300ms;
+	--transition-zip: cubic-bezier(0.5, 1, 0, 1.5);
+	--transition-fast: 150ms;
+
+	--info-color: 215 100% 50%;
+	--warning-color: 40 100% 50%;
+	--error-color: 0 100% 50%;
+
+	/* Light color scheme values */
+	color-scheme: light;
+	--background-color-hsl: 0 0 100%;
+	--text-color-hsl: 0 0 0;
+	--shadow-color-hsl: 240 50% 50%;
+	--shadow-opacity: 15%;
+}
+html.dark {
+	color-scheme: dark;
+	--background-color-hsl: 240 20% 14%;
+	--text-color-hsl: 0 0 100%;
+	--shadow-color-hsl: 240 50% 5%;
+	--shadow-opacity: 60%;
+}
+body {
+	position: relative;
+	display: flex;
+	height: 100vh;
+	overflow: hidden;
+	font-family: 'Roboto Slab', serif;
+	color: hsl(var(--text-color-hsl));
+}
+button, .button {
+	display: block;
+	appearance: none;
+	border: none;
+	height: 40px;
+	font: inherit;
+	line-height: 0;
+	background-color: transparent;
+	color: hsl(var(--text-color-hsl) / 65%);
+	border-radius: 5px;
+	cursor: pointer;
+
+	&:disabled {
+		color: hsl(var(--text-color-hsl) / 15%);
+		cursor: not-allowed;
+	}
+	&:enabled:hover {
+		color: hsl(var(--text-color-hsl));
+	}
+	> svg {
+		padding: 5px;
+	}
+}
+h1 {
+	margin: 10px 0;
+	font-size: 1.75em;
+	line-height: 1;
+}
+h2 {
+	margin: 5px 0;
+	font-size: 1.25em;
+	line-height: 1;
+}
+hr {
+	margin: 10px 0;
+	border: none;
+	height: 1px;
+	background-color: hsl(var(--text-color-hsl) / 15%);
+}
+p {
+	margin: 5px 0 10px 0;
+	font-size: 0.8em;
+	color: hsl(var(--text-color-hsl) / 65%);
+}
+.toggle {
+	position: relative;
+
+	> input {
+		position: absolute;
+		inset: 0;
+		appearance: none;
+		border-radius: inherit;
+		cursor: pointer;
+	}
+	> span {
+		display: flex;
+		position: absolute;
+		inset: 0;
+		justify-content: center;
+		align-items: center;
+		pointer-events: none;
+
+		input:checked + &:has(+ span) {
+			visibility: hidden;
+		}
+		input:not(:checked) + & + span {
+			visibility: hidden;
+		}
+	}
+}
+svg {
+	display: block;
+	fill: currentColor;
+	overflow: visible;
+}
+table {
+	border-collapse: collapse;
+	border-style: hidden;
+
+	td, th {
+		box-sizing: content-box;
+		border-width: 5px 10px;
+		border-style: solid;
+		border-color: transparent;
+	}
+}
+.symbol, .filled-symbol {
+	font-family: "Material Symbols Outlined";
+}
+.filled-symbol {
+	font-variation-settings: "FILL" 1;
+}
+
+.large-shadow, .small-shadow {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		border-radius: inherit;
+		z-index: -1;
+	}
+}
+.large-shadow::before {
+	box-shadow:
+		0px 0.6px 2.2px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.187)),
+		0px 1.3px 5.3px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.267)),
+		0px 2.5px 10px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.333)),
+		0px 4.5px 17.9px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.4)),
+		0px 8.4px 33.4px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.48)),
+		0px 20px 80px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.667));
+}
+.small-shadow::before {
+	box-shadow:
+		0px 0.1px 0.3px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.25)),
+		0px 0.3px 0.7px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.407)),
+		0px 0.6px 1.3px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.5)),
+		0px 1.1px 2.2px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.593)),
+		0px 2.1px 4.2px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity) * 0.72)),
+		0px 5px 10px hsl(var(--shadow-color-hsl) / calc(var(--shadow-opacity)));
+}
