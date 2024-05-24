@@ -85,15 +85,4 @@ export default abstract class Automaton {
 	 * @returns Whether the symbol was renamed.
 	 */
 	abstract renameSymbol(from: string, to: string): boolean;
-
-	/** Returns a JSON representation of the automaton. */
-	toJSON(): AutomatonData {
-		return {
-			alphabet: Array.from(this.alphabet),
-			states: Array.from(this.states),
-			startState: this.startState,
-			acceptStates: Array.from(this.acceptStates),
-			transitions: this.transitions
-		};
-	}
 }

@@ -1,4 +1,4 @@
-import { reactive, ref } from "vue";
+import { reactive, ref, watch } from "vue";
 import Diagram from "../../Model/Diagram";
 import DiagramData from "../../Type/DiagramData";
 import DeterministicFiniteAutomatonDiagram from "../../Model/Diagram/DeterministicFiniteAutomaton";
@@ -50,6 +50,9 @@ if (data === null) {
 const rawDiagrams: DiagramData[] = JSON.parse(data);
 export const diagrams = reactive(rawDiagrams.map(x => parseDiagram(x)));
 export const diagram = ref<Diagram>(diagrams[0]); // TODO: Store last opened diagram.
+
+// Save diagram data when changes are made.
+watch(diagrams, () => localStorage.setItem("diagrams", JSON.stringify(diagrams, (_, value) => value instanceof Set ? Array.from(value) : value)));
 
 export function createDiagram(type: string) {
 
