@@ -1,5 +1,5 @@
 {
-	"name": "finite-state-automata",
+	"name": "automata",
 	"private": true,
 	"type": "module",
 	"scripts": {
