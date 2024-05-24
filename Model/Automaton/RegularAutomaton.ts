@@ -35,6 +35,8 @@ export default abstract class RegularAutomaton extends Automaton {
 	}
 
 	renameSymbol(from: string, to: string): boolean {
+		if (from === "ε" || to === "ε") return false; // Prevent renaming to and from epsilon symbol.
+
 		const i = this.alphabet.indexOf(from);
 		if (i === -1) return false;
 		if (from === to) return true;

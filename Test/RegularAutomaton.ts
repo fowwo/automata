@@ -60,7 +60,7 @@ suite("RegularAutomaton", () => {
 			transitions: {
 				0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "c": [ 2 ] },
 				1: { "b": [ 1, 2 ], "c": [ 0, 2 ] },
-				2: { "a": [ 2 ], "c": [ 0, 1 ], "ε": [ 1 ] },
+				2: { "a": [ 2 ], "c": [ 0, 1 ], "ε": [ 1 ] }
 			}
 		});
 
@@ -69,7 +69,7 @@ suite("RegularAutomaton", () => {
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "d": [ 2 ] },
 			1: { "b": [ 1, 2 ], "d": [ 0, 2 ] },
-			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] },
+			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
 		});
 
 		assert(!automaton.renameSymbol("b", "d"));
@@ -77,7 +77,7 @@ suite("RegularAutomaton", () => {
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "d": [ 2 ] },
 			1: { "b": [ 1, 2 ], "d": [ 0, 2 ] },
-			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] },
+			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
 		});
 
 		assert(automaton.renameSymbol("b", "c"));
@@ -85,7 +85,7 @@ suite("RegularAutomaton", () => {
 		assert.deepEqual(automaton.transitions, {
 			0: { "a": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
-			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] },
+			2: { "a": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
 		});
 
 		assert(automaton.renameSymbol("a", "A"));
@@ -93,7 +93,7 @@ suite("RegularAutomaton", () => {
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
-			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] },
+			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
 		});
 
 		assert(!automaton.renameSymbol("", ""));
@@ -101,7 +101,31 @@ suite("RegularAutomaton", () => {
 		assert.deepEqual(automaton.transitions, {
 			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
 			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
-			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] },
+			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
+		});
+
+		assert(!automaton.renameSymbol("ε", "ε"));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
+			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
+			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
+		});
+
+		assert(!automaton.renameSymbol("ε", "x"));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
+			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
+			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
+		});
+
+		assert(!automaton.renameSymbol("A", "ε"));
+		assert.deepEqual(automaton.alphabet, [ "A", "c", "d" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "A": [ 0, 1, 2 ], "c": [ 1 ], "d": [ 2 ] },
+			1: { "c": [ 1, 2 ], "d": [ 0, 2 ] },
+			2: { "A": [ 2 ], "d": [ 0, 1 ], "ε": [ 1 ] }
 		});
 	});
 });
