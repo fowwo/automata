@@ -114,6 +114,27 @@ export default class TuringMachine extends Automaton {
 		}
 	}
 
+	removeSymbol(symbol: string): boolean {
+		for (const alphabet of [ this.alphabet, this.tapeAlphabet ]) {
+			const i = alphabet.indexOf(symbol);
+			if (i !== -1) {
+				alphabet.splice(i, 1);
+				for (const [ state, transition ] of Object.entries(this.transitions)) {
+					for (const [ transitionSymbol, [ state, newSymbol, move ] ] of Object.entries(transition)) {
+						if (transitionSymbol === symbol || newSymbol === symbol) {
+							delete transition[transitionSymbol];
+						}
+					}
+					if (Object.keys(transition).length === 0) {
+						delete this.transitions[+state];
+					}
+				}
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Adds a symbol to the tape alphabet.
 	 * @returns The new symbol.

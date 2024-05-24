@@ -207,6 +207,90 @@ suite("TM", () => {
 		assert.deepEqual(automaton.alphabet, [ "2", "5" ]);
 		assert.deepEqual(automaton.tapeAlphabet, [ "4", "7", "0", "1", "3", "6", "8" ]);
 	});
+	test(".removeSymbol", () => {
+		const automaton = new TM({
+			alphabet: [ "a", "b", "c" ],
+			tapeAlphabet: [ "A", "B", "C" ],
+			blankSymbol: "_",
+			states: 3,
+			startState: 0,
+			acceptStates: [],
+			transitions: {
+				0: { "a": [ 0, "b", "R" ], "b": [ 1, "c", "R" ], "C": [ 2, "a", "L" ], "_": [ 0, "A", "R" ] },
+				1: { "a": [ 0, "B", "R" ], "B": [ 1, "C", "R" ], "c": [ 2, "A", "L" ], "_": [ 1, "A", "L" ] },
+				2: { "a": [ 2, "_", "R" ], "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+			}
+		});
+
+		assert(automaton.removeSymbol("c"));
+		assert.deepEqual(automaton.alphabet, [ "a", "b" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "A", "B", "C" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "a": [ 0, "b", "R" ], "C": [ 2, "a", "L" ], "_": [ 0, "A", "R" ] },
+			1: { "a": [ 0, "B", "R" ], "B": [ 1, "C", "R" ], "_": [ 1, "A", "L" ] },
+			2: { "a": [ 2, "_", "R" ], "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+		});
+
+		assert(automaton.removeSymbol("B"));
+		assert.deepEqual(automaton.alphabet, [ "a", "b" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "A", "C" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "a": [ 0, "b", "R" ], "C": [ 2, "a", "L" ], "_": [ 0, "A", "R" ] },
+			1: { "_": [ 1, "A", "L" ] },
+			2: { "a": [ 2, "_", "R" ], "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+		});
+
+		assert(automaton.removeSymbol("a"));
+		assert.deepEqual(automaton.alphabet, [ "b" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "A", "C" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "_": [ 0, "A", "R" ] },
+			1: { "_": [ 1, "A", "L" ] },
+			2: { "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+		});
+
+		assert(automaton.removeSymbol("A"));
+		assert.deepEqual(automaton.alphabet, [ "b" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "C" ]);
+		assert.deepEqual(automaton.transitions, {
+			2: { "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+		});
+
+		assert(automaton.removeSymbol("b"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.tapeAlphabet, [ "C" ]);
+		assert.deepEqual(automaton.transitions, {
+			2: { "C": [ 0, "_", "L" ], "_": [ 1, "_", "R" ] }
+		});
+
+		assert(automaton.removeSymbol("C"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.tapeAlphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "_": [ 1, "_", "R" ] }
+		});
+
+		assert(!automaton.removeSymbol("_"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.tapeAlphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "_": [ 1, "_", "R" ] }
+		});
+
+		assert(!automaton.removeSymbol("C"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.tapeAlphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "_": [ 1, "_", "R" ] }
+		});
+
+		assert(!automaton.removeSymbol(""));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.tapeAlphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "_": [ 1, "_", "R" ] }
+		});
+	});
 	test(".renameSymbol", () => {
 		const automaton = new TM({
 			alphabet: [ "a", "b", "c" ],

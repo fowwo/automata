@@ -75,6 +75,12 @@ export default abstract class Automaton {
 	}
 
 	/**
+	 * Removes a symbol from the alphabet.
+	 * @returns Whether the symbol was removed.
+	 */
+	abstract removeSymbol(symbol: string): boolean;
+
+	/**
 	 * Renames a symbol in the alphabet.
 	 * @returns Whether the symbol was renamed.
 	 */

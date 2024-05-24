@@ -4,6 +4,53 @@ import RegularAutomaton from "../Model/Automaton/NondeterministicFiniteAutomaton
 
 // Using an NFA as the automaton since RegularAutomaton is abstract.
 suite("RegularAutomaton", () => {
+	test(".removeSymbol", () => {
+		const automaton = new RegularAutomaton({
+			alphabet: [ "a", "b", "c" ],
+			states: 3,
+			startState: 0,
+			acceptStates: [],
+			transitions: {
+				0: { "a": [ 0, 1, 2 ], "b": [ 1 ], "c": [ 2 ] },
+				1: { "b": [ 1, 2 ], "c": [ 0, 2 ] },
+				2: { "a": [ 2 ], "c": [ 0, 1 ], "ε": [ 1 ] }
+			}
+		});
+
+		assert(automaton.removeSymbol("b"));
+		assert.deepEqual(automaton.alphabet, [ "a", "c" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "a": [ 0, 1, 2 ], "c": [ 2 ] },
+			1: { "c": [ 0, 2 ] },
+			2: { "a": [ 2 ], "c": [ 0, 1 ], "ε": [ 1 ] }
+		});
+
+		assert(automaton.removeSymbol("c"));
+		assert.deepEqual(automaton.alphabet, [ "a" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "a": [ 0, 1, 2 ] },
+			2: { "a": [ 2 ], "ε": [ 1 ] }
+		});
+
+		assert(!automaton.removeSymbol("b"));
+		assert.deepEqual(automaton.alphabet, [ "a" ]);
+		assert.deepEqual(automaton.transitions, {
+			0: { "a": [ 0, 1, 2 ] },
+			2: { "a": [ 2 ], "ε": [ 1 ] }
+		});
+
+		assert(automaton.removeSymbol("a"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "ε": [ 1 ] }
+		});
+
+		assert(!automaton.removeSymbol("ε"));
+		assert.deepEqual(automaton.alphabet, []);
+		assert.deepEqual(automaton.transitions, {
+			2: { "ε": [ 1 ] }
+		});
+	});
 	test(".renameSymbol", () => {
 		const automaton = new RegularAutomaton({
 			alphabet: [ "a", "b", "c" ],
