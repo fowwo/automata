@@ -10,8 +10,8 @@
 	<div class="transitions">
 		<h1>Transitions</h1>
 		<hr>
-		<Note type="error" v-if="diagram.automaton.alphabet.length === 0">
-			Your automaton must have symbols in the alphabet before creating transitions.
+		<Note type="error" v-if="diagram.automaton.symbols.length === 0">
+			Your automaton must have symbols in the alphabet to create transitions.
 		</Note>
 		<div class="transition-table" v-else>
 			<span></span>
