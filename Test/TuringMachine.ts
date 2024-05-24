@@ -197,15 +197,17 @@ suite("TM", () => {
 	test(".addTapeSymbol", () => {
 		const automaton = new TM({
 			alphabet: [ "2", "5" ],
-			tapeAlphabet: [ "4", "7" ]
+			tapeAlphabet: [ "4", "8" ],
+			blankSymbol: "7"
 		});
 
-		for (const expected of [ "0", "1", "3", "6", "8" ]) {
+		for (const expected of [ "0", "1", "3", "6", "9" ]) {
 			const symbol = automaton.addTapeSymbol();
 			assert.equal(symbol, expected, `Symbol ${symbol} was added instead of symbol ${expected}.`);
 		}
 		assert.deepEqual(automaton.alphabet, [ "2", "5" ]);
-		assert.deepEqual(automaton.tapeAlphabet, [ "4", "7", "0", "1", "3", "6", "8" ]);
+		assert.deepEqual(automaton.tapeAlphabet, [ "4", "8", "0", "1", "3", "6", "9" ]);
+		assert.equal(automaton.blankSymbol, "7");
 	});
 	test(".removeSymbol", () => {
 		const automaton = new TM({
