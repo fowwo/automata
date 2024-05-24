@@ -27,7 +27,7 @@
 	async function addTapeSymbol() {
 		(props.diagram as TuringMachineDiagram).automaton.addTapeSymbol();
 		await nextTick();
-		(tapeSymbols.value?.children[tapeSymbols.value.children.length - 2].querySelector("input[type=text]") as HTMLInputElement).focus();
+		(tapeSymbols.value?.children[tapeSymbols.value.children.length - 3].querySelector("input[type=text]") as HTMLInputElement).focus();
 	}
 </script>
 <template>
@@ -72,7 +72,26 @@
 					/>
 				</li>
 				<li>
+					<TextInput auto-width disabled :modelValue="diagram.automaton.blankSymbol" />
+				</li>
+				<li>
 					<button class="symbol small-shadow" @click="addTapeSymbol()">&#xE145;</button>
+				</li>
+			</ul>
+			<hr>
+			<h2>Blank symbol</h2>
+			<p>The symbol to occupy unwritten cells on the tape.</p>
+			<ul>
+				<li v-for="symbol in [ diagram.automaton.blankSymbol ]">
+					<TextValidator revert auto-width
+						:validator="(symbol) => isValidSymbol(diagram.automaton.symbols.length - 1, symbol)"
+						v-model.trim.collapse.lazy="diagram.automaton.blankSymbol"
+						@change="() => {
+							const newSymbol = (diagram as TuringMachineDiagram).automaton.blankSymbol;
+							(diagram as TuringMachineDiagram).automaton.blankSymbol = symbol; // Revert v-model change
+							diagram.automaton.renameSymbol(symbol, newSymbol);
+						}"
+					/>
 				</li>
 			</ul>
 		</template>
