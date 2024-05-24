@@ -60,6 +60,18 @@ export default abstract class Automaton {
 	abstract removeState(state: number): void;
 
 	/**
+	 * Adds a symbol to the alphabet.
+	 * @returns The new symbol.
+	 */
+	addSymbol() {
+		const symbols = new Set(this.alphabet);
+		let i = 0;
+		while (symbols.has(String(i))) i++;
+		this.alphabet.push(String(i));
+		return String(i);
+	}
+
+	/**
 	 * Renames a symbol in the alphabet.
 	 * @returns Whether the symbol was renamed.
 	 */
@@ -75,5 +87,4 @@ export default abstract class Automaton {
 			transitions: this.transitions
 		};
 	}
-
 }
