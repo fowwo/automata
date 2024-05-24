@@ -17,6 +17,10 @@ export default class DeterministicFiniteAutomaton extends RegularAutomaton {
 		super({ alphabet, states, startState, acceptStates, transitions });
 	}
 
+	get symbols() {
+		return this.alphabet;
+	}
+
 	/** @returns The resulting state. */
 	run(string: string): number | null {
 		let state = this.startState;

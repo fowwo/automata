@@ -1,19 +1,10 @@
 <script setup lang="ts">
-	import { computed } from "vue";
 	import Note from "../../Note.vue";
 	import Select from "../../Input/Select.vue";
 	import Diagram from "../../../../Model/Diagram";
 	import TuringMachine from "../../../../Model/Automaton/TuringMachine";
 
-	const props = defineProps<{ diagram: Diagram; }>();
-
-	const symbols = computed(() => {
-		switch (props.diagram.type) {
-			case "NFA": return props.diagram.automaton.alphabet.concat([ "ε" ]);
-			case "TM": return props.diagram.automaton.alphabet.concat((props.diagram.automaton as TuringMachine).tapeAlphabet).concat([ (props.diagram.automaton as TuringMachine).blankSymbol ]);
-			default: return props.diagram.automaton.alphabet;
-		}
-	});
+	defineProps<{ diagram: Diagram; }>();
 </script>
 <template>
 	<div class="transitions">
@@ -24,10 +15,10 @@
 		</Note>
 		<div v-else>
 			<span></span>
-			<span v-for="symbol in symbols">{{ symbol }}</span>
+			<span v-for="symbol in diagram.automaton.symbols">{{ symbol }}</span>
 			<template v-for="state in diagram.automaton.states">
 				<span>{{ diagram.states[state].label }}</span>
-				<div v-for="symbol in symbols">
+				<div v-for="symbol in diagram.automaton.symbols">
 					<template v-if="diagram.type === 'DFA'">
 						<Select
 							:name="`${state}-${symbol}`"
@@ -104,7 +95,7 @@
 						/>
 						<Select
 							:name="`${state}-${symbol}-symbol`"
-							:options="symbols"
+							:options="diagram.automaton.symbols"
 							:modelValue="(diagram.automaton as TuringMachine).transitions[state]?.[symbol]?.[1]"
 							@update:modelValue="(diagram.automaton as TuringMachine).transitions[state][symbol][1] = $event"
 							:disabled="((diagram.automaton as TuringMachine).transitions[state]?.[symbol] === undefined)"
@@ -125,7 +116,7 @@
 <style scoped>
 	.transitions > div {
 		display: grid;
-		grid-template-columns: fit-content(200px) repeat(v-bind("symbols.length"), minmax(0, 1fr));
+		grid-template-columns: fit-content(200px) repeat(v-bind("diagram.automaton.symbols.length"), minmax(0, 1fr));
 		gap: 10px;
 		width: 100%;
 

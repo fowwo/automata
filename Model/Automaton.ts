@@ -33,6 +33,9 @@ export default abstract class Automaton {
 		this.transitions = transitions;
 	}
 
+	/** A list of all symbols in all alphabets. */
+	abstract get symbols(): string[];
+
 	/** Runs the automaton on a given string. */
 	abstract run(string: string, stepLimit?: number): unknown;
 
@@ -64,7 +67,7 @@ export default abstract class Automaton {
 	 * @returns The new symbol.
 	 */
 	addSymbol() {
-		const symbols = new Set(this.alphabet);
+		const symbols = new Set(this.symbols);
 		let i = 0;
 		while (symbols.has(String(i))) i++;
 		this.alphabet.push(String(i));

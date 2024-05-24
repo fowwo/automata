@@ -9,8 +9,8 @@
 
 	function isValidSymbol(index: number, symbol: string) {
 		if (symbol === "") return false;
-		for (let i = 0; i < props.diagram.automaton.alphabet.length; i++) {
-			if (i !== index && symbol === props.diagram.automaton.alphabet[i]) {
+		for (let i = 0; i < props.diagram.automaton.symbols.length; i++) {
+			if (i !== index && symbol === props.diagram.automaton.symbols[i]) {
 				return false;
 			}
 		}

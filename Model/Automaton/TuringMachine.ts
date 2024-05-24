@@ -18,6 +18,10 @@ export default class TuringMachine extends Automaton {
 		this.blankSymbol = blankSymbol;
 	}
 
+	get symbols() {
+		return this.alphabet.concat(this.tapeAlphabet).concat([ this.blankSymbol ]);
+	}
+
 	/**
 	 * @param {String} string - The input string.
 	 * @param {Number} [stepLimit] - The maximum number of transitions to take.

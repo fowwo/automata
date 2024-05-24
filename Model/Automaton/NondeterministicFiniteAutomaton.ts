@@ -11,6 +11,10 @@ export default class NondeterministicFiniteAutomaton extends RegularAutomaton {
 		super({ alphabet, states, startState, acceptStates, transitions });
 	}
 
+	get symbols() {
+		return this.alphabet.concat([ "ε" ]);
+	}
+
 	/** @returns {Set<Number>} The set of reachable states after reading the string. */
 	run(string: string): Set<number> {
 		if (this.startState === null) return new Set();
