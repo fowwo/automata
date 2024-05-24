@@ -13,7 +13,7 @@
 		<Note type="error" v-if="diagram.automaton.alphabet.length === 0">
 			Your automaton must have symbols in the alphabet before creating transitions.
 		</Note>
-		<div v-else>
+		<div class="transition-table" v-else>
 			<span></span>
 			<span v-for="symbol in diagram.automaton.symbols">{{ symbol }}</span>
 			<template v-for="state in diagram.automaton.states">
@@ -114,7 +114,7 @@
 	</div>
 </template>
 <style scoped>
-	.transitions > div {
+	.transitions > .transition-table {
 		display: grid;
 		grid-template-columns: fit-content(200px) repeat(v-bind("diagram.automaton.symbols.length"), minmax(0, 1fr));
 		gap: 10px;

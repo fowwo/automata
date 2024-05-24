@@ -1,8 +1,12 @@
 <script setup lang="ts">
-	const { type } = defineProps<{ type?: "info" | "warning" | "error" }>();
+	withDefaults(defineProps<{
+		type?: "info" | "warning" | "error";
+	}>(), {
+		type: "info"
+	});
 </script>
 <template>
-	<div class="note" :class="type ?? 'info'">
+	<div class="note" :class="type">
 		<slot></slot>
 	</div>
 </template>
