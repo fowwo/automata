@@ -3,6 +3,7 @@
 	import { Transform } from "../../Composable/Transform";
 	import Modal from "../Modal.vue";
 	import General from "./Diagram/General.vue";
+	import Alphabet from "./Diagram/Alphabet.vue";
 	import States from "./Diagram/States.vue";
 	import Transitions from "./Diagram/Transitions.vue";
 	import Diagram from "../../../Model/Diagram";
@@ -20,7 +21,7 @@
 	const nav = ref("general");
 </script>
 <template>
-	<Modal title="Automaton Settings" :class="$style['automaton-settings']" ref="modal">
+	<Modal title="Automaton Settings" class="automaton-settings" ref="modal">
 		<nav class="small-inset-shadow">
 			<ul>
 				<li class="toggle large-shadow">
@@ -43,22 +44,18 @@
 		</nav>
 		<div>
 			<General v-if="nav === 'general'" :diagram />
-			<div :class="$style.alphabet" v-else-if="nav === 'alphabet'">
-				<h1>Alphabet</h1>
-				<hr>
-				<ul></ul>
-			</div>
+			<Alphabet v-else-if="nav === 'alphabet'" :diagram />
 			<States v-else-if="nav === 'states'" :diagram :transform />
 			<Transitions v-else-if="nav === 'transitions'" :diagram />
 		</div>
 	</Modal>
 </template>
-<style module>
-	.automaton-settings > div {
+<style scoped>
+	.automaton-settings > :deep(div) {
 		width: 800px;
 		height: 100%;
 
-		> div {
+		:deep(& > div) {
 			flex-grow: 1;
 			display: flex;
 
@@ -96,36 +93,6 @@
 					inset: 0;
 					padding: 20px;
 					overflow: auto;
-				}
-			}
-		}
-	}
-	.alphabet {
-		> ul {
-			display: flex;
-			gap: 10px;
-			flex-wrap: wrap;
-
-			> li {
-				display: grid;
-				background-color: hsl(var(--background-color-hsl));
-				font-size: 1.5em;
-				border-radius: 10px;
-
-				> input {
-					min-width: 60px;
-					height: 60px;
-					text-align: center;
-					border-radius: inherit;
-					box-shadow: none;
-					grid-area: 1 / 1;
-				}
-				&::after {
-					content: attr(data-value);
-					visibility: hidden;
-					margin: 0 10px;
-					font-size: inherit;
-					grid-area: 1 / 1;
 				}
 			}
 		}

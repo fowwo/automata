@@ -40,10 +40,6 @@
 				> label {
 					line-height: 40px;
 				}
-				> p {
-					font-size: 0.8em;
-					color: hsl(var(--text-color-hsl) / 65%);
-				}
 			}
 			> div:last-child {
 				max-width: 250px;

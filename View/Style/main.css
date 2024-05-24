@@ -75,11 +75,21 @@ h1 {
 	font-size: 1.75em;
 	line-height: 1;
 }
+h2 {
+	margin: 5px 0;
+	font-size: 1.25em;
+	line-height: 1;
+}
 hr {
 	margin: 10px 0;
 	border: none;
 	height: 1px;
 	background-color: hsl(var(--text-color-hsl) / 15%);
+}
+p {
+	margin: 5px 0 10px 0;
+	font-size: 0.8em;
+	color: hsl(var(--text-color-hsl) / 65%);
 }
 .toggle {
 	position: relative;
